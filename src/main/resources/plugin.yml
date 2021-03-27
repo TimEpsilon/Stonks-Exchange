@@ -1,0 +1,4 @@
+name: smpBank
+version: ${project.version}
+main: fr.tim.smpbank.smpbank.Smpbank
+api-version: 1.16
