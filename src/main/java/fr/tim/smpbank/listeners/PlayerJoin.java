@@ -1,6 +1,7 @@
 package fr.tim.smpbank.listeners;
 
 import fr.tim.smpbank.bank.bank;
+import fr.tim.smpbank.smpBank;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -14,8 +15,9 @@ import java.util.UUID;
 public class PlayerJoin implements Listener {
 
     @EventHandler
-    public void onJoin(PlayerJoinEvent e, HashMap<UUID,bank> liste) {
+    public void onJoin(PlayerJoinEvent e) {
         Player player = e.getPlayer();
+        HashMap<UUID, bank> liste = smpBank.getPlugin().getListeJoueurs();
         addPlayer(player,liste);
 
     }

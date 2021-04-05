@@ -28,10 +28,6 @@ public class bank {
         return this.uuid;
     }
 
-    public void setName(String newName) {
-        if (this.name != newName) this.name = newName;
-    }
-
     public void setSolde(float newSolde) {
         this.solde = newSolde;
     }
