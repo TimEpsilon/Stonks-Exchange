@@ -1,6 +1,6 @@
 name: smpBank
 version: ${project.version}
-main: fr.tim.smpbank.Smpbank
+main: fr.tim.smpbank.smpBank
 api-version: 1.16
 
 commands:
