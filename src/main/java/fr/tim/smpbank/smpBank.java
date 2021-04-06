@@ -1,6 +1,6 @@
 package fr.tim.smpbank;
 
-import fr.tim.smpbank.bank.bank;
+import fr.tim.smpbank.bank.Bank;
 import fr.tim.smpbank.listeners.ListenerManager;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -10,7 +10,7 @@ import java.util.UUID;
 
 public class smpBank extends JavaPlugin implements Listener {
 
-    HashMap<UUID,bank> listeJoueurs;
+    HashMap<UUID, Bank> listeJoueurs;
     public static smpBank plugin;
 
     @Override
@@ -28,7 +28,7 @@ public class smpBank extends JavaPlugin implements Listener {
         plugin = this;
     }
 
-    public HashMap<UUID, bank> getListeJoueurs() {
+    public HashMap<UUID, Bank> getListeJoueurs() {
         return listeJoueurs;
     }
 
