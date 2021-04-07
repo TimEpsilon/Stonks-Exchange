@@ -7,16 +7,15 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.HashMap;
-import java.util.UUID;
 
 public class Bank {
 
-    private Player player;
+    private final Player player;
     private float solde;
 
     public Bank(Player player) {
         this.player = player;
-        this.solde = solde;
+        this.solde = 0;
     }
 
     public float getSolde() {
@@ -57,7 +56,7 @@ public class Bank {
         int totalDiamond = 0;
         int totalMcoin = 0;
         int diamond = 0;
-        int coin = 0;
+        int coin;
 
         //Parcours de l'inventaire, dénombrement des mcoins et diamonds
         for (ItemStack item : p.getInventory().getContents()) {
@@ -104,8 +103,48 @@ public class Bank {
         float stonks =5; //Récupérer taux du jour
 
         this.setSolde(this.getSolde() + depositD * stonks + depositM);
-        //Ajouter sauvegarde
 
-        return;
+    }
+
+    /**Withdraw
+     * Permet de retirer une quantité n de mcoins.
+     * Remplit au mieux l'inventaire.
+     * Ne retire au compte que ce qu'il peut ajouter à l'inventaire.
+     * @param n un entier représentant le nombre de mcoins à retirer du compte.
+     */
+    public void withdraw(int n) {
+
+        Player p = this.getPlayer();
+        float solde = this.getSolde();
+        int thune;
+        int resteThune = 0;
+
+        //Pas de solde négatif autorisé
+        if (n < solde) {
+            thune = n;
+        } else {
+            thune = (int) Math.floor(solde);
+        }
+
+        //Définition du m-coin
+        //Le custom model data est toujours 42
+        //Le nom est aqua en gras
+        ItemStack mcoin = new ItemStack(Material.EMERALD,thune);
+        ItemMeta Mmeta = mcoin.getItemMeta();
+        Mmeta.setDisplayName(ChatColor.AQUA + "" + ChatColor.BOLD + "M-Coin");
+        Mmeta.setCustomModelData(42);
+        mcoin.setItemMeta(Mmeta);
+
+        //Hashmap représentant les itemstack qui n'ont pas pu être ajouté
+        HashMap<Integer,ItemStack> reste = p.getInventory().addItem(mcoin);
+
+        //Compteur des items non ajoutés par manque de place
+        if (reste.size() !=0) {
+            for (ItemStack item : reste.values()) {
+            resteThune += item.getAmount();
+            }
+        }
+
+        this.setSolde(solde-thune+resteThune);
     }
 }
