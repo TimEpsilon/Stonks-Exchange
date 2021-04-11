@@ -1,6 +1,7 @@
 package fr.tim.smpbank;
 
 import fr.tim.smpbank.bank.Bank;
+import fr.tim.smpbank.commands.Gui;
 import fr.tim.smpbank.listeners.ListenerManager;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -34,4 +35,7 @@ public class smpBank extends JavaPlugin implements Listener {
 
     public static smpBank getPlugin() { return plugin; }
 
+    private void registerCommands() {
+        getCommand("bank").setExecutor(new Gui());
+    }
 }

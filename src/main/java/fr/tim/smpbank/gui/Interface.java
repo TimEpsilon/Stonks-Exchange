@@ -15,6 +15,7 @@ import java.util.List;
 
 public class Interface {
     private final Inventory inventory;
+    private final Bank bank;
 
     /**Objet Interface
      * Sert d'interface avec la banque.
@@ -25,7 +26,7 @@ public class Interface {
      */
     public Interface(Bank b) {
         Player p = b.getPlayer();
-        float solde = b.getSolde();
+        this.bank = b;
         float taux = 5; //Ajouter taux
 
         this.inventory = Bukkit.createInventory(p, 27, ChatColor.GREEN + "Banque");
@@ -38,16 +39,9 @@ public class Interface {
         setItem(14, "minecraft:emerald", 8, ChatColor.RED + "-8", ChatColor.GRAY + "Retirer 8 M-coins",42);
         setItem(23, "minecraft:emerald", 64, ChatColor.RED + "-64", ChatColor.GRAY + "Retirer 64 M-coins",42);
 
-        setItem(12, "minecraft:player_head", 1, ChatColor.GOLD + "Solde : ", "§d" + solde,0);
-        ItemStack item = this.inventory.getItem(12);
-        SkullMeta meta = (SkullMeta) item.getItemMeta();
-        meta.setOwningPlayer(p);
-        item.setItemMeta(meta);
-        this.inventory.setItem(12, item);
+        reload();
 
         setItem(9, "minecraft:nether_star", 1, ChatColor.YELLOW + "Taux du M-coin actuel :",ChatColor.GRAY + "" + taux,0);
-
-        p.openInventory(this.inventory);
     }
 
     /**setItem
@@ -74,8 +68,19 @@ public class Interface {
         this.inventory.setItem(pos, item);
     }
 
+    public Inventory getGUI() {
+        return inventory;
+    }
+
     public void reload() {
-        //Pour reload la banque.
+        setItem(12, "minecraft:player_head", 1, ChatColor.GOLD + "Solde : ", "§d" + this.bank.getSolde(),0);
+        ItemStack item = this.inventory.getItem(12);
+        SkullMeta meta = (SkullMeta) item.getItemMeta();
+        meta.setOwningPlayer(this.bank.getPlayer());
+        item.setItemMeta(meta);
+        this.inventory.setItem(12, item);
+
+        this.bank.getPlayer().openInventory(this.inventory);
     }
 
 }

@@ -19,6 +19,7 @@ public class PlayerJoin implements Listener {
         Player player = e.getPlayer();
         HashMap<UUID, Bank> liste = smpBank.getPlugin().getListeJoueurs();
         addPlayer(player,liste);
+        liste.clear();
 
     }
 

@@ -10,5 +10,6 @@ public class ListenerManager {
     public static void registerEvents(smpBank plugin) {
         PluginManager pm = Bukkit.getPluginManager();
         pm.registerEvents(new PlayerJoin(),plugin);
+        pm.registerEvents(new OnClick(),plugin);
     }
 }
