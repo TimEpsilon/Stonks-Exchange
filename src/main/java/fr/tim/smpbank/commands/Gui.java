@@ -1,7 +1,9 @@
 package fr.tim.smpbank.commands;
 
+import fr.tim.smpbank.bank.Bank;
 import fr.tim.smpbank.gui.Interface;
 import fr.tim.smpbank.smpBank;
+import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -15,7 +17,7 @@ public class Gui implements CommandExecutor {
         if (sender instanceof Player) {
             Player player = (Player) sender;
             Interface gui = smpBank.getPlugin().getListeJoueurs().get(player.getUniqueId()).getGUI();
-
+            Bukkit.broadcastMessage("commande bank");
             player.openInventory(gui.getGUI());
 
             return true;
