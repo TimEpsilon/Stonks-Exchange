@@ -37,31 +37,31 @@ public class OnClick implements Listener {
         switch (slot) {
 
             case 7:
-                Trader.deposit(1,b);
+                Trader.deposit(1,p);
                 break;
 
             case 16:
-                Trader.deposit(8,b);
+                Trader.deposit(8,p);
                 break;
 
             case 25:
-                Trader.deposit(64,b);
+                Trader.deposit(64,p);
                 break;
 
             case 15:
-                Trader.deposit(2304,b);
+                Trader.deposit(2304,p);
                 break;
 
             case 5:
-                Trader.withdraw(1, b);
+                Trader.withdraw(1, p);
                 break;
 
             case 14:
-                Trader.withdraw(8, b);
+                Trader.withdraw(8, p);
                 break;
 
             case 23:
-                Trader.withdraw(64, b);
+                Trader.withdraw(64, p);
                 break;
 
         }

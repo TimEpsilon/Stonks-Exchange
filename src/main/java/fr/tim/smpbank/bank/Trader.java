@@ -1,5 +1,6 @@
 package fr.tim.smpbank.bank;
 
+import fr.tim.smpbank.smpBank;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -7,6 +8,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.HashMap;
+import java.util.UUID;
 
 public class Trader {
 
@@ -17,9 +19,9 @@ public class Trader {
      *Depose le minimum entre n et le nombre d'items possibles dans l'inventaire.
      * @param n un entier représentant le nombre d'items à déposer dans le compte.
      */
-    public static void deposit(int n,Bank b) {
+    public static void deposit(int n,Player p) {
 
-        Player p = b.getPlayer();
+        Bank b = smpBank.getPlugin().getListeJoueurs().get(p.getUniqueId());
 
         //Uniquement si l'inventaire contient des emeralds ou diamonds
         if (!p.getInventory().contains(Material.EMERALD) && !p.getInventory().contains(Material.DIAMOND)) return;
@@ -93,9 +95,9 @@ public class Trader {
      * Ne retire au compte que ce qu'il peut ajouter à l'inventaire.
      * @param n un entier représentant le nombre de mcoins à retirer du compte.
      */
-    public static void withdraw(int n,Bank b) {
+    public static void withdraw(int n,Player p) {
 
-        Player p = b.getPlayer();
+        Bank b = smpBank.getPlugin().getListeJoueurs().get(p.getUniqueId());
         float solde = b.getSolde();
         int thune;
         int resteThune = 0;

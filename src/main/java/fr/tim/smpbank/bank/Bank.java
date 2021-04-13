@@ -3,14 +3,18 @@ package fr.tim.smpbank.bank;
 import fr.tim.smpbank.gui.Interface;
 import org.bukkit.entity.Player;
 
+import java.util.UUID;
+
 public class Bank {
 
-    private final Player player;
+    private final String name;
+    private final UUID uuid;
     private float solde;
     private final Interface gui;
 
     public Bank(Player player) {
-        this.player = player;
+        this.name = player.getName();
+        this.uuid = player.getUniqueId();
         this.solde = 0;
         this.gui = new Interface(this);
     }
@@ -19,8 +23,12 @@ public class Bank {
         return this.solde;
     }
 
-    public Player getPlayer() {
-        return this.player;
+    public UUID getUuid() {
+        return uuid;
+    }
+
+    public String getName() {
+        return name;
     }
 
     public Interface getGUI() {

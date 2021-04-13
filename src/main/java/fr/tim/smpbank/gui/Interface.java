@@ -16,6 +16,7 @@ import java.util.List;
 public class Interface {
     private final Inventory inventory;
     private final Bank bank;
+    float taux = 5; //Ajouter taux
 
     /**Objet Interface
      * Sert d'interface avec la banque.
@@ -25,11 +26,9 @@ public class Interface {
      * @param b la bank
      */
     public Interface(Bank b) {
-        Player p = b.getPlayer();
         this.bank = b;
-        float taux = 5; //Ajouter taux
 
-        this.inventory = Bukkit.createInventory(p, 27, ChatColor.GREEN + "Banque");
+        this.inventory = Bukkit.createInventory(null, 27, ChatColor.GREEN + "Banque");
 
         setItem(7, "minecraft:diamond", 1, ChatColor.GREEN + "+1", ChatColor.GRAY + "Déposer 1 diamant",0);
         setItem(16, "minecraft:diamond", 8, ChatColor.GREEN + "+8", ChatColor.GRAY + "Déposer 8 diamants",0);
@@ -76,11 +75,9 @@ public class Interface {
         setItem(12, "minecraft:player_head", 1, ChatColor.GOLD + "Solde : ", "§d" + this.bank.getSolde(),0);
         ItemStack item = this.inventory.getItem(12);
         SkullMeta meta = (SkullMeta) item.getItemMeta();
-        meta.setOwningPlayer(this.bank.getPlayer());
+        meta.setOwningPlayer(Bukkit.getOfflinePlayer(this.bank.getUuid()));
         item.setItemMeta(meta);
         this.inventory.setItem(12, item);
-
-        this.bank.getPlayer().openInventory(this.inventory);
     }
 
 }

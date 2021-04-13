@@ -46,7 +46,6 @@ public class smpBank extends JavaPlugin implements Listener {
         HashMap<UUID,Bank> liste = getListeJoueurs();
         for (Player p : this.getServer().getOnlinePlayers()) {
             if (!liste.containsKey(p.getUniqueId())){
-                Bukkit.broadcastMessage("test");
                 liste.put(p.getUniqueId(),new Bank(p));
             }
         }
