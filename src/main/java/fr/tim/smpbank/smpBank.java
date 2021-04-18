@@ -2,8 +2,8 @@ package fr.tim.smpbank;
 
 import fr.tim.smpbank.bank.Bank;
 import fr.tim.smpbank.commands.Gui;
+import fr.tim.smpbank.files.ConfigManager;
 import fr.tim.smpbank.listeners.ListenerManager;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;

@@ -11,6 +11,14 @@ import org.bukkit.entity.Player;
 
 public class Gui implements CommandExecutor {
 
+    /**Commande Gui (en fait c'est la commande bank mais osef)
+     * Affiche l'interface de la banque.
+     * @param sender
+     * @param command
+     * @param label
+     * @param args
+     * @return
+     */
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 
