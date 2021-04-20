@@ -1,11 +1,15 @@
 package fr.tim.smpbank.files;
 
+import fr.tim.smpbank.bank.Bank;
 import fr.tim.smpbank.smpBank;
 import org.bukkit.Bukkit;
+import org.bukkit.configuration.file.FileConfiguration;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
+import java.util.HashMap;
+import java.util.UUID;
 
 public class Autosave {
 
@@ -23,12 +27,27 @@ public class Autosave {
     }
 
 
-    private static void loadConfigManager() {
+    public static void loadConfigManager() {
         String date = LocalDate.now().getDayOfMonth() + "_" + LocalDate.now().getMonthValue() + "_" + LocalDate.now().getYear();
         ConfigManager cfgm = new ConfigManager();
         cfgm.setup(date);
+        write(cfgm);
         cfgm.saveDate();
         cfgm.reloadDate();
+    }
+
+    private static void write(ConfigManager cfgm) {
+        FileConfiguration fc = cfgm.getDate();
+        HashMap<UUID, Bank> players = smpBank.getPlugin().getListeJoueurs();
+
+        for (UUID uuid : players.keySet()) {
+            float solde = players.get(uuid).getSolde();
+            String name = players.get(uuid).getName();
+            fc.set("Player." + uuid + ".Solde", solde);
+            fc.set("Player." + uuid + ".Name", name);
+        }
+
+        cfgm.saveDate();
     }
 
 }

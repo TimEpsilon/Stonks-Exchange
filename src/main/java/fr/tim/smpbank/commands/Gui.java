@@ -1,6 +1,5 @@
 package fr.tim.smpbank.commands;
 
-import fr.tim.smpbank.bank.Bank;
 import fr.tim.smpbank.gui.Interface;
 import fr.tim.smpbank.smpBank;
 import org.bukkit.Bukkit;
