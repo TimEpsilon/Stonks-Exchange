@@ -1,6 +1,7 @@
 package fr.tim.smpbank.bank;
 
 import fr.tim.smpbank.gui.Interface;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
 import java.util.UUID;
@@ -9,7 +10,7 @@ public class Bank {
 
     private final String name;
     private final UUID uuid;
-    private float solde;
+    private double solde;
     private final Interface gui;
 
     public Bank(Player player) {
@@ -19,7 +20,14 @@ public class Bank {
         this.gui = new Interface(this);
     }
 
-    public float getSolde() {
+    public Bank(OfflinePlayer player) {
+        this.name = player.getName();
+        this.uuid = player.getUniqueId();
+        this.solde = 0;
+        this.gui = new Interface(this);
+    }
+
+    public double getSolde() {
         return this.solde;
     }
 
@@ -35,7 +43,7 @@ public class Bank {
         return this.gui;
     }
 
-    public void setSolde(float newSolde) {
+    public void setSolde(double newSolde) {
         this.solde = newSolde;
     }
 

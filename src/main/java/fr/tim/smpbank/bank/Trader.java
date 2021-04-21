@@ -98,7 +98,7 @@ public class Trader {
     public static void withdraw(int n,Player p) {
 
         Bank b = smpBank.getPlugin().getListeJoueurs().get(p.getUniqueId());
-        float solde = b.getSolde();
+        double solde = b.getSolde();
         int thune;
         int resteThune = 0;
 

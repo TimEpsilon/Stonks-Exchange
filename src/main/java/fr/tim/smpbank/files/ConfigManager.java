@@ -11,15 +11,21 @@ import java.io.IOException;
 public class ConfigManager {
 
     private smpBank plugin = smpBank.getPlugin(smpBank.class);
+    private FileConfiguration datecfg;
+    private File datefile;
 
-    public FileConfiguration datecfg;
-    public File datefile;
-
+    /**Setup
+     * Met en place le fichier de la date spécifiée
+     * @param date
+     */
     public void setup(String date) {
+        //Crée le datafolder
         if(!plugin.getDataFolder().exists()) plugin.getDataFolder().mkdir();
 
-        datefile = new File(plugin.getDataFolder(),date);
+        //Crée le fichier .yml
+        datefile = new File(plugin.getDataFolder(),date+".yml");
 
+        //L'enregistre
         if(!datefile.exists()) {
             try {
                 datefile.createNewFile();
@@ -27,9 +33,13 @@ public class ConfigManager {
                 e.printStackTrace();
             }
         }
+        //Assigne la configuration du fichier .yml
         datecfg = YamlConfiguration.loadConfiguration(datefile);
     }
 
+    /**SaveDate
+     * Sauvegarde les modifications faites sur la config
+     */
     public void saveDate() {
         try {
             datecfg.save(datefile);
@@ -38,6 +48,9 @@ public class ConfigManager {
         }
     }
 
+    /**ReloadDate
+     * Récupère la config à partir du fichier
+     */
     public void reloadDate() {
         datecfg = YamlConfiguration.loadConfiguration(datefile);
         Bukkit.broadcastMessage("§2Reload de la banque");
