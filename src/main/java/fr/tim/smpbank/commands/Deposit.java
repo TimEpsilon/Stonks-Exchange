@@ -16,13 +16,24 @@ public class Deposit implements CommandExecutor {
 
         if (sender instanceof Player) {
             Player player = (Player) sender;
-            if (args.length == 0) { //pas de check si le string est un int
-                player.sendMessage(ChatColor.RED + "Veuillez entrer une valeur positive!");
+
+            if (args.length != 1) {
+                player.sendMessage(ChatColor.RED + "Veuillez entrer un unique argument!");
                 return false;
+            } else {
+                try {
+                    int n = Integer.parseInt(args[0]);
+                    if (n<0) {
+                        player.sendMessage(ChatColor.RED +"Veuillez entrer un entier positif!");
+                        return false;
+                    }
+                    Trader.deposit(n,player);
+                    return true;
+                } catch (NumberFormatException e) {
+                    player.sendMessage(ChatColor.RED +"L'argument n'est pas un entier!");
+                    return false;
+                }
             }
-            int n = Integer.parseInt(args[0]);
-            Trader.deposit(n,player);
-            return true;
         }
         return false;
     }

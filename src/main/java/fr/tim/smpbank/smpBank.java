@@ -2,8 +2,10 @@ package fr.tim.smpbank;
 
 import fr.tim.smpbank.bank.Bank;
 
+import fr.tim.smpbank.commands.Deposit;
 import fr.tim.smpbank.commands.Forcesave;
 import fr.tim.smpbank.commands.Gui;
+import fr.tim.smpbank.commands.Withdraw;
 import fr.tim.smpbank.files.Autosave;
 import fr.tim.smpbank.listeners.ListenerManager;
 import org.bukkit.entity.Player;
@@ -24,6 +26,7 @@ public class smpBank extends JavaPlugin implements Listener {
         registerCommands();
         addOnline();
         Autosave.read();
+        Autosave.loop();
     }
 
     @Override
@@ -57,6 +60,8 @@ public class smpBank extends JavaPlugin implements Listener {
     private void registerCommands() {
         getCommand("bank").setExecutor(new Gui());
         getCommand("forcesave").setExecutor(new Forcesave());
+        getCommand("deposit").setExecutor(new Deposit());
+        getCommand("withdraw").setExecutor(new Withdraw());
 
     }
 }
