@@ -1,5 +1,12 @@
 package fr.tim.smpbank.bank;
 
+import fr.tim.smpbank.files.Autosave;
+import fr.tim.smpbank.smpBank;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+
+import java.time.LocalTime;
+import java.time.temporal.ChronoUnit;
 import java.util.Random;
 
 public class Taux {
@@ -12,7 +19,7 @@ public class Taux {
      * C'est une purge absolue pour simuler une situation réelle donc je sens bien que les premiers jours ça va être du tweaking massif.
      */
 
-    public static float Tauxdx(float dx) {
+    private static double Tauxdx(double dx) {
         float m = -6000f;
         float M = 3000f;
 
@@ -24,7 +31,7 @@ public class Taux {
         }
     }
 
-    public static float Tauxjn(float jn) {
+    private static float Tauxjn(float jn) {
         float M = 12;
 
         float a = 6/M;
@@ -33,14 +40,14 @@ public class Taux {
         return (float)Math.exp((double)a*jn+b);
     }
 
-    public static float Tauxx(float x) {
+    private static double Tauxx(double x) {
         float a = (float)(Math.pow(10, -2)-Math.pow(10, -5));
         float b = 1f;
 
         return 1/(a*x+b);
     }
 
-    public static float TauxTn(float Tn) {
+    private static float TauxTn(float Tn) {
         double s = -16/Math.log(0.3);
 
         if (Tn<=5) {
@@ -52,20 +59,39 @@ public class Taux {
     }
 
 
-    public static float newTaux(float tau,float Tn,float jn, float x, float dx) {
+    private static float newTaux(float tau,float Tn,float jn, double x, double dx) {
         float aTau  =0.2f;
         float aTn =0.155f;
         float aJn =0.1f;
         float aX =0.04f;
         float aDx =0.005f;
 
-        float moyenne = (aTau*tau + aTn*TauxTn(Tn) + aJn*Tauxjn(jn) + aX*Tauxx(x) + aDx*Tauxdx(dx));
+        double moyenne = (aTau*tau + aTn*TauxTn(Tn) + aJn*Tauxjn(jn) + aX*Tauxx(x) + aDx*Tauxdx(dx));
         float sigma = -0.09f*Math.abs(TauxTn(Tn))+0.1f;
 
         Random r = new Random();
-        float f = (float)r.nextGaussian()*sigma+moyenne;
+        float f = (float)r.nextGaussian()*sigma+(float)moyenne;
 
         return Tn+f;
 
+    }
+
+    public static void dailyTaux() {
+        smpBank.getPlugin().setTaux(5);
+
+        long delay = LocalTime.now().until(LocalTime.parse("00:00:00"), ChronoUnit.SECONDS)*20;
+
+        Bukkit.getScheduler().runTaskTimerAsynchronously(smpBank.getPlugin(), () -> {
+            Bukkit.broadcastMessage(ChatColor.AQUA + "Nouveau taux!");
+            float tau = 0;
+            float Tn = Autosave.getTauxDate(1);
+            int jn = smpBank.getPlugin().getJoined().size();
+            double x = Autosave.getTotalSolde(1);
+            double dx = x - Autosave.getTotalSolde(2);
+
+            smpBank.getPlugin().setTaux(newTaux(tau,Tn,jn,x,dx));
+
+            smpBank.getPlugin().getJoined().clear();
+        },delay,1728000);
     }
 }

@@ -2,6 +2,7 @@ package fr.tim.smpbank;
 
 import fr.tim.smpbank.bank.Bank;
 
+import fr.tim.smpbank.bank.Taux;
 import fr.tim.smpbank.commands.Deposit;
 import fr.tim.smpbank.commands.Forcesave;
 import fr.tim.smpbank.commands.Gui;
@@ -18,7 +19,9 @@ import java.util.UUID;
 public class smpBank extends JavaPlugin implements Listener {
 
     HashMap<UUID, Bank> listeJoueurs = new HashMap<>();
+    HashMap<UUID,Boolean> joined = new HashMap<>();
     public static smpBank plugin;
+    public float taux;
 
     @Override
     public void onEnable() {
@@ -27,6 +30,7 @@ public class smpBank extends JavaPlugin implements Listener {
         addOnline();
         Autosave.read();
         Autosave.loop();
+        Taux.dailyTaux();
     }
 
     @Override
@@ -43,8 +47,20 @@ public class smpBank extends JavaPlugin implements Listener {
         return listeJoueurs;
     }
 
+    public HashMap<UUID, Boolean> getJoined() {
+        return joined;
+    }
+
     public static smpBank getPlugin() {
         return plugin;
+    }
+
+    public float getTaux() {
+        return taux;
+    }
+
+    public void setTaux(float stonks) {
+        taux = stonks;
     }
 
 

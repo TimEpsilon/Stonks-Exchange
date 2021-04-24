@@ -19,7 +19,9 @@ public class PlayerJoin implements Listener {
     public void onJoin(PlayerJoinEvent e) {
         Player player = e.getPlayer();
         HashMap<UUID, Bank> liste = smpBank.getPlugin().getListeJoueurs();
+        HashMap<UUID,Boolean> joined = smpBank.getPlugin().getJoined();
         addPlayer(player,liste);
+        if (!joined.containsKey(player.getUniqueId())) joined.put(player.getUniqueId(),true);
 
     }
 

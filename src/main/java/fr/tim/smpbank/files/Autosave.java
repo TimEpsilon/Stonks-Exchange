@@ -7,6 +7,8 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
+import org.yaml.snakeyaml.Yaml;
+import org.yaml.snakeyaml.error.YAMLException;
 
 import java.io.File;
 import java.time.LocalDate;
@@ -39,24 +41,25 @@ public class Autosave {
     private static void write(ConfigManager cfgm) {
         FileConfiguration fc = cfgm.getDate();
         HashMap<UUID, Bank> players = smpBank.getPlugin().getListeJoueurs();
+        double total = 0;
 
         for (UUID uuid : players.keySet()) {
             double solde = players.get(uuid).getSolde();
+            total += solde;
             String name = players.get(uuid).getName();
             fc.set("Player." + uuid + ".Solde", solde);
             fc.set("Player." + uuid + ".Name", name);
         }
 
+        fc.set("Total",total);
+        fc.set("Taux",smpBank.getPlugin().getTaux());
+
         cfgm.saveDate();
     }
 
     public static void read() {
-        int prevDay=0;
-        File datefile = new File(smpBank.getPlugin().getDataFolder(),dateFormat(prevDay)+".yml");
-        while (!datefile.exists()) {
-            prevDay ++;
-            datefile = new File(smpBank.getPlugin().getDataFolder(),dateFormat(prevDay)+".yml");
-        }
+        File datefile = getLastSave(0);
+        if (datefile == null) return;
 
         FileConfiguration fc = YamlConfiguration.loadConfiguration(datefile);
         HashMap<UUID, Bank> players = smpBank.getPlugin().getListeJoueurs();
@@ -69,11 +72,43 @@ public class Autosave {
             if (fc.contains("Player." + op.getUniqueId() + ".Solde")) {
                 solde = (double) fc.get("Player." + op.getUniqueId() + ".Solde");
             }
-            smpBank.getPlugin().getServer().getConsoleSender().sendMessage(""+solde);
+
             Bank b = players.get(op.getUniqueId());
 
             b.setSolde(solde);
         }
+    }
+
+    public static double getTotalSolde(int prevDay) {
+        File datefile = getLastSave(prevDay);
+        double total = 0;
+
+        FileConfiguration fc = YamlConfiguration.loadConfiguration(datefile);
+        total = fc.getDouble("Total");
+
+        return total;
+    }
+
+    public static float getTauxDate(int prevDay) {
+        File datefile = getLastSave(prevDay);
+        float taux = 5;
+
+        FileConfiguration fc = YamlConfiguration.loadConfiguration(datefile);
+        taux = (float) fc.getDouble("Taux");
+        return taux;
+    }
+
+
+    private static File getLastSave(int minusDay) {
+        int prevDay=0;
+        File datefile = new File(smpBank.getPlugin().getDataFolder(),dateFormat(prevDay-minusDay)+".yml");
+        if (smpBank.getPlugin().getDataFolder().listFiles().length == 0) return null;
+
+        while (!datefile.exists()) {
+            prevDay ++;
+            datefile = new File(smpBank.getPlugin().getDataFolder(),dateFormat(prevDay-minusDay)+".yml");
+        }
+        return datefile;
     }
 
     private static String dateFormat(int prevDay) {
