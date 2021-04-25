@@ -20,7 +20,7 @@ import java.util.UUID;
 public class Autosave {
 
     public static void loop() {
-        long delay = LocalTime.now().until(LocalTime.parse("00:00:00"), ChronoUnit.SECONDS)*20;
+        long delay = LocalTime.now().until(LocalTime.parse("23:59:00"), ChronoUnit.SECONDS)*20;
 
         Bukkit.getScheduler().runTaskTimerAsynchronously(smpBank.getPlugin(), () -> {
             Bukkit.broadcastMessage("§2Sauvegarde des donnees...");

@@ -9,6 +9,7 @@ import fr.tim.smpbank.commands.Gui;
 import fr.tim.smpbank.commands.Withdraw;
 import fr.tim.smpbank.files.Autosave;
 import fr.tim.smpbank.listeners.ListenerManager;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -35,7 +36,7 @@ public class smpBank extends JavaPlugin implements Listener {
 
     @Override
     public void onDisable() {
-        Autosave.loadConfigManager();
+        //Autosave.loadConfigManager();
     }
 
     @Override

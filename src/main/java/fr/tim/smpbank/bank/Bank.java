@@ -44,7 +44,7 @@ public class Bank {
     }
 
     public void setSolde(double newSolde) {
-        this.solde = newSolde;
+        this.solde = Math.round(newSolde*1000.0d)/1000.0d;
     }
 
 

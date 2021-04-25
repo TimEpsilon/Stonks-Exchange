@@ -1,6 +1,7 @@
 package fr.tim.smpbank.gui;
 
 import fr.tim.smpbank.bank.Bank;
+import fr.tim.smpbank.smpBank;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -16,7 +17,7 @@ import java.util.List;
 public class Interface {
     private final Inventory inventory;
     private final Bank bank;
-    float taux = 5; //Ajouter taux
+    float taux = smpBank.getPlugin().getTaux();
 
     /**Objet Interface
      * Sert d'interface avec la banque.
@@ -78,6 +79,8 @@ public class Interface {
         meta.setOwningPlayer(Bukkit.getOfflinePlayer(this.bank.getUuid()));
         item.setItemMeta(meta);
         this.inventory.setItem(12, item);
+
+        setItem(9, "minecraft:nether_star", 1, ChatColor.YELLOW + "Taux du M-coin actuel :",ChatColor.GRAY + "" + smpBank.getPlugin().getTaux(),0);
     }
 
 }

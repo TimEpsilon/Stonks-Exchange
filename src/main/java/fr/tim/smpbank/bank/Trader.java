@@ -1,6 +1,7 @@
 package fr.tim.smpbank.bank;
 
 import fr.tim.smpbank.smpBank;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -83,9 +84,9 @@ public class Trader {
 
         final int depositD = diamond;
         final int depositM = coin;
-        float stonks =5; //Récupérer taux du jour
+        float stonks = smpBank.getPlugin().getTaux();
 
-        b.setSolde(b.getSolde() + depositD * stonks + depositM);
+        b.setSolde(Math.round((b.getSolde() + depositD * stonks + depositM)*1000.0d)/1000.0d);
 
     }
 

@@ -70,9 +70,9 @@ public class Taux {
         float sigma = -0.09f*Math.abs(TauxTn(Tn))+0.1f;
 
         Random r = new Random();
-        float f = (float)r.nextGaussian()*sigma+(float)moyenne;
+        float f = Math.round(((float)r.nextGaussian()*sigma+(float)moyenne)*1000f)/1000f;
 
-        return Tn+f;
+        return Math.round((Tn+f)*1000f)/1000f;
 
     }
 
@@ -89,9 +89,15 @@ public class Taux {
             double x = Autosave.getTotalSolde(1);
             double dx = x - Autosave.getTotalSolde(2);
 
-            smpBank.getPlugin().setTaux(newTaux(tau,Tn,jn,x,dx));
+            Bukkit.broadcastMessage("Tn = " + Tn);
+            Bukkit.broadcastMessage("jn = " + jn);
+            Bukkit.broadcastMessage("x = " + x);
+            Bukkit.broadcastMessage("dx = " + dx);
+            float taux = newTaux(tau,Tn,jn,x,dx);
+
+            smpBank.getPlugin().setTaux(taux);
 
             smpBank.getPlugin().getJoined().clear();
-        },delay,1728000);
+        },delay,1728000/1440);
     }
 }
