@@ -5,6 +5,23 @@ api-version: 1.16
 
 commands:
   bank:
+    description: Permet de gérer votre compte bancaire
+    usage: /bank
   forcesave:
+    description: Permet de forcer la sauvegarde de la banque. /!\ Remplace la dernière sauvegarde du jour!
+    usage: /forcesave
+    permission: admin
   deposit:
+    description: Permet de déposer des diamants ou des M-Coins sur votre compte
+    usage: /deposit <valeur>
   withdraw:
+    description: Permet de retirer des M-Coins de votre compte
+    usage: /withdraw <valeur>
+  taux:
+    description: Permet de forcer la mise à jour du taux
+    usage: /taux
+    permission: admin
+
+permissions:
+  admin:
+    description: Pour sauvegarder manuellement la banque et rafraichir le taux

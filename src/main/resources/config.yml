@@ -1,0 +1,58 @@
+#Le taux chaque jour est calculé à partir des 5 variables suivantes.
+#Chaque quantité est injectée dans une fonction dont les coefficients dépendent des valeurs où elle est extremal
+#Il est fortement recommandé de modifier les constantes lorsque les variables dépassent les seuils définis ci dessous
+#Les coefficients de la moyenne et de l'écart sont à adapter en fonction du poids de chaque variable
+Taux:
+
+  #La fonction variation est de la forme f(x) = { (x/M)^1/3 si x>0 , (x/m)^1/3 si x<0 }
+  #m et M vérifient f(m) = -1 et f(M) = 1
+  variation:
+    m: 3000
+    M: -6000
+
+  #La fonction joueurs est de la forme f(x) = exp(a*x+b)
+  #m et M vérifient m = 0 , f(m) = 10^-eps ~0 et f(M) = 1
+  #eps est l'ordre de grandeur de l'approximation à 0 -> plus eps est grand, plus la courbe reste collée à 0
+  joueurs:
+    eps: 2
+    M: 12
+
+  #La fonction total est de la forme f(x) = 1/(ax+b)
+  #m et M vérifient f(m) = 10^-eps ~0 , M = 0 et f(M) = 1
+  #eps est l'ordre de grandeur de l'approximation à 0 -> plus eps est grand, plus la courbe reste collée à 0
+  total:
+    eps: 4
+    m: 10000000
+
+  #La fonction taux est de la forme f(x) = { 1 - exp((x-5)^5 / 2s) si x<5 , exp(-(x-5)^5 / 2s) - 1 si x>5}
+  #dm correspond à l'écart à 5 de m et M tel que f(m) = -1 et f(M) = 1
+  #m = 5 + dm , M = 5 - dm
+  #eps est l'ordre de grandeur de l'approximation à 0 -> plus eps est grand, plus la courbe monte vite et tôt
+  taux:
+    dm: 3
+    eps: 40
+
+  mort:
+    m: 60
+    eps: 2
+
+  #Permet de modifier directement et fortement les valeurs finales
+  #Suis une fonction f(x) = x
+  admin:
+    tau: 0
+
+  #Après injection dans chaque fonction, chaque résultat est multiplié par un coefficient pour calculer la moyenne
+  moyenne:
+    aAdmin: 0.2
+    aTaux: 0.155
+    aJoueurs: 0.1
+    aTotal: 0.04
+    aVariation: 0.0005
+    aMort: 0.125
+
+  #Seul le taux précédent influence l'écart type, dont le résultat par sa fonction est injectée dans f(x) = ax + b
+  ecart:
+    aEcart: -0.049
+    bEcart: 0.05
+
+  #L'écart type et la moyenne servent alors dans le calcul d'une loi normale

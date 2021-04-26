@@ -2,11 +2,7 @@ package fr.tim.smpbank;
 
 import fr.tim.smpbank.bank.Bank;
 
-import fr.tim.smpbank.bank.Taux;
-import fr.tim.smpbank.commands.Deposit;
-import fr.tim.smpbank.commands.Forcesave;
-import fr.tim.smpbank.commands.Gui;
-import fr.tim.smpbank.commands.Withdraw;
+import fr.tim.smpbank.commands.*;
 import fr.tim.smpbank.files.Autosave;
 import fr.tim.smpbank.listeners.ListenerManager;
 import org.bukkit.Bukkit;
@@ -21,6 +17,7 @@ public class smpBank extends JavaPlugin implements Listener {
 
     HashMap<UUID, Bank> listeJoueurs = new HashMap<>();
     HashMap<UUID,Boolean> joined = new HashMap<>();
+    HashMap<UUID,Boolean> dead = new HashMap<>();
     public static smpBank plugin;
     public float taux;
 
@@ -31,12 +28,13 @@ public class smpBank extends JavaPlugin implements Listener {
         addOnline();
         Autosave.read();
         Autosave.loop();
-        Taux.dailyTaux();
+        fr.tim.smpbank.bank.Taux.dailyTaux();
+        saveDefaultConfig();
     }
 
     @Override
     public void onDisable() {
-        //Autosave.loadConfigManager();
+        Autosave.loadConfigManager();
     }
 
     @Override
@@ -50,6 +48,10 @@ public class smpBank extends JavaPlugin implements Listener {
 
     public HashMap<UUID, Boolean> getJoined() {
         return joined;
+    }
+
+    public HashMap<UUID, Boolean> getDead() {
+        return dead;
     }
 
     public static smpBank getPlugin() {
@@ -79,6 +81,7 @@ public class smpBank extends JavaPlugin implements Listener {
         getCommand("forcesave").setExecutor(new Forcesave());
         getCommand("deposit").setExecutor(new Deposit());
         getCommand("withdraw").setExecutor(new Withdraw());
+        getCommand("taux").setExecutor(new Taux());
 
     }
 }

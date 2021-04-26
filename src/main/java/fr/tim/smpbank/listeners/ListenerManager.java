@@ -11,5 +11,6 @@ public class ListenerManager {
         PluginManager pm = Bukkit.getPluginManager();
         pm.registerEvents(new PlayerJoin(),plugin);
         pm.registerEvents(new OnClick(),plugin);
+        pm.registerEvents(new OnDeath(),plugin);
     }
 }

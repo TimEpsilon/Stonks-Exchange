@@ -1,6 +1,7 @@
 package fr.tim.smpbank.bank;
 
 import fr.tim.smpbank.files.Autosave;
+import fr.tim.smpbank.files.CoeffConfig;
 import fr.tim.smpbank.smpBank;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -20,8 +21,9 @@ public class Taux {
      */
 
     private static double Tauxdx(double dx) {
-        float m = -6000f;
-        float M = 3000f;
+        float[] coeff = CoeffConfig.getCoeff("Taux.variation");
+        float m = coeff[0];
+        float M = coeff[1];
 
         if (dx>0) {
             return (float)Math.pow(dx/M,1/3f);
@@ -32,23 +34,33 @@ public class Taux {
     }
 
     private static float Tauxjn(float jn) {
-        float M = 12;
+        float[] coeff = CoeffConfig.getCoeff("Taux.joueurs");
+        float M = coeff[1];
+        float eps = coeff[0];
 
-        float a = 6/M;
-        float b = -6;
+        float a = (float)(eps*Math.log(10)/M);
+        float b = (float)(-eps*Math.log(10));
 
         return (float)Math.exp((double)a*jn+b);
     }
 
     private static double Tauxx(double x) {
-        float a = (float)(Math.pow(10, -2)-Math.pow(10, -5));
+        float[] coeff = CoeffConfig.getCoeff("Taux.total");
+        float m = coeff[1];
+        float eps = coeff[0];
+
+        float a = (float)((Math.pow(10,eps)-1)/m);
         float b = 1f;
 
         return 1/(a*x+b);
     }
 
     private static float TauxTn(float Tn) {
-        double s = -16/Math.log(0.3);
+        float[] coeff = CoeffConfig.getCoeff("Taux.taux");
+        float dm = coeff[0];
+        float eps = coeff[1];
+
+        double s = Math.pow(dm,5)/(2*eps*Math.log(10));
 
         if (Tn<=5) {
             return 1- (float)Math.exp(Math.pow(Tn-5,5)/(2*s));
@@ -58,16 +70,29 @@ public class Taux {
         }
     }
 
+    private static float TauxM(float d) {
+        float[] coeff = CoeffConfig.getCoeff("Taux.mort");
+        float m = coeff[0];
+        float eps = coeff[1];
 
-    private static float newTaux(float tau,float Tn,float jn, double x, double dx) {
-        float aTau  =0.2f;
-        float aTn =0.155f;
-        float aJn =0.1f;
-        float aX =0.04f;
-        float aDx =0.005f;
+        double s = Math.pow(m,2)/(2*eps*Math.log(10));
 
-        double moyenne = (aTau*tau + aTn*TauxTn(Tn) + aJn*Tauxjn(jn) + aX*Tauxx(x) + aDx*Tauxdx(dx));
-        float sigma = -0.09f*Math.abs(TauxTn(Tn))+0.1f;
+        return (float)Math.exp(-Math.pow(d,2)/(2*s))-1;
+    }
+
+    public static float newTaux(float tau,float Tn,float jn, double x, double dx, float d) {
+        float[] coeff = CoeffConfig.getCoeff("Taux.moyenne");
+        float aTau = coeff[0];
+        float aTn = coeff[1];
+        float aJn = coeff[2];
+        float aX = coeff[3];
+        float aDx = coeff[4];
+        float aD = coeff[5];
+
+        float[] coeffEcart = CoeffConfig.getCoeff("Taux.ecart");
+
+        double moyenne = (aTau*tau + aTn*TauxTn(Tn) + aJn*Tauxjn(jn) + aX*Tauxx(x) + aDx*Tauxdx(dx) + aD*TauxM(d));
+        float sigma = coeffEcart[0]*Math.abs(TauxTn(Tn))+coeffEcart[1];
 
         Random r = new Random();
         float f = Math.round(((float)r.nextGaussian()*sigma+(float)moyenne)*1000f)/1000f;
@@ -83,21 +108,23 @@ public class Taux {
 
         Bukkit.getScheduler().runTaskTimerAsynchronously(smpBank.getPlugin(), () -> {
             Bukkit.broadcastMessage(ChatColor.AQUA + "Nouveau taux!");
-            float tau = 0;
+            float tau = CoeffConfig.getCoeff("Taux.total")[0];
             float Tn = Autosave.getTauxDate(1);
             int jn = smpBank.getPlugin().getJoined().size();
             double x = Autosave.getTotalSolde(1);
             double dx = x - Autosave.getTotalSolde(2);
+            float d = smpBank.getPlugin().getDead().size();
 
             Bukkit.broadcastMessage("Tn = " + Tn);
             Bukkit.broadcastMessage("jn = " + jn);
             Bukkit.broadcastMessage("x = " + x);
             Bukkit.broadcastMessage("dx = " + dx);
-            float taux = newTaux(tau,Tn,jn,x,dx);
+            float taux = newTaux(tau,Tn,jn,x,dx,d);
 
             smpBank.getPlugin().setTaux(taux);
 
             smpBank.getPlugin().getJoined().clear();
-        },delay,1728000/1440);
+            smpBank.getPlugin().getDead().clear();
+        },delay,1728000);
     }
 }

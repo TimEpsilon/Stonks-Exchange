@@ -2,7 +2,6 @@ package fr.tim.smpbank.listeners;
 
 import fr.tim.smpbank.bank.Bank;
 import fr.tim.smpbank.smpBank;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;

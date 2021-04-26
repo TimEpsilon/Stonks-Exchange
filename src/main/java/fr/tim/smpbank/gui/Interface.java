@@ -41,7 +41,7 @@ public class Interface {
 
         reload();
 
-        setItem(9, "minecraft:nether_star", 1, ChatColor.YELLOW + "Taux du M-coin actuel :",ChatColor.GRAY + "" + taux,0);
+        setItem(10, "minecraft:nether_star", 1, ChatColor.YELLOW + "Taux du M-coin actuel :",ChatColor.GRAY + "" + taux,0);
     }
 
     /**setItem
@@ -80,7 +80,7 @@ public class Interface {
         item.setItemMeta(meta);
         this.inventory.setItem(12, item);
 
-        setItem(9, "minecraft:nether_star", 1, ChatColor.YELLOW + "Taux du M-coin actuel :",ChatColor.GRAY + "" + smpBank.getPlugin().getTaux(),0);
+        setItem(10, "minecraft:nether_star", 1, ChatColor.YELLOW + "Taux du M-coin actuel :",ChatColor.GRAY + "" + smpBank.getPlugin().getTaux(),0);
     }
 
 }

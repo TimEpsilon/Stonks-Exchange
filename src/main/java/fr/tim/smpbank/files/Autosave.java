@@ -3,12 +3,10 @@ package fr.tim.smpbank.files;
 import fr.tim.smpbank.bank.Bank;
 import fr.tim.smpbank.smpBank;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.entity.Player;
-import org.yaml.snakeyaml.Yaml;
-import org.yaml.snakeyaml.error.YAMLException;
 
 import java.io.File;
 import java.time.LocalDate;
@@ -53,6 +51,8 @@ public class Autosave {
 
         fc.set("Total",total);
         fc.set("Taux",smpBank.getPlugin().getTaux());
+        fc.set("Death",smpBank.getPlugin().getDead().size());
+        fc.set("Joined",smpBank.getPlugin().getJoined().size());
 
         cfgm.saveDate();
     }
@@ -74,27 +74,34 @@ public class Autosave {
             }
 
             Bank b = players.get(op.getUniqueId());
-
+            smpBank.getPlugin().setTaux((float)fc.getDouble("Taux"));
             b.setSolde(solde);
         }
     }
 
     public static double getTotalSolde(int prevDay) {
-        File datefile = getLastSave(prevDay);
         double total = 0;
+        try {
+            File datefile = getLastSave(prevDay);
+            FileConfiguration fc = YamlConfiguration.loadConfiguration(datefile);
+            total = fc.getDouble("Total");
+        } catch (Exception e) {
+            Bukkit.broadcastMessage(ChatColor.RED + "Fichier non trouvé");
+        }
 
-        FileConfiguration fc = YamlConfiguration.loadConfiguration(datefile);
-        total = fc.getDouble("Total");
 
         return total;
     }
 
     public static float getTauxDate(int prevDay) {
-        File datefile = getLastSave(prevDay);
         float taux = 5;
-
-        FileConfiguration fc = YamlConfiguration.loadConfiguration(datefile);
-        taux = (float) fc.getDouble("Taux");
+        try {
+            File datefile = getLastSave(prevDay);
+            FileConfiguration fc = YamlConfiguration.loadConfiguration(datefile);
+            taux = (float) fc.getDouble("Taux");
+        } catch (Exception e) {
+            Bukkit.broadcastMessage(ChatColor.RED + "Fichier non trouvé");
+        }
         return taux;
     }
 
