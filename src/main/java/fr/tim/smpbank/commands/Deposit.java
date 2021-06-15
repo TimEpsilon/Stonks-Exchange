@@ -1,9 +1,6 @@
 package fr.tim.smpbank.commands;
 
 import fr.tim.smpbank.bank.Trader;
-import fr.tim.smpbank.gui.Interface;
-import fr.tim.smpbank.smpBank;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
