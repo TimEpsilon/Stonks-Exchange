@@ -93,12 +93,12 @@ public class Autosave {
         return total;
     }
 
-    public static float getTauxDate(int prevDay) {
+    public static float getValueDate(int prevDay,String value) {
         float taux = 5;
         try {
             File datefile = getLastSave(prevDay);
             FileConfiguration fc = YamlConfiguration.loadConfiguration(datefile);
-            taux = (float) fc.getDouble("Taux");
+            taux = (float) fc.getDouble(value);
         } catch (Exception e) {
             Bukkit.broadcastMessage(ChatColor.RED + "Fichier non trouvé");
         }

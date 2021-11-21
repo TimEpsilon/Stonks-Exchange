@@ -2,7 +2,6 @@ package fr.tim.smpbank.listeners;
 
 import fr.tim.smpbank.bank.Bank;
 import fr.tim.smpbank.bank.Trader;
-import fr.tim.smpbank.gui.Interface;
 import fr.tim.smpbank.smpBank;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;

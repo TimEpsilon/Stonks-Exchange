@@ -12,7 +12,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.util.HashMap;
 import java.util.UUID;
 
-public class smpBank extends JavaPlugin implements Listener {
+public class smpBank extends JavaPlugin {
 
     HashMap<UUID, Bank> listeJoueurs = new HashMap<>();
     HashMap<UUID,Boolean> joined = new HashMap<>();

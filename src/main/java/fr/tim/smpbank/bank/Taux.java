@@ -10,7 +10,7 @@ import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Random;
 
-public class Taux {
+public abstract class Taux {
     /**Taux
      * Effectue tous les calculs du taux du jour.
      * Les valeurs des constantes peuvent être modifiées dans le plugin.yml (à terme).
@@ -109,7 +109,7 @@ public class Taux {
         Bukkit.getScheduler().runTaskTimerAsynchronously(smpBank.getPlugin(), () -> {
             Bukkit.broadcastMessage(ChatColor.AQUA + "Nouveau taux!");
             float tau = CoeffConfig.getCoeff("Taux.total")[0];
-            float Tn = Autosave.getTauxDate(1);
+            float Tn = Autosave.getValueDate(1,"Taux");
             int jn = smpBank.getPlugin().getJoined().size();
             double x = Autosave.getTotalSolde(1);
             double dx = x - Autosave.getTotalSolde(2);

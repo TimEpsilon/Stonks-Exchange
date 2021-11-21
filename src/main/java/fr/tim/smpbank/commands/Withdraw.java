@@ -10,6 +10,7 @@ import org.bukkit.entity.Player;
 public class Withdraw implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+        //target joueur
 
         if (sender instanceof Player) {
             Player player = (Player) sender;

@@ -18,7 +18,7 @@ public class Taux implements CommandExecutor {
        if (sender.isOp()) {
            Bukkit.broadcastMessage(ChatColor.AQUA + "Nouveau taux!");
            float tau = CoeffConfig.getCoeff("Taux.total")[0];
-           float Tn = Autosave.getTauxDate(1);
+           float Tn = Autosave.getValueDate(1,"Taux");
            int jn = smpBank.getPlugin().getJoined().size();
            double x = Autosave.getTotalSolde(1);
            double dx = x - Autosave.getTotalSolde(2);
