@@ -1,7 +1,6 @@
 package fr.tim.smpbank.gui;
 
 import fr.tim.smpbank.smpBank;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.map.*;
 
