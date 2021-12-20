@@ -6,6 +6,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 
 
 import java.util.HashMap;
@@ -17,18 +18,20 @@ public class PlayerJoin implements Listener {
     @EventHandler
     public void onJoin(PlayerJoinEvent e) {
         Player player = e.getPlayer();
-        HashMap<UUID, Bank> liste = smpBank.getPlugin().getListeJoueurs();
-        HashMap<UUID,Boolean> joined = smpBank.getPlugin().getJoined();
-        addPlayer(player,liste);
-        if (!joined.containsKey(player.getUniqueId())) joined.put(player.getUniqueId(),true);
+        Bank bank = Bank.bankList.get(player);
 
+        if (bank == null) {
+            new Bank(player);
+        } else {
+            bank.loadData();
+        }
     }
 
-    private Bank creationCompte(Player player) {
-        return new Bank(player);
-    }
+    @EventHandler
+    public void onLeave(PlayerQuitEvent e) {
+        Player player = e.getPlayer();
+        Bank bank = Bank.bankList.get(player);
 
-    private void addPlayer(Player player, HashMap<UUID, Bank> liste) {
-        if (!liste.containsKey(player.getUniqueId())) liste.put(player.getUniqueId(),creationCompte(player));
+        bank.logBankState();
     }
 }

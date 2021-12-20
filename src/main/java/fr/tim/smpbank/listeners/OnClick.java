@@ -64,7 +64,7 @@ public class OnClick implements Listener {
                 break;
 
         }
-        b.getGUI().reload();
+        //b.getGUI().reload();
     }
 }
 

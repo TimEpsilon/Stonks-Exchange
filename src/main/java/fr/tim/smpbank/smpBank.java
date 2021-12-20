@@ -4,6 +4,7 @@ import fr.tim.smpbank.bank.Bank;
 
 import fr.tim.smpbank.commands.*;
 import fr.tim.smpbank.files.Autosave;
+import fr.tim.smpbank.files.FileManager;
 import fr.tim.smpbank.listeners.ListenerManager;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
@@ -25,15 +26,17 @@ public class smpBank extends JavaPlugin {
         ListenerManager.registerEvents(this);
         registerCommands();
         addOnline();
-        Autosave.read();
+        new FileManager();
         Autosave.loop();
         fr.tim.smpbank.bank.Taux.dailyTaux();
-        saveDefaultConfig();
+
     }
 
     @Override
     public void onDisable() {
-        Autosave.loadConfigManager();
+        for (Bank bank : Bank.bankList.values()) {
+            bank.logBankState();
+        }
     }
 
     @Override

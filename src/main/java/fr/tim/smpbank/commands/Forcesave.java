@@ -12,7 +12,7 @@ public class Forcesave implements CommandExecutor {
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 
         if(sender.isOp()) {
-            Autosave.loadConfigManager();
+            //Autosave.loadConfigManager();
             Bukkit.broadcastMessage("commande forcesave");
 
             return true;

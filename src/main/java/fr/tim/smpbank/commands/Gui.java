@@ -23,10 +23,10 @@ public class Gui implements CommandExecutor {
 
         if (sender instanceof Player) {
             Player player = (Player) sender;
-            Interface gui = smpBank.getPlugin().getListeJoueurs().get(player.getUniqueId()).getGUI();
+            //Interface gui = smpBank.getPlugin().getListeJoueurs().get(player.getUniqueId()).getGUI();
             Bukkit.broadcastMessage("commande bank");
-            gui.reload();
-            player.openInventory(gui.getGUI());
+            //gui.reload();
+            //player.openInventory(gui.getGUI());
 
             return true;
         }

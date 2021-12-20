@@ -106,7 +106,7 @@ public abstract class Taux {
 
         long delay = LocalTime.now().until(LocalTime.parse("00:00:00"), ChronoUnit.SECONDS)*20;
 
-        Bukkit.getScheduler().runTaskTimerAsynchronously(smpBank.getPlugin(), () -> {
+        /**Bukkit.getScheduler().runTaskTimerAsynchronously(smpBank.getPlugin(), () -> {
             Bukkit.broadcastMessage(ChatColor.AQUA + "Nouveau taux!");
             float tau = CoeffConfig.getCoeff("Taux.total")[0];
             float Tn = Autosave.getValueDate(1,"Taux");
@@ -125,6 +125,6 @@ public abstract class Taux {
 
             smpBank.getPlugin().getJoined().clear();
             smpBank.getPlugin().getDead().clear();
-        },delay,1728000);
+        },delay,1728000);**/
     }
 }

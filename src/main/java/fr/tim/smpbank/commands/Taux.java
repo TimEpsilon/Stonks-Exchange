@@ -16,7 +16,7 @@ public class Taux implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
        if (sender.isOp()) {
-           Bukkit.broadcastMessage(ChatColor.AQUA + "Nouveau taux!");
+           /**Bukkit.broadcastMessage(ChatColor.AQUA + "Nouveau taux!");
            float tau = CoeffConfig.getCoeff("Taux.total")[0];
            float Tn = Autosave.getValueDate(1,"Taux");
            int jn = smpBank.getPlugin().getJoined().size();
@@ -33,7 +33,7 @@ public class Taux implements CommandExecutor {
            smpBank.getPlugin().setTaux(taux);
 
            smpBank.getPlugin().getJoined().clear();
-           smpBank.getPlugin().getDead().clear();
+           smpBank.getPlugin().getDead().clear();**/
            return true;
        }
        return false;
