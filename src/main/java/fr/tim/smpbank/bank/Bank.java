@@ -1,9 +1,7 @@
 package fr.tim.smpbank.bank;
 
 import fr.tim.smpbank.files.FileManager;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
-import org.bukkit.util.io.BukkitObjectOutputStream;
 
 import java.io.*;
 import java.util.*;
