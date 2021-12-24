@@ -1,6 +1,7 @@
 package fr.tim.smpbank.bank;
 
 import fr.tim.smpbank.files.FileManager;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import java.io.*;
@@ -41,6 +42,8 @@ public class Bank implements Serializable {
 
     public void loadData() {
         File file = new File(FileManager.BANK_PATH + this.uuid + ".bank");
+
+        System.out.println("file");
 
         if (!file.exists()) return;
 

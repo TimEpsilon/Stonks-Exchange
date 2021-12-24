@@ -26,7 +26,7 @@ public class BankInterface implements Listener {
     public BankInterface(Player p) {
         this.bank = Bank.bankList.get(p.getUniqueId());
 
-        this.inventory = Bukkit.createInventory(null, 27, ChatColor.GREEN + "Banque");
+        this.inventory = Bukkit.createInventory(null, 27, Component.text(ChatColor.GREEN + "Banque"));
 
         this.inventory.setItem(7,VisualItems.DEPOSIT_1.getItem());
         this.inventory.setItem(16,VisualItems.DEPOSIT_8.getItem());
