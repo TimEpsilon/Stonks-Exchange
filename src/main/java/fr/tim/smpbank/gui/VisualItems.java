@@ -19,7 +19,7 @@ public enum VisualItems {
     WITHDRAW_64(Material.EMERALD, 64, ChatColor.RED + "-64", ChatColor.GRAY + "Retirer 64 M-Coin",42),
     DEPOSIT_ALL(Material.DIAMOND_BLOCK,1,ChatColor.GREEN + "All", ChatColor.GRAY + "Tout déposer",0),
     TAUX(Material.NETHER_STAR, 1, ChatColor.YELLOW + "Taux du M-coin actuel :",ChatColor.GRAY + " null", 0),
-    SOLDE( Material.PLAYER_HEAD, 1, ChatColor.GOLD + "Solde : ", "§d" + "0.0",0);
+    SOLDE(Material.PLAYER_HEAD, 1, ChatColor.GOLD + "Solde : ", "§d" + "0.0",0);
 
     private ItemStack item;
 
@@ -67,6 +67,7 @@ public enum VisualItems {
             case "PLAYER_HEAD":
                 return SOLDE;
         }
+        return null;
     }
 
 }

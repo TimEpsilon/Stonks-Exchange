@@ -11,124 +11,55 @@ import java.util.HashMap;
 
 public class Trader {
 
-    /**Deposit
-     * Permet de déposer une quantité n de m-coin et diamond
-     * dans cet ordre.
-     * Multiplie le nombre de diamants déposés par le taux du jour.
-     *Depose le minimum entre n et le nombre d'items possibles dans l'inventaire.
-     * @param n un entier représentant le nombre d'items à déposer dans le compte.
-     */
-    public static void deposit(int n,Player p) {
+    public static void deposit(int n, Player p) {
+        Bank b = Bank.bankList.get(p.getUniqueId());
+        float taux = smpBank.getPlugin().getTaux();
 
-        Bank b = smpBank.getPlugin().getListeJoueurs().get(p.getUniqueId());
+        if (!p.getInventory().contains(Material.DIAMOND) && !p.getInventory().contains(Material.EMERALD)) return;
 
-        //Uniquement si l'inventaire contient des emeralds ou diamonds
-        if (!p.getInventory().contains(Material.EMERALD) && !p.getInventory().contains(Material.DIAMOND)) return;
+        int i = 0;
 
-        //Définition du m-coin
-        //Le custom model data est toujours 42
-        //Le nom est aqua en gras
-        ItemStack mcoin = new ItemStack(Material.EMERALD,n);
-        ItemMeta Mmeta = mcoin.getItemMeta();
-        Mmeta.setDisplayName(ChatColor.AQUA + "" + ChatColor.BOLD + "M-Coin");
-        Mmeta.setCustomModelData(42);
-        mcoin.setItemMeta(Mmeta);
-
-        //Compteurs
-        int totalDiamond = 0;
-        int totalMcoin = 0;
-        int diamond = 0;
-        int coin;
-
-        //Parcours de l'inventaire, dénombrement des mcoins et diamonds
         for (ItemStack item : p.getInventory().getContents()) {
-            if (item == null) continue;
-            if (item.isSimilar(mcoin)) totalMcoin += item.getAmount();
-            if (item.isSimilar(new ItemStack(Material.DIAMOND))) totalDiamond += item.getAmount();
+            if (item.isSimilar(CustomItems.MCOIN.getItem())) {
+                i += item.getAmount();
+            }
         }
-        //Nombre maximal d'items dans l'inventaire
-        if (n>=2304) {
-            p.getInventory().remove(mcoin);
-            p.getInventory().remove(new ItemStack(Material.DIAMOND));
+        ItemStack removeQuantity = CustomItems.MCOIN.getItem();
+        removeQuantity.setAmount(Math.min(i,n));
 
-            diamond = totalDiamond;
-            coin = totalMcoin;
-        }
+        b.add(Math.min(i,n));
+        p.getInventory().remove(removeQuantity);
 
-        int reste = 0;
+        if (i<n) {
+            int j = 0;
 
-        //Supprime au mieux les mcoins
-        HashMap<Integer,ItemStack> notRemoved = p.getInventory().removeItem(mcoin);
-        if (notRemoved.size()==0) {
-            coin = n;
-        } else {
-            for (ItemStack item : notRemoved.values()) {
-                if (item.isSimilar(mcoin)) {
-                    reste += item.getAmount();
+            for (ItemStack item : p.getInventory().getContents()) {
+                if (item.isSimilar(new ItemStack(Material.DIAMOND))) {
+                    j += item.getAmount();
                 }
             }
 
-            coin = totalMcoin;
-            notRemoved.clear();
-            notRemoved = p.getInventory().removeItem(new ItemStack(Material.DIAMOND,reste));
+            removeQuantity = new ItemStack(Material.DIAMOND,Math.min(n-i,j));
 
-            if (notRemoved.size()==0) {
-                diamond = reste;
-            } else {
-                diamond = totalDiamond;
-            }
-            notRemoved.clear();
+            b.add(taux*Math.min(n-i,j));
+            p.getInventory().remove(removeQuantity);
         }
-
-        final int depositD = diamond;
-        final int depositM = coin;
-        float stonks = smpBank.getPlugin().getTaux();
-
-        b.setSolde(Math.round((b.getSolde() + depositD * stonks + depositM)*1000.0d)/1000.0d);
 
     }
 
-    /**Withdraw
-     * Permet de retirer une quantité n de mcoins.
-     * Remplit au mieux l'inventaire.
-     * Ne retire au compte que ce qu'il peut ajouter à l'inventaire.
-     * @param n un entier représentant le nombre de mcoins à retirer du compte.
-     */
-    public static void withdraw(int n,Player p) {
+    public static void withdraw(int n, Player p) {
+        Bank b = Bank.bankList.get(p.getUniqueId());
 
-        Bank b = smpBank.getPlugin().getListeJoueurs().get(p.getUniqueId());
-        double solde = b.getSolde();
-        int thune;
-        int resteThune = 0;
+        int retirer = (int) Math.min(Math.floor(b.getSolde()),n);
 
-        //Pas de solde négatif autorisé
-        if (n < solde) {
-            thune = n;
-        } else {
-            thune = (int) Math.floor(solde);
+        ItemStack item = CustomItems.MCOIN.getItem();
+        item.setAmount(retirer);
+        HashMap<Integer, ItemStack> surplus = p.getInventory().addItem(item);
+        b.add(-1*retirer);
+
+        for (ItemStack i : surplus.values()) {
+            p.getWorld().dropItem(p.getLocation(),i);
         }
 
-        //Définition du m-coin
-        //Le custom model data est toujours 42
-        //Le nom est aqua en gras
-        ItemStack mcoin = new ItemStack(Material.EMERALD,thune);
-        ItemMeta Mmeta = mcoin.getItemMeta();
-        Mmeta.setDisplayName(ChatColor.AQUA + "" + ChatColor.BOLD + "M-Coin");
-        Mmeta.setCustomModelData(42);
-        mcoin.setItemMeta(Mmeta);
-
-        //Hashmap représentant les itemstack qui n'ont pas pu être ajouté
-        HashMap<Integer,ItemStack> reste = p.getInventory().addItem(mcoin);
-
-        //Compteur des items non ajoutés par manque de place
-        if (reste.size() !=0) {
-            for (ItemStack item : reste.values()) {
-                resteThune += item.getAmount();
-            }
-        }
-
-        reste.clear();
-
-        b.setSolde(solde-thune+resteThune);
     }
 }

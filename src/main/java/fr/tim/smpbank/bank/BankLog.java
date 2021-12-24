@@ -4,7 +4,6 @@ import java.io.Serializable;
 
 public class BankLog implements Serializable {
 
-    private String uuid;
     private long time;
     private float solde;
 

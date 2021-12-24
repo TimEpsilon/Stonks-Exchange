@@ -3,9 +3,9 @@ package fr.tim.smpbank.gui;
 import fr.tim.smpbank.bank.Bank;
 import fr.tim.smpbank.bank.Trader;
 import fr.tim.smpbank.smpBank;
+import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -15,8 +15,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class BankInterface implements Listener {
     private final Inventory inventory;
@@ -37,6 +37,15 @@ public class BankInterface implements Listener {
         this.inventory.setItem(23,VisualItems.WITHDRAW_64.getItem());
         this.inventory.setItem(10,VisualItems.TAUX.getItem());
         this.inventory.setItem(12,VisualItems.SOLDE.getItem());
+
+        p.openInventory(this.inventory);
+
+        showBank();
+    }
+
+    public BankInterface() {
+        this.inventory = null;
+        this.bank = null;
     }
 
     @EventHandler
@@ -45,6 +54,7 @@ public class BankInterface implements Listener {
         ItemStack item = e.getCurrentItem();
 
         if (item == null) return;
+        if (!e.getClickedInventory().equals(this.inventory)) return;
 
         e.setCancelled(true);
 
@@ -56,46 +66,63 @@ public class BankInterface implements Listener {
         VisualItems itemEnum = VisualItems.searchItem(item.getType().toString(), item.getAmount());
         switch (itemEnum) {
 
-            case VisualItems.DEPOSIT_1:
+            case DEPOSIT_1:
                 Trader.deposit(1, player);
                 break;
 
-            case VisualItems.DEPOSIT_8:
+            case DEPOSIT_8:
                 Trader.deposit(8, player);
                 break;
 
-            case VisualItems.DEPOSIT_64:
+            case DEPOSIT_64:
                 Trader.deposit(64, player);
                 break;
 
-            case VisualItems.DEPOSIT_ALL:
+            case DEPOSIT_ALL:
                 Trader.deposit(2304, player);
                 break;
 
-            case VisualItems.WITHDRAW_1:
+            case WITHDRAW_1:
                 Trader.withdraw(1, player);
                 break;
 
-            case VisualItems.WITHDRAW_8:
+            case WITHDRAW_8:
                 Trader.withdraw(8, player);
                 break;
 
-            case VisualItems.WITHDRAW_64:
+            case WITHDRAW_64:
                 Trader.withdraw(64, player);
                 break;
 
         }
+        update();
     }
 
-    public void reload() {
-        //setItem(12, "minecraft:player_head", 1, ChatColor.GOLD + "Solde : ", "§d" + this.bank.getSolde(),0);
-        ItemStack item = this.inventory.getItem(12);
+    private void showBank() {
+        //Custom head
+        ItemStack item = VisualItems.SOLDE.getItem();
         SkullMeta meta = (SkullMeta) item.getItemMeta();
-        meta.setOwningPlayer(Bukkit.getOfflinePlayer(this.bank.getUuid()));
+        meta.setOwningPlayer(Bukkit.getOfflinePlayer(UUID.fromString(this.bank.getUuid())));
         item.setItemMeta(meta);
         this.inventory.setItem(12, item);
 
-        //setItem(10, "minecraft:nether_star", 1, ChatColor.YELLOW + "Taux du M-coin actuel :",ChatColor.GRAY + "" + smpBank.getPlugin().getTaux(),0);
+        //Taux
+        item = VisualItems.TAUX.getItem();
+        ItemMeta itemMeta = item.getItemMeta();
+        List<Component> lore =  itemMeta.lore();
+        lore.set(0,Component.text(ChatColor.GRAY + "" + this.taux));
+        itemMeta.lore(lore);
+        item.setItemMeta(itemMeta);
+        this.inventory.setItem(10,item);
+    }
+
+    private void update() {
+        ItemStack item = this.inventory.getItem(12);
+        ItemMeta meta = item.getItemMeta();
+        List<Component> lore =  meta.lore();
+        lore.set(0,Component.text("§d" + this.bank.getSolde()));
+        meta.lore(lore);
+        item.setItemMeta(meta);
     }
 
 }
