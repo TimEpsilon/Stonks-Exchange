@@ -1,15 +1,8 @@
 package fr.tim.smpbank.commands;
 
-import fr.tim.smpbank.files.Autosave;
-import fr.tim.smpbank.files.CoeffConfig;
-import fr.tim.smpbank.smpBank;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-
-import static fr.tim.smpbank.bank.Taux.newTaux;
 
 public class Taux implements CommandExecutor {
 

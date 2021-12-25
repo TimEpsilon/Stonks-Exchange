@@ -1,6 +1,8 @@
 package fr.tim.smpbank.bank;
 
 import fr.tim.smpbank.smpBank;
+import net.kyori.adventure.text.Component;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -20,6 +22,7 @@ public class Trader {
         int i = 0;
 
         for (ItemStack item : p.getInventory().getContents()) {
+            if (item == null) continue;
             if (item.isSimilar(CustomItems.MCOIN.getItem())) {
                 i += item.getAmount();
             }
@@ -28,12 +31,14 @@ public class Trader {
         removeQuantity.setAmount(Math.min(i,n));
 
         b.add(Math.min(i,n));
-        p.getInventory().remove(removeQuantity);
+
+        p.getInventory().removeItem(removeQuantity);
 
         if (i<n) {
             int j = 0;
 
             for (ItemStack item : p.getInventory().getContents()) {
+                if (item == null) continue;
                 if (item.isSimilar(new ItemStack(Material.DIAMOND))) {
                     j += item.getAmount();
                 }
@@ -42,7 +47,7 @@ public class Trader {
             removeQuantity = new ItemStack(Material.DIAMOND,Math.min(n-i,j));
 
             b.add(taux*Math.min(n-i,j));
-            p.getInventory().remove(removeQuantity);
+            p.getInventory().removeItem(removeQuantity);
         }
 
     }
@@ -58,6 +63,7 @@ public class Trader {
         b.add(-1*retirer);
 
         for (ItemStack i : surplus.values()) {
+            if (i == null || i.getAmount() == 0) continue;
             p.getWorld().dropItem(p.getLocation(),i);
         }
 

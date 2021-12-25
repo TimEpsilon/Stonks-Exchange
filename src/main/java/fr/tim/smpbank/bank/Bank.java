@@ -10,17 +10,20 @@ import java.util.*;
 public class Bank implements Serializable {
     public transient static HashMap<UUID,Bank> bankList = new HashMap<>();
 
-    private final String name;
     private final String uuid;
     private float solde;
     private List<BankLog> bankLogList = new ArrayList<>();
 
     public Bank(Player player) {
-        this.name = player.getName();
-        this.uuid = player.getUniqueId().toString();
+        this(player.getUniqueId().toString());
+    }
+
+    public Bank(String uuid) {
+        this.solde = 0;
+        this.uuid = uuid;
         loadData();
 
-        if (!bankList.containsKey(player.getUniqueId())) bankList.put(player.getUniqueId(),this);
+        if (!bankList.containsKey(uuid)) bankList.put(UUID.fromString(uuid),this);
     }
 
     private void saveData() {
@@ -43,8 +46,6 @@ public class Bank implements Serializable {
     public void loadData() {
         File file = new File(FileManager.BANK_PATH + this.uuid + ".bank");
 
-        System.out.println("file");
-
         if (!file.exists()) return;
 
         try {
@@ -64,8 +65,8 @@ public class Bank implements Serializable {
         saveData();
     }
 
-    private List<BankLog> getBankLogList() {
-        return bankLogList;
+    public List<BankLog> getBankLogList() {
+        return this.bankLogList;
     }
 
 
@@ -75,10 +76,6 @@ public class Bank implements Serializable {
 
     public String getUuid() {
         return this.uuid;
-    }
-
-    public String getName() {
-        return name;
     }
 
     public void setSolde(float newSolde) {

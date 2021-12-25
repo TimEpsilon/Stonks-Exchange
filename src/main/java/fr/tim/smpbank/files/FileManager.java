@@ -6,7 +6,7 @@ import java.io.File;
 
 public class FileManager {
 
-    public static final String BANK_PATH = smpBank.getPlugin().getDataFolder() + File.separator;
+    public static final String BANK_PATH = smpBank.getPlugin().getDataFolder() + File.separator + "";
 
     public FileManager() {
         initDataFolder();

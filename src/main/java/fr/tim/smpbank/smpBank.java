@@ -2,12 +2,12 @@ package fr.tim.smpbank;
 
 import fr.tim.smpbank.bank.Bank;
 
+import fr.tim.smpbank.bank.CalculTaux;
 import fr.tim.smpbank.commands.*;
 import fr.tim.smpbank.files.Autosave;
 import fr.tim.smpbank.files.FileManager;
 import fr.tim.smpbank.listeners.ListenerManager;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.HashMap;
@@ -28,7 +28,7 @@ public class smpBank extends JavaPlugin {
         addOnline();
         new FileManager();
         Autosave.loop();
-        fr.tim.smpbank.bank.Taux.dailyTaux();
+        CalculTaux.dailyTaux();
 
     }
 

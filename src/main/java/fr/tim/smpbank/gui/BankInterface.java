@@ -43,25 +43,7 @@ public class BankInterface implements Listener {
         showBank();
     }
 
-    public BankInterface() {
-        this.inventory = null;
-        this.bank = null;
-    }
-
-    @EventHandler
-    public void onClick(InventoryClickEvent e) {
-        Player player = (Player) e.getWhoClicked();
-        ItemStack item = e.getCurrentItem();
-
-        if (item == null) return;
-        if (!e.getClickedInventory().equals(this.inventory)) return;
-
-        e.setCancelled(true);
-
-        interaction(item,player);
-    }
-
-    private void interaction(ItemStack item,Player player) {
+    public static void interaction(ItemStack item,Player player,Inventory inv) {
 
         VisualItems itemEnum = VisualItems.searchItem(item.getType().toString(), item.getAmount());
         switch (itemEnum) {
@@ -95,7 +77,7 @@ public class BankInterface implements Listener {
                 break;
 
         }
-        update();
+        update(inv,Bank.bankList.get(player.getUniqueId()));
     }
 
     private void showBank() {
@@ -114,15 +96,18 @@ public class BankInterface implements Listener {
         itemMeta.lore(lore);
         item.setItemMeta(itemMeta);
         this.inventory.setItem(10,item);
+
+        update(this.inventory,this.bank);
     }
 
-    private void update() {
-        ItemStack item = this.inventory.getItem(12);
+    public static void update(Inventory inv, Bank bank) {
+        ItemStack item = inv.getItem(12);
         ItemMeta meta = item.getItemMeta();
         List<Component> lore =  meta.lore();
-        lore.set(0,Component.text("§d" + this.bank.getSolde()));
+        lore.set(0,Component.text("§d" + bank.getSolde()));
         meta.lore(lore);
         item.setItemMeta(meta);
+        inv.setItem(12,item);
     }
 
 }
