@@ -1,13 +1,9 @@
 package fr.tim.smpbank.bank;
 
 import fr.tim.smpbank.smpBank;
-import net.kyori.adventure.text.Component;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.HashMap;
 
@@ -15,7 +11,7 @@ public class Trader {
 
     public static void deposit(int n, Player p) {
         Bank b = Bank.bankList.get(p.getUniqueId());
-        float taux = smpBank.getPlugin().getTaux();
+        float taux = smpBank.getPlugin().getTaux().getTaux();
 
         if (!p.getInventory().contains(Material.DIAMOND) && !p.getInventory().contains(Material.EMERALD)) return;
 

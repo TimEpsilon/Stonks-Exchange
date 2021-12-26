@@ -1,6 +1,10 @@
 package fr.tim.smpbank.listeners;
 
+import fr.tim.smpbank.bank.Bank;
+import fr.tim.smpbank.bank.BankLog;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -9,6 +13,7 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.UUID;
 
 public class GetTauxParametres implements Listener {
@@ -37,7 +42,27 @@ public class GetTauxParametres implements Listener {
         if (!JoinedList.containsKey(p.getUniqueId())) JoinedList.put(p.getUniqueId(),true);
     }
 
-    public void resetParameters() {
+    public static float getTotalBefore(long time) {
+        float total = 0;
+        for (OfflinePlayer p : Bukkit.getOfflinePlayers()) {
+            if (!Bank.bankList.containsKey(p.getUniqueId())) {
+                new Bank(p.getUniqueId().toString());
+            }
+
+            List<BankLog> logList = Bank.bankList.get(p.getUniqueId()).getBankLogList();
+
+            for (int i = logList.size()-1; i > -1; i--) {
+                if (logList.get(i).getTime() <= time) {
+                    total += logList.get(i).getSolde();
+                    break;
+                }
+            }
+        }
+
+        return total;
+    }
+
+    public static void resetParameters() {
         JoinedList.clear();
         DiamondList.clear();
         DeadList.clear();

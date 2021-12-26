@@ -84,31 +84,4 @@ public abstract class CalculTaux {
     public static int temps(float pente) {
         return (int) Math.min(4,Math.round(1/Math.sqrt(Math.abs(pente))));
     }
-
-    public static void dailyTaux() {
-        smpBank.getPlugin().setTaux(5);
-
-        long delay = LocalTime.now().until(LocalTime.parse("00:00:00"), ChronoUnit.SECONDS)*20;
-
-        /**Bukkit.getScheduler().runTaskTimerAsynchronously(smpBank.getPlugin(), () -> {
-            Bukkit.broadcastMessage(ChatColor.AQUA + "Nouveau taux!");
-            float tau = CoeffConfig.getCoeff("Taux.total")[0];
-            float Tn = Autosave.getValueDate(1,"Taux");
-            int jn = smpBank.getPlugin().getJoined().size();
-            double x = Autosave.getTotalSolde(1);
-            double dx = x - Autosave.getTotalSolde(2);
-            float d = smpBank.getPlugin().getDead().size();
-
-            Bukkit.broadcastMessage("Tn = " + Tn);
-            Bukkit.broadcastMessage("jn = " + jn);
-            Bukkit.broadcastMessage("x = " + x);
-            Bukkit.broadcastMessage("dx = " + dx);
-            float taux = newTaux(tau,Tn,jn,x,dx,d);
-
-            smpBank.getPlugin().setTaux(taux);
-
-            smpBank.getPlugin().getJoined().clear();
-            smpBank.getPlugin().getDead().clear();
-        },delay,1728000);**/
-    }
 }

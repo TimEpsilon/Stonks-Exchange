@@ -3,6 +3,7 @@ package fr.tim.smpbank;
 import fr.tim.smpbank.bank.Bank;
 
 import fr.tim.smpbank.bank.CalculTaux;
+import fr.tim.smpbank.bank.Taux;
 import fr.tim.smpbank.commands.*;
 import fr.tim.smpbank.files.Autosave;
 import fr.tim.smpbank.files.FileManager;
@@ -15,20 +16,18 @@ import java.util.UUID;
 
 public class smpBank extends JavaPlugin {
 
-    HashMap<UUID, Bank> listeJoueurs = new HashMap<>();
-    HashMap<UUID,Boolean> joined = new HashMap<>();
-    HashMap<UUID,Boolean> dead = new HashMap<>();
     public static smpBank plugin;
-    public float taux;
+    public Taux taux;
 
     @Override
     public void onEnable() {
         ListenerManager.registerEvents(this);
         registerCommands();
-        addOnline();
         new FileManager();
         Autosave.loop();
-        CalculTaux.dailyTaux();
+
+        this.taux = new Taux();
+
 
     }
 
@@ -44,38 +43,12 @@ public class smpBank extends JavaPlugin {
         plugin = this;
     }
 
-    public HashMap<UUID, Bank> getListeJoueurs() {
-        return listeJoueurs;
-    }
-
-    public HashMap<UUID, Boolean> getJoined() {
-        return joined;
-    }
-
-    public HashMap<UUID, Boolean> getDead() {
-        return dead;
-    }
-
     public static smpBank getPlugin() {
         return plugin;
     }
 
-    public float getTaux() {
-        return taux;
-    }
-
-    public void setTaux(float stonks) {
-        taux = stonks;
-    }
-
-
-    private void addOnline() {
-        HashMap<UUID,Bank> liste = getListeJoueurs();
-        for (Player p : this.getServer().getOnlinePlayers()) {
-            if (!liste.containsKey(p.getUniqueId())){
-                liste.put(p.getUniqueId(),new Bank(p));
-            }
-        }
+    public Taux getTaux() {
+        return this.taux;
     }
 
     private void registerCommands() {
@@ -83,7 +56,6 @@ public class smpBank extends JavaPlugin {
         getCommand("forcesave").setExecutor(new Forcesave());
         getCommand("deposit").setExecutor(new Deposit());
         getCommand("withdraw").setExecutor(new Withdraw());
-        getCommand("taux").setExecutor(new Taux());
 
     }
 }

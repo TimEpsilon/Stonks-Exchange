@@ -10,7 +10,7 @@ import java.io.IOException;
 public class CoeffConfig {
 
     private static FileConfiguration load() {
-        File file = new File(smpBank.getPlugin().getDataFolder(),"config.yml");
+        File file = new File(FileManager.BANK_PATH + "config.yml");
         return YamlConfiguration.loadConfiguration(file);
     }
 

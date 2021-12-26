@@ -22,6 +22,7 @@ public class Bank implements Serializable {
         this.solde = 0;
         this.uuid = uuid;
         loadData();
+        logBankState();
 
         if (!bankList.containsKey(uuid)) bankList.put(UUID.fromString(uuid),this);
     }
@@ -46,7 +47,10 @@ public class Bank implements Serializable {
     public void loadData() {
         File file = new File(FileManager.BANK_PATH + this.uuid + ".bank");
 
-        if (!file.exists()) return;
+        if (!file.exists()) {
+            saveData();
+            return;
+        }
 
         try {
             ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file));
