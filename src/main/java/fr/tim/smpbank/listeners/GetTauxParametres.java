@@ -5,6 +5,7 @@ import fr.tim.smpbank.bank.BankLog;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -31,7 +32,7 @@ public class GetTauxParametres implements Listener {
     @EventHandler
     public void onDiamondMined(BlockBreakEvent e) {
         Player p = e.getPlayer();
-        if (e.getBlock().getType().equals(Material.DIAMOND_ORE) || e.getBlock().getType().equals(Material.DEEPSLATE_DIAMOND_ORE)) {
+        if ((e.getBlock().getType().equals(Material.DIAMOND_ORE) || e.getBlock().getType().equals(Material.DEEPSLATE_DIAMOND_ORE)) && !p.getInventory().getItemInMainHand().getEnchantments().containsKey(Enchantment.SILK_TOUCH)) {
             DiamondList.compute(p.getUniqueId(),(k, v) -> (v == null) ? 1 : v+1);
         }
     }

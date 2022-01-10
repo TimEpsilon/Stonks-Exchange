@@ -22,7 +22,7 @@ public class MapRender extends MapRenderer {
     private float ymax;
     private boolean hasRendered;
 
-    public MapRender(float[] x, float[] y) {
+    public MapRender(float[]x, float[] y) {
         super(false);
         this.hasRendered = false;
         this.X = x.clone();
@@ -43,6 +43,26 @@ public class MapRender extends MapRenderer {
             ymin = Math.min(ymin,Y);
             ymax = Math.max(ymax,Y);
         }
+
+        float dx = (xmax - xmin);
+        float dy = (ymax - ymin);
+
+        for (int i = 0; i<x.length; i++ ) {
+            this.x_scale[i] = (this.X[i] - xmin)/dx;
+            this.y_scale[i] = (this.Y[i] - ymin)/dy;
+        }
+
+        this.dx = dx;
+        this.dy = dy;
+        this.xmin = xmin;
+        this.ymin = ymin;
+        this.xmax = xmax;
+        this.ymax = ymax;
+
+    }
+
+    public MapRender(float[] x, float[] y, float xmax, float xmin, float ymax, float ymin) {
+        this(x,y);
 
         float dx = (xmax - xmin);
         float dy = (ymax - ymin);
@@ -87,17 +107,14 @@ public class MapRender extends MapRenderer {
                 canvas.setPixel(2,i,MapPalette.DARK_GRAY);
                 canvas.setPixel(i,125,MapPalette.DARK_GRAY);
                 if (i%32 == 0) {
-                    cursors.addCursor(-128,127 - i*2,(byte)0,(byte)7,true,String.valueOf(Math.round((this.ymin + this.dy/128f*i) *1000f)/1000f));
-                    cursors.addCursor(-128 + 2*i,127,(byte)0,(byte)7,true,String.valueOf(Math.round((this.xmin + this.dx/128f*i) *1000f)/1000f));
+                    cursors.addCursor(-128,-128 + i*2,(byte)0,(byte)7,true,String.valueOf(Math.round((this.ymax - this.dy/128f*i) *1000f)/1000f));
                 }
             }
         }
 
-        cursors.addCursor(-128,-128,(byte)0,(byte)7,true,String.valueOf(Math.round((this.ymax) *1000f)/1000f));
-        cursors.addCursor(127,127,(byte)0,(byte)7,true,String.valueOf(Math.round((this.xmax) *1000f)/1000f));
-
         for (int j =0; j < this.x_scale.length; j++) {
             cursors.addCursor(Math.round(this.x_scale[j]*255)-128,Math.round(this.y_scale[j]*-255)+127,(byte)0,(byte)4,true);
+            if (j%2 == 0) cursors.addCursor(Math.round(this.x_scale[j]*255)-128,127,(byte)0,(byte)7,true,String.valueOf(Math.round(this.x_scale[j]*this.dx *1000f)/1000f-this.dx));
         }
         canvas.setCursors(cursors);
 

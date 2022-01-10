@@ -15,9 +15,11 @@ public class Taux implements Serializable {
     private float taux;
     private List<BankLog> tauxLog = new ArrayList<>();
 
-    private static float moyenne = 5;
-    private static float ecart = 0.3f;
-    private static float ecartMax = 2;
+    private transient static float moyenne = 5;
+    private transient static float ecart = 0.05f;
+    private transient static float ecartMax = 2;
+    public transient static final long time = 60;
+    private transient static float retour =0.1f;
 
 
     public Taux() {
@@ -73,7 +75,7 @@ public class Taux implements Serializable {
         }
     }
 
-    private List<BankLog> getTauxLog() {
+    public List<BankLog> getTauxLog() {
         return this.tauxLog;
     }
 
@@ -92,21 +94,19 @@ public class Taux implements Serializable {
         }
 
         v = GetTauxParametres.getTotalBefore(System.currentTimeMillis())
-                - GetTauxParametres.getTotalBefore(System.currentTimeMillis()- 300000);
+                - GetTauxParametres.getTotalBefore(System.currentTimeMillis()- time*1000);
 
         float somme = CalculTaux.somme(j,m,d,v);
         float pente = CalculTaux.pente(somme);
 
-        Bukkit.broadcastMessage(this.taux + pente + (moyenne - this.taux) * 0.1f + Math.random()*2*ecart - ecart + "");
+        Bukkit.broadcastMessage(pente + "");
 
-        this.taux = (float) (this.taux + pente + (moyenne - this.taux) * 0.1f + Math.random()*2*ecart - ecart);
+        this.taux = (float) (this.taux + pente + (moyenne - this.taux) * retour + Math.random()*2*ecart - ecart);
 
         if (this.taux > moyenne + ecartMax) this.taux = 2*moyenne + 2*ecartMax - this.taux;
         if (this.taux < moyenne - ecartMax) this.taux = 2*moyenne - 2*ecartMax - this.taux;
 
         this.taux = Math.round(this.taux*1000f)/1000f;
-
-        logTaux(System.currentTimeMillis());
 
         GetTauxParametres.resetParameters();
 
@@ -115,11 +115,10 @@ public class Taux implements Serializable {
     public void dailyUpdate() {
         Bukkit.getScheduler().runTaskTimerAsynchronously(StonksExchange.getPlugin(),() -> {
             nextTaux();
-            Bukkit.broadcast(Component.text(this.taux));
             Bukkit.broadcast(Component.text(ChatColor.AQUA + "Nouveau Taux"));
             saveData();
 
-        },6000,6000);
+        },time*20,time*20);
     }
 
 }

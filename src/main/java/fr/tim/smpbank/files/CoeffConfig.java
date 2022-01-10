@@ -34,17 +34,17 @@ public class CoeffConfig {
                 coeff[0] = (float)fc.getDouble(path+".m");
                 break;
 
-            case "Somme":
-                coeff[0] = (float)fc.getDouble(path+"aJoueurs");
-                coeff[1] = (float)fc.getDouble(path+"aVariation");
-                coeff[2] = (float)fc.getDouble(path+"aMort");
-                coeff[3] = (float)fc.getDouble(path+"aDiamonds");
+            case "Taux.Somme":
+                coeff[0] = (float)fc.getDouble(path+".aJoueurs");
+                coeff[1] = (float)fc.getDouble(path+".aVariation");
+                coeff[2] = (float)fc.getDouble(path+".aMort");
+                coeff[3] = (float)fc.getDouble(path+".aDiamonds");
                 break;
 
-            case "Pente":
-                coeff[0] = (float)fc.getDouble(path+"a");
-                coeff[1] = (float)fc.getDouble(path+"K");
-                coeff[2] = (float)fc.getDouble(path+"r");
+            case "Taux.Pente":
+                coeff[0] = (float)fc.getDouble(path+".a");
+                coeff[1] = (float)fc.getDouble(path+".K");
+                coeff[2] = (float)fc.getDouble(path+".r");
                 break;
         }
 

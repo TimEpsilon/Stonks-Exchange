@@ -1,5 +1,7 @@
 package fr.tim.smpbank.gui;
 
+import fr.tim.smpbank.StonksExchange;
+import fr.tim.smpbank.bank.Taux;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -34,12 +36,17 @@ public class GraphRender implements Listener {
             for (MapRenderer render : map.getRenderers()) {
                 map.removeRenderer(render);
             }
-            float[] x = {0,1,2,3,4,5,6,7,8,9};
-            float[] y = {(int)(Math.random()*10),(int)(Math.random()*10),(int)(Math.random()*10),3,(int)(Math.random()*10),(int)(Math.random()*10),(int)(Math.random()*10),(int)(Math.random()*10),(int)(Math.random()*10),6};
+            Taux taux = StonksExchange.getPlugin().taux;
 
-            //float[] x = {0,1,2};
-            //float[] y = {2,-3,4};
-            map.addRenderer(new MapRender(x,y));
+            float[] x = new float[Math.min(10,taux.getTauxLog().size())];
+            float[] y = new float[Math.min(10,taux.getTauxLog().size())];
+
+            for (int i =0; i>-x.length; i--) {
+                x[-i] = i;
+                y[-i] = taux.getTauxLog().get(taux.getTauxLog().size() - 1 + i).getSolde();
+            }
+
+            map.addRenderer(new MapRender(x,y,0,-9,7,3));
 
             MapMeta meta = (MapMeta) e.getItem().getItemMeta();
             meta.setMapView(map);

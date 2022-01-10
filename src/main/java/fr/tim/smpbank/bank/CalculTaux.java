@@ -42,7 +42,7 @@ public abstract class CalculTaux {
     }
 
     public static float somme(float joueurs,float morts, float diamond, float variation) {
-        float[] coeff = CoeffConfig.getCoeff("Somme");
+        float[] coeff = CoeffConfig.getCoeff("Taux.Somme");
         float aJoueurs = coeff[0];
         float aVariation = coeff[1];
         float aMort = coeff[2];
@@ -53,14 +53,19 @@ public abstract class CalculTaux {
     }
 
     public static float pente(float somme) {
-        float[] coeff = CoeffConfig.getCoeff("Pente");
+        float[] coeff = CoeffConfig.getCoeff("Taux.Pente");
         float a = coeff[0];
         float K = coeff[1];
         float r = coeff[2];
 
+        Bukkit.broadcastMessage("Somme " + somme);
+
         double exp = Math.exp(-r * Math.abs(somme));
         float p = (float) (K/(1+a* exp));
         float q = (float) (K-K/(1+1/a* exp));
+
+        Bukkit.broadcastMessage("p " + p);
+        Bukkit.broadcastMessage("q "+q);
 
         float tirage = (float) Math.random();
 
