@@ -1,19 +1,26 @@
 package fr.tim.smpbank.files;
 
 import fr.tim.smpbank.bank.Bank;
-import fr.tim.smpbank.smpBank;
+import fr.tim.smpbank.StonksExchange;
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 
 public abstract class Autosave {
 
     public static void loop() {
-        Bukkit.getScheduler().runTaskTimerAsynchronously(smpBank.getPlugin(), () -> {
+        for (Player p : Bukkit.getOnlinePlayers()) {
+            if (!Bank.bankList.containsKey(p.getUniqueId())) {
+                new Bank(p);
+            }
+        }
+
+        Bukkit.getScheduler().runTaskTimerAsynchronously(StonksExchange.getPlugin(), () -> {
             Bukkit.broadcastMessage("§2Sauvegarde des donnees...");
 
             for (Bank bank : Bank.bankList.values()) {
                 bank.logBankState();
             }
 
-        },0,288000);
+        },0,6000);
     }
 }

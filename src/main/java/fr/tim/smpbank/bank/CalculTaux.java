@@ -1,14 +1,7 @@
 package fr.tim.smpbank.bank;
 
-import fr.tim.smpbank.files.Autosave;
 import fr.tim.smpbank.files.CoeffConfig;
-import fr.tim.smpbank.smpBank;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-
-import java.time.LocalTime;
-import java.time.temporal.ChronoUnit;
-import java.util.Random;
 
 public abstract class CalculTaux {
 
@@ -45,7 +38,6 @@ public abstract class CalculTaux {
         float[] coeff = CoeffConfig.getCoeff("Taux.diamonds");
 
         float m = coeff[0];
-
         return (float) (Math.pow(2,-x/m)-1);
     }
 

@@ -2,14 +2,12 @@ package fr.tim.smpbank.gui;
 
 import fr.tim.smpbank.bank.Bank;
 import fr.tim.smpbank.bank.Trader;
-import fr.tim.smpbank.smpBank;
+import fr.tim.smpbank.StonksExchange;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -21,7 +19,7 @@ import java.util.UUID;
 public class BankInterface implements Listener {
     private final Inventory inventory;
     private final Bank bank;
-    float taux = smpBank.getPlugin().getTaux();
+    float taux = StonksExchange.getPlugin().getTaux().getTaux();
 
     public BankInterface(Player p) {
         this.bank = Bank.bankList.get(p.getUniqueId());

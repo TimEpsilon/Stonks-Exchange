@@ -2,7 +2,7 @@ package fr.tim.smpbank.bank;
 
 import fr.tim.smpbank.files.FileManager;
 import fr.tim.smpbank.listeners.GetTauxParametres;
-import fr.tim.smpbank.smpBank;
+import fr.tim.smpbank.StonksExchange;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -23,7 +23,6 @@ public class Taux implements Serializable {
     public Taux() {
         this.taux = 5;
         loadData();
-        logTaux(System.currentTimeMillis());
     }
 
     public float getTaux() {
@@ -41,6 +40,8 @@ public class Taux implements Serializable {
             if (!file.exists()) {
                 file.createNewFile();
             }
+
+            logTaux(System.currentTimeMillis());
 
             ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(file));
             oos.writeObject(this);
@@ -65,13 +66,15 @@ public class Taux implements Serializable {
             Taux taux = (Taux) ois.readObject();
             ois.close();
 
-            for (int i = taux.tauxLog.size(); i > -1; i--) {
-                if (System.currentTimeMillis() > taux.tauxLog.get(i).getTime()) this.taux = taux.tauxLog.get(i).getSolde();
-            }
-            this.tauxLog = taux.tauxLog;
+            this.tauxLog = taux.getTauxLog();
+            this.taux = taux.getTaux();
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
+    }
+
+    private List<BankLog> getTauxLog() {
+        return this.tauxLog;
     }
 
     public void nextTaux() {
@@ -89,32 +92,34 @@ public class Taux implements Serializable {
         }
 
         v = GetTauxParametres.getTotalBefore(System.currentTimeMillis())
-                - GetTauxParametres.getTotalBefore(System.currentTimeMillis()- 86400000);
+                - GetTauxParametres.getTotalBefore(System.currentTimeMillis()- 300000);
 
         float somme = CalculTaux.somme(j,m,d,v);
         float pente = CalculTaux.pente(somme);
-        int dt = CalculTaux.temps(pente);
 
-        for (int i = 0; i<dt; i++) {
-            this.taux = (float) (this.taux + pente + (moyenne - this.taux) * 0.1f + Math.random()*2*ecart - ecart);
+        Bukkit.broadcastMessage(this.taux + pente + (moyenne - this.taux) * 0.1f + Math.random()*2*ecart - ecart + "");
 
-            if (this.taux > moyenne + ecartMax) this.taux = 2*moyenne + 2*ecartMax - this.taux;
-            if (this.taux < moyenne - ecartMax) this.taux = 2*moyenne - 2*ecartMax - this.taux;
+        this.taux = (float) (this.taux + pente + (moyenne - this.taux) * 0.1f + Math.random()*2*ecart - ecart);
 
-            logTaux(System.currentTimeMillis()+ i* 86400000L);
-        }
+        if (this.taux > moyenne + ecartMax) this.taux = 2*moyenne + 2*ecartMax - this.taux;
+        if (this.taux < moyenne - ecartMax) this.taux = 2*moyenne - 2*ecartMax - this.taux;
+
+        this.taux = Math.round(this.taux*1000f)/1000f;
+
+        logTaux(System.currentTimeMillis());
 
         GetTauxParametres.resetParameters();
-
-        loadData();
 
     }
 
     public void dailyUpdate() {
-        Bukkit.getScheduler().runTaskTimerAsynchronously(smpBank.getPlugin(),() -> {
+        Bukkit.getScheduler().runTaskTimerAsynchronously(StonksExchange.getPlugin(),() -> {
             nextTaux();
+            Bukkit.broadcast(Component.text(this.taux));
             Bukkit.broadcast(Component.text(ChatColor.AQUA + "Nouveau Taux"));
-        },0,1728000);
+            saveData();
+
+        },6000,6000);
     }
 
 }

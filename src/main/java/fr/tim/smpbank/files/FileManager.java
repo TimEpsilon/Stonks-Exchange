@@ -1,21 +1,21 @@
 package fr.tim.smpbank.files;
 
-import fr.tim.smpbank.smpBank;
+import fr.tim.smpbank.StonksExchange;
 
 import java.io.File;
 
 public class FileManager {
 
-    public static final String BANK_PATH = smpBank.getPlugin().getDataFolder() + File.separator + "";
+    public static final String BANK_PATH = StonksExchange.getPlugin().getDataFolder() + File.separator + "";
 
     public FileManager() {
         initDataFolder();
     }
 
     private void initDataFolder() {
-        if (!smpBank.getPlugin().getDataFolder().exists()) {
-            smpBank.getPlugin().getDataFolder().mkdir();
-            smpBank.getPlugin().saveDefaultConfig();
+        if (!StonksExchange.getPlugin().getDataFolder().exists()) {
+            StonksExchange.getPlugin().getDataFolder().mkdir();
         }
+        StonksExchange.getPlugin().saveDefaultConfig();
     }
 }

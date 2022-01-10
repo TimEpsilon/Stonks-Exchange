@@ -1,6 +1,6 @@
 package fr.tim.smpbank.gui;
 
-import fr.tim.smpbank.smpBank;
+import fr.tim.smpbank.StonksExchange;
 import org.bukkit.entity.Player;
 import org.bukkit.map.*;
 
@@ -69,7 +69,7 @@ public class MapRender extends MapRenderer {
         this.hasRendered = true;
 
         try {
-            InputStream is = smpBank.getPlugin().getResource("graph_paper.png");
+            InputStream is = StonksExchange.getPlugin().getResource("graph_paper.png");
             BufferedImage image = ImageIO.read(is);
             canvas.drawImage(0,0,image);
         } catch (IOException e) {

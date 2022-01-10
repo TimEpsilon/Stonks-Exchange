@@ -2,21 +2,17 @@ package fr.tim.smpbank;
 
 import fr.tim.smpbank.bank.Bank;
 
-import fr.tim.smpbank.bank.CalculTaux;
 import fr.tim.smpbank.bank.Taux;
 import fr.tim.smpbank.commands.*;
 import fr.tim.smpbank.files.Autosave;
 import fr.tim.smpbank.files.FileManager;
 import fr.tim.smpbank.listeners.ListenerManager;
-import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.util.HashMap;
-import java.util.UUID;
 
-public class smpBank extends JavaPlugin {
+public class StonksExchange extends JavaPlugin {
 
-    public static smpBank plugin;
+    public static StonksExchange plugin;
     public Taux taux;
 
     @Override
@@ -27,6 +23,7 @@ public class smpBank extends JavaPlugin {
         Autosave.loop();
 
         this.taux = new Taux();
+        this.taux.dailyUpdate();
 
 
     }
@@ -43,7 +40,7 @@ public class smpBank extends JavaPlugin {
         plugin = this;
     }
 
-    public static smpBank getPlugin() {
+    public static StonksExchange getPlugin() {
         return plugin;
     }
 

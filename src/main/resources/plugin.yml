@@ -1,7 +1,7 @@
 name: smpBank
 version: ${project.version}
-main: fr.tim.smpbank.smpBank
-api-version: 1.17
+main: fr.tim.smpbank.StonksExchange
+api-version: 1.18
 
 commands:
   bank:

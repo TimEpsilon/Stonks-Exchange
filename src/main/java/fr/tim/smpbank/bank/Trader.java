@@ -1,6 +1,6 @@
 package fr.tim.smpbank.bank;
 
-import fr.tim.smpbank.smpBank;
+import fr.tim.smpbank.StonksExchange;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -11,7 +11,7 @@ public class Trader {
 
     public static void deposit(int n, Player p) {
         Bank b = Bank.bankList.get(p.getUniqueId());
-        float taux = smpBank.getPlugin().getTaux().getTaux();
+        float taux = StonksExchange.getPlugin().getTaux().getTaux();
 
         if (!p.getInventory().contains(Material.DIAMOND) && !p.getInventory().contains(Material.EMERALD)) return;
 
