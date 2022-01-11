@@ -43,8 +43,7 @@ public class CoeffConfig {
 
             case "Taux.Pente":
                 coeff[0] = (float)fc.getDouble(path+".a");
-                coeff[1] = (float)fc.getDouble(path+".K");
-                coeff[2] = (float)fc.getDouble(path+".r");
+                coeff[1] = (float)fc.getDouble(path+".r");
                 break;
         }
 

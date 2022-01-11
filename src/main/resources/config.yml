@@ -28,14 +28,13 @@ Taux:
 
   #Après injection dans chaque fonction, chaque résultat est multiplié par un coefficient pour calculer la somme
   Somme:
-    aJoueurs: 0.5
-    aVariation: 0.3
-    aMort: 0.1
-    aDiamonds: 0.1
+    aJoueurs: 0.6
+    aVariation: 0.4
+    aMort: 0.6
+    aDiamonds: 0.3
 
   #Le taux suit toujours une évolution linéaire dont la pente est déterminée par la somme
-  #A chaque instant, la probabilité d'augmenter est de p = K / (1+a*e^-rx) et celle de diminuer q = K - K / (1+(1/a)*e^-rx)
+  #A chaque instant, la probabilité d'augmenter est de p = (1+a) / (3+3a*e^-rx) et celle de diminuer q = (1+a)/3 - (1+a) / (3+(3/a)*e^-rx)
   Pente:
     a: 1.5
-    K: 0.5
     r: 5
