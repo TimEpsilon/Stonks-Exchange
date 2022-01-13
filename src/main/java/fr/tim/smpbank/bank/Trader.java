@@ -1,9 +1,11 @@
 package fr.tim.smpbank.bank;
 
 import fr.tim.smpbank.StonksExchange;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.persistence.PersistentDataType;
 
 import java.util.HashMap;
 
@@ -18,17 +20,18 @@ public class Trader {
         int i = 0;
 
         for (ItemStack item : p.getInventory().getContents()) {
+            if (n < 0) break;
             if (item == null) continue;
-            if (item.isSimilar(CustomItems.MCOIN.getItem())) {
-                i += item.getAmount();
+            if (item.getItemMeta().getPersistentDataContainer().has(CustomItems.CustomItemKey, PersistentDataType.STRING)) {
+                if(item.getItemMeta().getPersistentDataContainer().get(CustomItems.CustomItemKey,PersistentDataType.STRING).contains(ChatColor.AQUA + "" + ChatColor.BOLD + "M-Coin")) {
+                    int amount = item.getAmount();
+                    item.setAmount(Math.max(amount - n,0));
+                    int cleared = Math.min(n, amount);
+                    n -= cleared;
+                    b.add(cleared);
+                }
             }
         }
-        ItemStack removeQuantity = CustomItems.MCOIN.getItem();
-        removeQuantity.setAmount(Math.min(i,n));
-
-        b.add(Math.min(i,n));
-
-        p.getInventory().removeItem(removeQuantity);
 
         if (i<n) {
             int j = 0;
@@ -40,7 +43,7 @@ public class Trader {
                 }
             }
 
-            removeQuantity = new ItemStack(Material.DIAMOND,Math.min(n-i,j));
+            ItemStack removeQuantity = new ItemStack(Material.DIAMOND,Math.min(n-i,j));
 
             b.add(taux*Math.min(n-i,j));
             p.getInventory().removeItem(removeQuantity);

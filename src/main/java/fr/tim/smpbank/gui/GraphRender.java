@@ -28,7 +28,6 @@ public class GraphRender implements Listener {
     @EventHandler
     public void showGraph(PlayerInteractEvent e) {
 
-
         if (e.getMaterial().isAir()) return;
 
         ItemStack item = e.getItem();

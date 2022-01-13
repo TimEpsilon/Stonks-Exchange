@@ -1,8 +1,8 @@
 package fr.tim.smpbank.bank;
 
+import fr.tim.smpbank.StonksExchange;
 import fr.tim.smpbank.files.FileManager;
 import fr.tim.smpbank.listeners.GetTauxParametres;
-import fr.tim.smpbank.StonksExchange;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -80,6 +80,7 @@ public class Taux implements Serializable {
     }
 
     public void nextTaux() {
+
         float j = GetTauxParametres.JoinedList.size();
         float m = 0;
         float d = 0;
