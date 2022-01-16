@@ -24,7 +24,7 @@ public class Deposit implements CommandExecutor {
                         player.sendMessage(ChatColor.RED +"Veuillez entrer un entier positif!");
                         return false;
                     }
-                    Trader.deposit(n,player);
+                    Trader.deposit(n,player,player.getUniqueId());
                     return true;
                 } catch (NumberFormatException e) {
                     player.sendMessage(ChatColor.RED +"L'argument n'est pas un entier!");

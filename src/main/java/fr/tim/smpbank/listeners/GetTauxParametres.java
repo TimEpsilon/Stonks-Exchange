@@ -15,6 +15,7 @@ import org.bukkit.event.player.PlayerJoinEvent;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Random;
 import java.util.UUID;
 
 public class GetTauxParametres implements Listener {
@@ -63,9 +64,42 @@ public class GetTauxParametres implements Listener {
         return total;
     }
 
+    public static float getTotalNow() {
+        float total = 0;
+        for (OfflinePlayer p : Bukkit.getOfflinePlayers()) {
+            if (!Bank.bankList.containsKey(p.getUniqueId())) {
+                new Bank(p.getUniqueId().toString());
+            }
+
+            total += Bank.bankList.get(p.getUniqueId()).getSolde();
+        }
+
+        return total;
+    }
+
     public static void resetParameters() {
         JoinedList.clear();
         DiamondList.clear();
         DeadList.clear();
+    }
+
+    public static float[] getFakeParameters() {
+        float[] parameters = {0,0,0,0};
+        //0 : joueurs
+        //1 : morts
+        //2 : diamonds
+        //3 : variation
+
+        parameters[0] = Math.round(7*Math.random());
+
+        for (int i =0; i < parameters[0]; i++) {
+            while (Math.random() < 0.2) {
+                parameters[1] += 1;
+            }
+            parameters[2] += Math.round(Math.random()*10);
+            parameters[3] += Math.round(Math.random()*700-200);
+        }
+
+        return parameters;
     }
 }

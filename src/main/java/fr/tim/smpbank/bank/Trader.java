@@ -8,11 +8,12 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
 
 import java.util.HashMap;
+import java.util.UUID;
 
 public class Trader {
 
-    public static void deposit(int n, Player p) {
-        Bank b = Bank.bankList.get(p.getUniqueId());
+    public static void deposit(int n, Player p, UUID uuid) {
+        Bank b = Bank.bankList.get(uuid);
         float taux = StonksExchange.getPlugin().getTaux().getTaux();
 
         if (!p.getInventory().contains(Material.DIAMOND) && !p.getInventory().contains(Material.EMERALD)) return;
@@ -28,7 +29,7 @@ public class Trader {
                     item.setAmount(Math.max(amount - n,0));
                     int cleared = Math.min(n, amount);
                     n -= cleared;
-                    b.add(cleared);
+                    b.add(Math.round(1000f*cleared)/1000f);
                 }
             }
         }
@@ -45,21 +46,21 @@ public class Trader {
 
             ItemStack removeQuantity = new ItemStack(Material.DIAMOND,Math.min(n-i,j));
 
-            b.add(taux*Math.min(n-i,j));
+            b.add(Math.round(1000f*taux*Math.min(n-i,j))/1000f);
             p.getInventory().removeItem(removeQuantity);
         }
 
     }
 
-    public static void withdraw(int n, Player p) {
-        Bank b = Bank.bankList.get(p.getUniqueId());
+    public static void withdraw(int n, Player p,UUID uuid) {
+        Bank b = Bank.bankList.get(uuid);
 
         int retirer = (int) Math.min(Math.floor(b.getSolde()),n);
 
         ItemStack item = CustomItems.MCOIN.getItem();
         item.setAmount(retirer);
         HashMap<Integer, ItemStack> surplus = p.getInventory().addItem(item);
-        b.add(-1*retirer);
+        b.add(Math.round(1000f*-1*retirer)/1000f);
 
         for (ItemStack i : surplus.values()) {
             if (i == null || i.getAmount() == 0) continue;

@@ -16,10 +16,10 @@ public class Taux implements Serializable {
     private List<BankLog> tauxLog = new ArrayList<>();
 
     private transient static float moyenne = 5;
-    private transient static float ecart = 0f;
+    private transient static float ecartRandom = 0.15f;
     private transient static float ecartMax = 2;
     public transient static final long time = 60;
-    private transient static float retour =0f;
+    private transient static float retour =0.2f;
 
 
     public Taux() {
@@ -94,20 +94,22 @@ public class Taux implements Serializable {
             d += i;
         }
 
-        v = GetTauxParametres.getTotalBefore(System.currentTimeMillis())
+        v = GetTauxParametres.getTotalNow()
                 - GetTauxParametres.getTotalBefore(System.currentTimeMillis()- time*1000);
+
+        Bukkit.broadcastMessage("variation " + v);
 
         float somme = CalculTaux.somme(j,m,d,v);
         float pente = CalculTaux.pente(somme);
 
-        this.taux = (float) (this.taux + pente + (moyenne - this.taux) * retour + Math.random()*2*ecart - ecart);
+        this.taux = (float) (this.taux + pente + (moyenne - this.taux) * retour + Math.random()*2*ecartRandom - ecartRandom);
 
         if (this.taux > moyenne + ecartMax) this.taux = 2*moyenne + 2*ecartMax - this.taux;
         if (this.taux < moyenne - ecartMax) this.taux = 2*moyenne - 2*ecartMax - this.taux;
 
         this.taux = Math.round(this.taux*1000f)/1000f;
 
-        Bukkit.broadcastMessage(this.taux+"");
+        Bukkit.broadcastMessage(ChatColor.RED + "" +this.taux+"");
 
         GetTauxParametres.resetParameters();
 

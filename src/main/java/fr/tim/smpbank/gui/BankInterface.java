@@ -22,7 +22,11 @@ public class BankInterface implements Listener {
     float taux = StonksExchange.getPlugin().getTaux().getTaux();
 
     public BankInterface(Player p) {
-        this.bank = Bank.bankList.get(p.getUniqueId());
+        this(p,p.getUniqueId());
+    }
+
+    public BankInterface(Player viewer,UUID uuid) {
+        this.bank = Bank.bankList.get(uuid);
 
         this.inventory = Bukkit.createInventory(null, 27, Component.text(ChatColor.GREEN + "Banque"));
 
@@ -36,53 +40,54 @@ public class BankInterface implements Listener {
         this.inventory.setItem(10,VisualItems.TAUX.getItem());
         this.inventory.setItem(12,VisualItems.SOLDE.getItem());
 
-        p.openInventory(this.inventory);
+        viewer.openInventory(this.inventory);
 
-        showBank();
+        showBank(uuid);
     }
 
     public static void interaction(ItemStack item,Player player,Inventory inv) {
 
+        UUID uuid = ((SkullMeta)inv.getItem(12).getItemMeta()).getOwningPlayer().getUniqueId();
         VisualItems itemEnum = VisualItems.searchItem(item.getType().toString(), item.getAmount());
         switch (itemEnum) {
 
             case DEPOSIT_1:
-                Trader.deposit(1, player);
+                Trader.deposit(1, player,uuid);
                 break;
 
             case DEPOSIT_8:
-                Trader.deposit(8, player);
+                Trader.deposit(8, player,uuid);
                 break;
 
             case DEPOSIT_64:
-                Trader.deposit(64, player);
+                Trader.deposit(64, player,uuid);
                 break;
 
             case DEPOSIT_ALL:
-                Trader.deposit(2304, player);
+                Trader.deposit(2304, player,uuid);
                 break;
 
             case WITHDRAW_1:
-                Trader.withdraw(1, player);
+                Trader.withdraw(1, player,uuid);
                 break;
 
             case WITHDRAW_8:
-                Trader.withdraw(8, player);
+                Trader.withdraw(8, player,uuid);
                 break;
 
             case WITHDRAW_64:
-                Trader.withdraw(64, player);
+                Trader.withdraw(64, player,uuid);
                 break;
 
         }
-        update(inv,Bank.bankList.get(player.getUniqueId()));
+        update(inv,Bank.bankList.get(uuid));
     }
 
-    private void showBank() {
+    private void showBank(UUID uuid) {
         //Custom head
         ItemStack item = VisualItems.SOLDE.getItem();
         SkullMeta meta = (SkullMeta) item.getItemMeta();
-        meta.setOwningPlayer(Bukkit.getOfflinePlayer(UUID.fromString(this.bank.getUuid())));
+        meta.setOwningPlayer(Bukkit.getOfflinePlayer(uuid));
         item.setItemMeta(meta);
         this.inventory.setItem(12, item);
 

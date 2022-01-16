@@ -25,7 +25,7 @@ public class Withdraw implements CommandExecutor {
                         player.sendMessage(ChatColor.RED +"Veuillez entrer un entier positif!");
                         return false;
                     }
-                    Trader.withdraw(n,player);
+                    Trader.withdraw(n,player,player.getUniqueId());
                     return true;
                 } catch (NumberFormatException e) {
                     player.sendMessage(ChatColor.RED +"L'argument n'est pas un entier!");

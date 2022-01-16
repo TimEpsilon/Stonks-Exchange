@@ -8,12 +8,12 @@ Taux:
   #m et M vérifient f(m) = -1/2 et f(M) = 1/2
   variation:
     m: -1000
-    M: 5000
+    M: 6000
 
   #La fonction joueurs est de la forme f(x) = 1/a * ((1+a) / (1+a*(a+2)^-x/m) - 1 )
   #m vérifie f(m) = 1/2, a correspond à l'étalement de la logistique
   joueurs:
-    m: 6
+    m: 7
     a: 25
 
   #La fonction mort est de la forme f(x) = 2^-x/m - 1
@@ -24,17 +24,17 @@ Taux:
   #La fonction diamonds est de la forme f(x) = 2^-x/m - 1
   #m vérifie f(m) = 1/2
   diamonds:
-    m: 50
+    m: 25
 
   #Après injection dans chaque fonction, chaque résultat est multiplié par un coefficient pour calculer la somme
   Somme:
-    aJoueurs: 0.6
+    aJoueurs: 0.5
     aVariation: 0.4
-    aMort: 0.6
+    aMort: 0.7
     aDiamonds: 0.3
 
   #Le taux suit toujours une évolution linéaire dont la pente est déterminée par la somme
-  #A chaque instant, la probabilité d'augmenter est de p = (1+a) / (3+3a*e^-rx) et celle de diminuer q = (1+a)/3 - (1+a) / (3+(3/a)*e^-rx)
+  #La pente est donnée par f(x) = a / (1+a*exp(-rx)) - a/2
   Pente:
-    a: 1.5
+    a: 0.8
     r: 5
