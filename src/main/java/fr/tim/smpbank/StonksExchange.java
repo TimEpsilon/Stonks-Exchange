@@ -6,6 +6,7 @@ import fr.tim.smpbank.bank.Taux;
 import fr.tim.smpbank.commands.*;
 import fr.tim.smpbank.files.Autosave;
 import fr.tim.smpbank.files.FileManager;
+import fr.tim.smpbank.items.CustomCraft;
 import fr.tim.smpbank.listeners.ListenerManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -20,6 +21,7 @@ public class StonksExchange extends JavaPlugin {
         ListenerManager.registerEvents(this);
         registerCommands();
         new FileManager();
+        new CustomCraft();
         Autosave.loop();
 
         this.taux = new Taux();
@@ -50,7 +52,6 @@ public class StonksExchange extends JavaPlugin {
 
     private void registerCommands() {
         getCommand("bank").setExecutor(new Gui());
-        getCommand("forcesave").setExecutor(new Forcesave());
         getCommand("deposit").setExecutor(new Deposit());
         getCommand("withdraw").setExecutor(new Withdraw());
 

@@ -1,4 +1,4 @@
-package fr.tim.smpbank.bank;
+package fr.tim.smpbank.items;
 
 import fr.tim.smpbank.StonksExchange;
 import net.kyori.adventure.text.Component;

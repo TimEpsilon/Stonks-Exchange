@@ -1,6 +1,7 @@
 package fr.tim.smpbank.bank;
 
 import fr.tim.smpbank.StonksExchange;
+import fr.tim.smpbank.items.CustomItems;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
