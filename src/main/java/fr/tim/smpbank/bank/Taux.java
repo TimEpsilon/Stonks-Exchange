@@ -2,13 +2,18 @@ package fr.tim.smpbank.bank;
 
 import fr.tim.smpbank.StonksExchange;
 import fr.tim.smpbank.files.FileManager;
+import fr.tim.smpbank.gui.GestionPDA;
 import fr.tim.smpbank.listeners.GetTauxParametres;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 
 import java.io.*;
+import java.time.Instant;
+import java.time.LocalTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class Taux implements Serializable {
@@ -18,7 +23,7 @@ public class Taux implements Serializable {
     private transient static float moyenne = 5;
     private transient static float ecartRandom = 0.15f;
     private transient static float ecartMax = 2;
-    public transient static final long time = 60;
+    public transient static final long time = 21300; //5h55min
     private transient static float retour =0.2f;
 
 
@@ -109,8 +114,6 @@ public class Taux implements Serializable {
 
         this.taux = Math.round(this.taux*1000f)/1000f;
 
-        Bukkit.broadcastMessage(ChatColor.RED + "" +this.taux+"");
-
         GetTauxParametres.resetParameters();
 
     }
@@ -118,10 +121,10 @@ public class Taux implements Serializable {
     public void dailyUpdate() {
         Bukkit.getScheduler().runTaskTimerAsynchronously(StonksExchange.getPlugin(),() -> {
             nextTaux();
-            Bukkit.broadcast(Component.text(ChatColor.AQUA + "Nouveau Taux"));
+            Bukkit.broadcast(Component.text(GestionPDA.PDAText + ChatColor.AQUA + "Nouveau Taux : " + ChatColor.GOLD + this.taux));
             saveData();
 
-        },time*20,time*20);
+        },0,time*20);
     }
 
 }
