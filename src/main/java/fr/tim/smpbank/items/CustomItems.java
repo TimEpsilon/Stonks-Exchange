@@ -16,7 +16,8 @@ import java.util.List;
 public enum CustomItems {
 
     MCOIN(Material.EMERALD,1, ChatColor.AQUA + "" + ChatColor.BOLD + "M-Coin",42),
-    PDA(Material.FILLED_MAP,1,ChatColor.GREEN + "" + ChatColor.BOLD + "S.A.M.",96,ChatColor.GRAY+"Stonks Assistant Manager", ChatColor.GRAY + "" + ChatColor.ITALIC + "'Te ramènes chez toi quand t'es bourré!'")
+    PDA(Material.FILLED_MAP,1,ChatColor.GREEN + "" + ChatColor.BOLD + "S.A.M.",96,ChatColor.GRAY+"Stonks Assistant Manager", ChatColor.GRAY + "" + ChatColor.ITALIC + "'Te ramènes chez toi quand t'es bourré!'"),
+    PDA_ITEM(Material.PAPER,1,ChatColor.GREEN + "" + ChatColor.BOLD + "S.A.M.",96,ChatColor.GRAY+"Stonks Assistant Manager", ChatColor.GRAY + "" + ChatColor.ITALIC + "'Te ramènes chez toi quand t'es bourré!'")
     ;
 
     public static NamespacedKey CustomItemKey =  new NamespacedKey(StonksExchange.getPlugin(),"customItem");
