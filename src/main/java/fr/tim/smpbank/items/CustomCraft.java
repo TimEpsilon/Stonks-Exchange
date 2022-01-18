@@ -10,7 +10,7 @@ public class CustomCraft {
 
     public CustomCraft() {
         NamespacedKey key = new NamespacedKey(StonksExchange.getPlugin(),"SAM");
-        ShapedRecipe SAM = new ShapedRecipe(key,CustomItems.PDA.getItem());
+        ShapedRecipe SAM = new ShapedRecipe(key,CustomItems.PDA_ITEM.getItem());
         SAM.shape("012","*3*","4*5");
         SAM.setIngredient('0', Material.EMERALD);
         SAM.setIngredient('1',Material.NETHERITE_INGOT);
