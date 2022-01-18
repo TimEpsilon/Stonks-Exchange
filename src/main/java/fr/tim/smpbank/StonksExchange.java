@@ -52,8 +52,6 @@ public class StonksExchange extends JavaPlugin {
 
     private void registerCommands() {
         getCommand("bank").setExecutor(new Gui());
-        getCommand("deposit").setExecutor(new Deposit());
-        getCommand("withdraw").setExecutor(new Withdraw());
 
     }
 }
