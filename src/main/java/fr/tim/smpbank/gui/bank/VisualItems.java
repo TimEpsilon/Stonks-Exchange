@@ -1,4 +1,4 @@
-package fr.tim.smpbank.gui;
+package fr.tim.smpbank.gui.bank;
 
 import net.kyori.adventure.text.Component;
 import org.bukkit.ChatColor;

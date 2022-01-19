@@ -1,4 +1,4 @@
-package fr.tim.smpbank.gui;
+package fr.tim.smpbank.gui.bank;
 
 import fr.tim.smpbank.bank.Bank;
 import fr.tim.smpbank.bank.Trader;
@@ -30,7 +30,7 @@ public class BankInterface implements Listener {
 
         this.inventory = Bukkit.createInventory(null, 27, Component.text(ChatColor.GREEN + "Banque"));
 
-        this.inventory.setItem(7,VisualItems.DEPOSIT_1.getItem());
+        this.inventory.setItem(7, VisualItems.DEPOSIT_1.getItem());
         this.inventory.setItem(16,VisualItems.DEPOSIT_8.getItem());
         this.inventory.setItem(25,VisualItems.DEPOSIT_64.getItem());
         this.inventory.setItem(15,VisualItems.DEPOSIT_ALL.getItem());

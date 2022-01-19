@@ -1,4 +1,4 @@
-package fr.tim.smpbank.listeners;
+package fr.tim.smpbank.listeners.environment;
 
 import fr.tim.smpbank.StonksExchange;
 import fr.tim.smpbank.bank.Bank;

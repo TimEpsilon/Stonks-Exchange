@@ -1,4 +1,4 @@
-package fr.tim.smpbank.listeners;
+package fr.tim.smpbank.listeners.taux;
 
 import fr.tim.smpbank.bank.Bank;
 import fr.tim.smpbank.bank.BankLog;

@@ -2,7 +2,7 @@ package fr.tim.smpbank.files;
 
 import fr.tim.smpbank.bank.Bank;
 import fr.tim.smpbank.StonksExchange;
-import fr.tim.smpbank.bank.Taux;
+import fr.tim.smpbank.bank.taux.Taux;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 

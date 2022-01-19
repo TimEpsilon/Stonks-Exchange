@@ -2,8 +2,8 @@ package fr.tim.smpbank;
 
 import fr.tim.smpbank.bank.Bank;
 
-import fr.tim.smpbank.bank.Taux;
-import fr.tim.smpbank.commands.*;
+import fr.tim.smpbank.bank.taux.Taux;
+import fr.tim.smpbank.commands.Gui;
 import fr.tim.smpbank.files.Autosave;
 import fr.tim.smpbank.files.FileManager;
 import fr.tim.smpbank.items.CustomCraft;

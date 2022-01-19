@@ -1,4 +1,4 @@
-package fr.tim.smpbank.bank;
+package fr.tim.smpbank.bank.taux;
 
 import fr.tim.smpbank.files.CoeffConfig;
 

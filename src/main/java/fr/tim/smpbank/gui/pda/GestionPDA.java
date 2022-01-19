@@ -1,9 +1,9 @@
-package fr.tim.smpbank.gui;
+package fr.tim.smpbank.gui.pda;
 
 import fr.tim.smpbank.StonksExchange;
-import fr.tim.smpbank.bank.Taux;
+import fr.tim.smpbank.bank.taux.Taux;
 import fr.tim.smpbank.items.CustomItems;
-import fr.tim.smpbank.listeners.GetTauxParametres;
+import fr.tim.smpbank.listeners.taux.GetTauxParametres;
 import net.kyori.adventure.text.Component;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
@@ -15,7 +15,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.MapMeta;
 import org.bukkit.map.MapRenderer;
 import org.bukkit.map.MapView;
-import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 
 public class GestionPDA implements Listener {

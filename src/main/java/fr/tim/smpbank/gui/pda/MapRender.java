@@ -1,4 +1,4 @@
-package fr.tim.smpbank.gui;
+package fr.tim.smpbank.gui.pda;
 
 import fr.tim.smpbank.StonksExchange;
 import org.bukkit.entity.Player;

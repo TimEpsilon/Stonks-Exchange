@@ -1,6 +1,6 @@
-package fr.tim.smpbank.listeners;
+package fr.tim.smpbank.listeners.bank;
 
-import fr.tim.smpbank.gui.BankInterface;
+import fr.tim.smpbank.gui.bank.BankInterface;
 import net.kyori.adventure.text.Component;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
