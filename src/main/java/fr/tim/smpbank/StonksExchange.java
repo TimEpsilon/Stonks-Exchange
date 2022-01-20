@@ -4,10 +4,13 @@ import fr.tim.smpbank.bank.Bank;
 
 import fr.tim.smpbank.bank.taux.Taux;
 import fr.tim.smpbank.commands.Gui;
+import fr.tim.smpbank.commands.OnTabComplete;
+import fr.tim.smpbank.commands.VaultSpawn;
 import fr.tim.smpbank.files.Autosave;
 import fr.tim.smpbank.files.FileManager;
 import fr.tim.smpbank.items.CustomCraft;
 import fr.tim.smpbank.listeners.ListenerManager;
+import org.bukkit.command.TabCompleter;
 import org.bukkit.plugin.java.JavaPlugin;
 
 
@@ -52,6 +55,8 @@ public class StonksExchange extends JavaPlugin {
 
     private void registerCommands() {
         getCommand("bank").setExecutor(new Gui());
+        getCommand("vault").setExecutor(new VaultSpawn());
+        getCommand("vault").setTabCompleter(new OnTabComplete());
 
     }
 }

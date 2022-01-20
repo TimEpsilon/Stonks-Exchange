@@ -1,6 +1,7 @@
 package fr.tim.smpbank.listeners.environment;
 
 import fr.tim.smpbank.items.CustomItems;
+import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -17,5 +18,11 @@ public class AntiEChest implements Listener {
                 e.setCancelled(true);
             }
         }
+        if (e.getClick().isKeyboardClick()) {
+            e.setCancelled(true);
+            e.setResult(Event.Result.DENY);
+            return;
+        }
+
     }
 }

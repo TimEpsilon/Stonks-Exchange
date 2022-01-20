@@ -106,8 +106,8 @@ public class Gui implements CommandExecutor {
             StringBuilder sb = new StringBuilder();
             for (BankLog bl : t.getTauxLog()) {
                 sb.append(Utils.UnixToDate(bl.getTime()));
-                sb.append(';');
-                sb.append(String.valueOf(bl.getSolde()).replace(".",","));
+                sb.append(',');
+                sb.append(bl.getSolde());
                 sb.append("\n");
             }
             br.write(sb.toString());

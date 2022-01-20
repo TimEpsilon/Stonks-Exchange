@@ -7,6 +7,8 @@ commands:
   bank:
     description: Permet de gérer le compte bancaire des joueurs
     usage: /bank <UUID/Name/Taux> [save]
+  vault:
+    description: Fait appararaitre un coffre fort
 
 permissions:
   admin:

@@ -38,14 +38,8 @@ public class GestionPDA implements Listener {
 
         if (item.getItemMeta().getPersistentDataContainer().has(CustomItems.CustomItemKey, PersistentDataType.STRING)) {
             if (!item.getItemMeta().getPersistentDataContainer().get(CustomItems.CustomItemKey,PersistentDataType.STRING).contains(ChatColor.GREEN + "" + ChatColor.BOLD + "S.A.M.")) return;
-            if (p.getScoreboardTags().contains("SamOnCooldown")) {
-                p.sendMessage(Component.text(PDAText + ChatColor.DARK_RED + ChatColor.ITALIC + "Sous cooldown..."));
-                p.playSound(p.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING,SoundCategory.PLAYERS,1,0.1f);
-                return;
-            }
-            p.getScoreboardTags().add("SamOnCooldown");
 
-            Bukkit.broadcast(Component.text(  ChatColor.AQUA + "Actualisation..."));
+            p.sendMessage(Component.text(  ChatColor.AQUA + "Actualisation..."));
 
             switch (item.getType().toString()) {
                 case "FILLED_MAP":
@@ -57,6 +51,8 @@ public class GestionPDA implements Listener {
                         } else {
                             p.getInventory().setItemInOffHand(CustomItems.PDA_ITEM.getItem());
                         }
+
+                        showStats(p);
 
                     } else {
                         showMap(item);
@@ -77,39 +73,7 @@ public class GestionPDA implements Listener {
                         }
 
                     } else {
-
-                        float j = GetTauxParametres.JoinedList.size();
-                        float m = 0;
-                        float d = 0;
-
-                        for (int i : GetTauxParametres.DeadList.values()) {
-                            m += i;
-                        }
-
-                        for (int i : GetTauxParametres.DiamondList.values()) {
-                            d += i;
-                        }
-
-                        float v = GetTauxParametres.getTotalNow()
-                                - GetTauxParametres.getTotalBefore(System.currentTimeMillis()- 10);//to do
-
-                        final float mort = m;
-                        final float diamonds = d;
-                        final float variation = v;
-
-                        p.sendMessage(Component.text(PDAText + ChatColor.AQUA + "Informations du jour :"));
-                        Bukkit.getScheduler().runTaskLaterAsynchronously(StonksExchange.getPlugin(),()->{
-                            p.sendMessage(Component.text(PDAText + ChatColor.LIGHT_PURPLE + "Joueurs Connectés : " + j));
-                        },20);
-                        Bukkit.getScheduler().runTaskLaterAsynchronously(StonksExchange.getPlugin(),()->{
-                            p.sendMessage(Component.text(PDAText + ChatColor.LIGHT_PURPLE + "Nombre de Morts : " + mort));
-                        },40);
-                        Bukkit.getScheduler().runTaskLaterAsynchronously(StonksExchange.getPlugin(),()->{
-                            p.sendMessage(Component.text(PDAText + ChatColor.LIGHT_PURPLE + "Diamants Minés : " + diamonds));
-                        },60);
-                        Bukkit.getScheduler().runTaskLaterAsynchronously(StonksExchange.getPlugin(),()->{
-                            p.sendMessage(Component.text(PDAText + ChatColor.LIGHT_PURPLE + "Variation de la Banque : " + variation));
-                        },80);
+                        showStats(p);
                     }
                     break;
             }
@@ -119,6 +83,48 @@ public class GestionPDA implements Listener {
             },100);
 
             }
+        }
+
+        private void showStats(Player p) {
+            if (p.getScoreboardTags().contains("SamOnCooldown")) {
+                p.sendMessage(Component.text(PDAText + ChatColor.DARK_RED + ChatColor.ITALIC + "Sous cooldown..."));
+                p.playSound(p.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING,SoundCategory.PLAYERS,1,0.1f);
+                return;
+            }
+            p.getScoreboardTags().add("SamOnCooldown");
+
+            float j = GetTauxParametres.JoinedList.size();
+            float m = 0;
+            float d = 0;
+
+            for (int i : GetTauxParametres.DeadList.values()) {
+                m += i;
+            }
+
+            for (int i : GetTauxParametres.DiamondList.values()) {
+                d += i;
+            }
+
+            float v = GetTauxParametres.getTotalNow()
+                    - GetTauxParametres.getTotalBefore(System.currentTimeMillis()- 10);//to do
+
+            final float mort = m;
+            final float diamonds = d;
+            final float variation = v;
+
+            p.sendMessage(Component.text(PDAText + ChatColor.AQUA + "Informations du jour :"));
+            Bukkit.getScheduler().runTaskLaterAsynchronously(StonksExchange.getPlugin(),()->{
+                p.sendMessage(Component.text(PDAText + ChatColor.LIGHT_PURPLE + "Joueurs Connectés : " + j));
+            },20);
+            Bukkit.getScheduler().runTaskLaterAsynchronously(StonksExchange.getPlugin(),()->{
+                p.sendMessage(Component.text(PDAText + ChatColor.LIGHT_PURPLE + "Nombre de Morts : " + mort));
+            },40);
+            Bukkit.getScheduler().runTaskLaterAsynchronously(StonksExchange.getPlugin(),()->{
+                p.sendMessage(Component.text(PDAText + ChatColor.LIGHT_PURPLE + "Diamants Minés : " + diamonds));
+            },60);
+            Bukkit.getScheduler().runTaskLaterAsynchronously(StonksExchange.getPlugin(),()->{
+                p.sendMessage(Component.text(PDAText + ChatColor.LIGHT_PURPLE + "Variation de la Banque : " + variation));
+            },80);
         }
 
         private void showMap(ItemStack itemMap) {
