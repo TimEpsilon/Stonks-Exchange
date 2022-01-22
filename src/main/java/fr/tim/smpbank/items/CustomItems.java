@@ -17,7 +17,6 @@ public enum CustomItems {
 
     MCOIN(Material.EMERALD,1, ChatColor.AQUA + "" + ChatColor.BOLD + "M-Coin",42),
     PDA(Material.FILLED_MAP,1,ChatColor.GREEN + "" + ChatColor.BOLD + "S.A.M.",96,ChatColor.GRAY+"Stonks Assistant Manager", ChatColor.GRAY + "" + ChatColor.ITALIC + "'Te ramènes chez toi quand t'es bourré!'"),
-    VAULT(Material.IRON_INGOT,1,"",12,""),
     PDA_ITEM(Material.PAPER,1,ChatColor.GREEN + "" + ChatColor.BOLD + "S.A.M.",96,ChatColor.GRAY+"Stonks Assistant Manager", ChatColor.GRAY + "" + ChatColor.ITALIC + "'Te ramènes chez toi quand t'es bourré!'")
     ;
 

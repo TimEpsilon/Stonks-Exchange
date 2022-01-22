@@ -20,10 +20,10 @@ public class Taux implements Serializable {
     private List<BankLog> penteLog = new ArrayList<>();
 
     private transient static float moyenne = 5;
-    private transient static float ecartRandom = 0.15f;
+    private transient static float ecartRandom = 0.1f;
     private transient static float ecartMax = 2;
-    public transient static final long time = 300; //21300; //5h55min
-    private transient static float retour =0.2f;
+    public transient static final long time = 21300; //5h55min
+    private transient static float retour =0.1f;
 
 
     public Taux() {
@@ -112,8 +112,6 @@ public class Taux implements Serializable {
 
         v = GetTauxParametres.getTotalNow()
                 - GetTauxParametres.getTotalBefore(System.currentTimeMillis()- time*1000);
-
-        Bukkit.broadcastMessage("variation " + v);
 
         float somme = CalculTaux.somme(j,m,d,v);
         this.pente = CalculTaux.pente(somme);

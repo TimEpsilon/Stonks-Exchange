@@ -10,7 +10,6 @@ import fr.tim.smpbank.files.Autosave;
 import fr.tim.smpbank.files.FileManager;
 import fr.tim.smpbank.items.CustomCraft;
 import fr.tim.smpbank.listeners.ListenerManager;
-import org.bukkit.command.TabCompleter;
 import org.bukkit.plugin.java.JavaPlugin;
 
 
