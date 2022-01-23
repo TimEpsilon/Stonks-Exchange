@@ -1,6 +1,7 @@
 package fr.tim.smpbank.listeners.bank;
 
 import fr.tim.smpbank.gui.bank.BankInterface;
+import fr.tim.smpbank.gui.bank.VisualItems;
 import net.kyori.adventure.text.Component;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -20,6 +21,8 @@ public class InterfaceInteraction implements Listener {
         if (!e.getView().title().equals(Component.text(ChatColor.GREEN + "Banque"))) return;
 
         e.setCancelled(true);
+
+        if (e.getClickedInventory().getItem(VisualItems.DEPOSIT_ALL.getSlot()) == null || !e.getClickedInventory().getItem(VisualItems.DEPOSIT_ALL.getSlot()).isSimilar(VisualItems.DEPOSIT_ALL.getItem())) return;
 
         BankInterface.interaction(item,player,e.getClickedInventory());
     }

@@ -20,17 +20,18 @@ public class Trader {
         if (!p.getInventory().contains(Material.DIAMOND) && !p.getInventory().contains(Material.EMERALD)) return;
 
         int i = 0;
+        int max = b.getRank().getMaxStorage();
 
         for (ItemStack item : p.getInventory().getContents()) {
             if (n < 0) break;
             if (item == null) continue;
             if (item.getItemMeta().getPersistentDataContainer().has(CustomItems.CustomItemKey, PersistentDataType.STRING)) {
-                if(item.getItemMeta().getPersistentDataContainer().get(CustomItems.CustomItemKey,PersistentDataType.STRING).contains(ChatColor.AQUA + "" + ChatColor.BOLD + "M-Coin")) {
+                if(item.getItemMeta().getPersistentDataContainer().get(CustomItems.CustomItemKey,PersistentDataType.STRING).contains(CustomItems.MCOIN.getName())) {
                     int amount = item.getAmount();
                     item.setAmount(Math.max(amount - n,0));
                     int cleared = Math.min(n, amount);
                     n -= cleared;
-                    b.add(Math.round(1000f*cleared)/1000f);
+                    b.add(cleared);
                 }
             }
         }
@@ -47,10 +48,20 @@ public class Trader {
 
             ItemStack removeQuantity = new ItemStack(Material.DIAMOND,Math.min(n-i,j));
 
-            b.add(Math.round(1000f*taux*Math.min(n-i,j))/1000f);
+            b.add(taux*Math.min(n-i,j));
             p.getInventory().removeItem(removeQuantity);
         }
 
+        if (b.getSolde() > max) {
+            int diff = (int) b.getSolde() - max + 1;
+            ItemStack mcoin = CustomItems.MCOIN.getItem();
+            mcoin.setAmount(diff);
+            HashMap<Integer,ItemStack> rest = p.getInventory().addItem(mcoin);
+            for (ItemStack restItem : rest.values()) {
+                p.getWorld().dropItem(p.getLocation(),restItem);
+            }
+            b.add(-diff);
+        }
     }
 
     public static void withdraw(int n, Player p,UUID uuid) {
@@ -61,7 +72,7 @@ public class Trader {
         ItemStack item = CustomItems.MCOIN.getItem();
         item.setAmount(retirer);
         HashMap<Integer, ItemStack> surplus = p.getInventory().addItem(item);
-        b.add(Math.round(1000f*-1*retirer)/1000f);
+        b.add(-retirer);
 
         for (ItemStack i : surplus.values()) {
             if (i == null || i.getAmount() == 0) continue;

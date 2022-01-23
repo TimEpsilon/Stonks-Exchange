@@ -1,20 +1,26 @@
 package fr.tim.smpbank.bank.rank;
 
-public enum BankRank {
+import org.bukkit.ChatColor;
 
-    GREEN(10,0),
-    BLUE(100,5),
-    PURPLE(500,25),
-    RED(1000,100),
-    ORANGE(5000,500),
-    GOLD(1000000,1000);
+import java.io.Serializable;
+
+public enum BankRank implements Serializable  {
+
+    GREEN(10,0, ChatColor.GREEN),
+    BLUE(100,5,ChatColor.AQUA),
+    PURPLE(500,25,ChatColor.LIGHT_PURPLE),
+    RED(1000,100,ChatColor.RED),
+    YELLOW(5000,500,ChatColor.YELLOW),
+    GOLD(1000000,1000,ChatColor.GOLD);
 
     private int maxStorage;
-    private  int price;
+    private int price;
+    private ChatColor color;
 
-    BankRank(int maxStorage, int price) {
+    BankRank(int maxStorage, int price,ChatColor color) {
         this.maxStorage = maxStorage;
         this.price = price;
+        this.color = color;
     }
 
     public int getMaxStorage() {
@@ -23,6 +29,10 @@ public enum BankRank {
 
     public int getPrice() {
         return price;
+    }
+
+    public ChatColor getColor() {
+        return color;
     }
 
     public static BankRank getRankByName(String name) {
@@ -35,8 +45,8 @@ public enum BankRank {
                 return BankRank.PURPLE;
             case "RED":
                 return BankRank.RED;
-            case "ORANGE":
-                return BankRank.ORANGE;
+            case "YELLOW":
+                return BankRank.YELLOW;
             case "GOLD":
                 return BankRank.GOLD;
         }
@@ -52,8 +62,8 @@ public enum BankRank {
             case PURPLE:
                 return BankRank.RED;
             case RED:
-                return BankRank.ORANGE;
-            case ORANGE:
+                return BankRank.YELLOW;
+            case YELLOW:
                 return BankRank.GOLD;
         }
         return null;

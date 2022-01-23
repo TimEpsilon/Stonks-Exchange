@@ -1,5 +1,6 @@
 package fr.tim.smpbank.bank;
 
+import fr.tim.smpbank.bank.rank.BankRank;
 import fr.tim.smpbank.files.FileManager;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -12,6 +13,7 @@ public class Bank implements Serializable {
 
     private final String uuid;
     private float solde;
+    private BankRank rank;
     private List<BankLog> bankLogList = new ArrayList<>();
 
     public Bank(Player player) {
@@ -21,6 +23,7 @@ public class Bank implements Serializable {
     public Bank(String uuid) {
         this.solde = 0;
         this.uuid = uuid;
+        this.rank = BankRank.GREEN;
         loadData();
         logBankState();
 
@@ -59,9 +62,18 @@ public class Bank implements Serializable {
 
             this.bankLogList = bank.getBankLogList();
             this.solde = bank.getSolde();
+            this.rank = bank.getRank();
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
+    }
+
+    public BankRank getRank() {
+        return this.rank;
+    }
+
+    public void setRank(BankRank rank) {
+        this.rank = rank;
     }
 
     public void logBankState() {
@@ -87,7 +99,7 @@ public class Bank implements Serializable {
     }
 
     public void add(float n) {
-        this.solde += n;
+        this.solde += Math.round(n*1000f)/1000f;
     }
 
 }

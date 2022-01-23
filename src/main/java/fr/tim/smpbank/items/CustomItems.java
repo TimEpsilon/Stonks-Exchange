@@ -2,6 +2,7 @@ package fr.tim.smpbank.items;
 
 import fr.tim.smpbank.StonksExchange;
 import net.kyori.adventure.text.Component;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -22,6 +23,7 @@ public enum CustomItems {
 
     public static NamespacedKey CustomItemKey =  new NamespacedKey(StonksExchange.getPlugin(),"customItem");
     private ItemStack item;
+    private String name;
 
     CustomItems(Material material, int n, String name, int cmd, String... lore) {
         List<Component> Lore = new ArrayList<>();
@@ -38,10 +40,15 @@ public enum CustomItems {
         PersistentDataContainer data = meta.getPersistentDataContainer();
         data.set(new NamespacedKey(StonksExchange.getPlugin(),"customItem"), PersistentDataType.STRING,name);
         this.item.setItemMeta(meta);
+        this.name = name;
     }
 
     public ItemStack getItem() {
         return this.item;
+    }
+
+    public String getName() {
+        return this.name;
     }
 
 }

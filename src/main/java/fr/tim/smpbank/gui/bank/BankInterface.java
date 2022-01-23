@@ -3,6 +3,8 @@ package fr.tim.smpbank.gui.bank;
 import fr.tim.smpbank.bank.Bank;
 import fr.tim.smpbank.bank.Trader;
 import fr.tim.smpbank.StonksExchange;
+import fr.tim.smpbank.bank.rank.BankRank;
+import fr.tim.smpbank.bank.rank.RankManager;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -30,15 +32,16 @@ public class BankInterface implements Listener {
 
         this.inventory = Bukkit.createInventory(null, 27, Component.text(ChatColor.GREEN + "Banque"));
 
-        this.inventory.setItem(7, VisualItems.DEPOSIT_1.getItem());
-        this.inventory.setItem(16,VisualItems.DEPOSIT_8.getItem());
-        this.inventory.setItem(25,VisualItems.DEPOSIT_64.getItem());
-        this.inventory.setItem(15,VisualItems.DEPOSIT_ALL.getItem());
-        this.inventory.setItem(5,VisualItems.WITHDRAW_1.getItem());
-        this.inventory.setItem(14,VisualItems.WITHDRAW_8.getItem());
-        this.inventory.setItem(23,VisualItems.WITHDRAW_64.getItem());
-        this.inventory.setItem(10,VisualItems.TAUX.getItem());
-        this.inventory.setItem(12,VisualItems.SOLDE.getItem());
+        this.inventory.setItem(VisualItems.DEPOSIT_1.getSlot(), VisualItems.DEPOSIT_1.getItem());
+        this.inventory.setItem(VisualItems.DEPOSIT_8.getSlot(),VisualItems.DEPOSIT_8.getItem());
+        this.inventory.setItem(VisualItems.DEPOSIT_64.getSlot(),VisualItems.DEPOSIT_64.getItem());
+        this.inventory.setItem(VisualItems.DEPOSIT_ALL.getSlot(),VisualItems.DEPOSIT_ALL.getItem());
+        this.inventory.setItem(VisualItems.WITHDRAW_1.getSlot(),VisualItems.WITHDRAW_1.getItem());
+        this.inventory.setItem(VisualItems.WITHDRAW_8.getSlot(),VisualItems.WITHDRAW_8.getItem());
+        this.inventory.setItem(VisualItems.WITHDRAW_64.getSlot(),VisualItems.WITHDRAW_64.getItem());
+        this.inventory.setItem(VisualItems.TAUX.getSlot(),VisualItems.TAUX.getItem());
+        this.inventory.setItem(VisualItems.SOLDE.getSlot(),VisualItems.SOLDE.getItem());
+        this.inventory.setItem(VisualItems.RANK_GREEN.getSlot(),VisualItems.RANK_GREEN.getItem());
 
         viewer.openInventory(this.inventory);
 
@@ -47,7 +50,7 @@ public class BankInterface implements Listener {
 
     public static void interaction(ItemStack item,Player player,Inventory inv) {
 
-        UUID uuid = ((SkullMeta)inv.getItem(12).getItemMeta()).getOwningPlayer().getUniqueId();
+        UUID uuid = ((SkullMeta)inv.getItem(VisualItems.SOLDE.getSlot()).getItemMeta()).getOwningPlayer().getUniqueId();
         VisualItems itemEnum = VisualItems.searchItem(item.getType().toString(), item.getAmount());
         switch (itemEnum) {
 
@@ -79,6 +82,15 @@ public class BankInterface implements Listener {
                 Trader.withdraw(64, player,uuid);
                 break;
 
+            case RANK_GREEN:
+            case RANK_BLUE:
+            case RANK_GOLD:
+            case RANK_YELLOW:
+            case PURPLE:
+            case RANK_RED:
+                RankManager.upggradeAccount(player);
+                break;
+
         }
         update(inv,Bank.bankList.get(uuid));
     }
@@ -89,7 +101,7 @@ public class BankInterface implements Listener {
         SkullMeta meta = (SkullMeta) item.getItemMeta();
         meta.setOwningPlayer(Bukkit.getOfflinePlayer(uuid));
         item.setItemMeta(meta);
-        this.inventory.setItem(12, item);
+        this.inventory.setItem(VisualItems.SOLDE.getSlot(), item);
 
         //Taux
         item = VisualItems.TAUX.getItem();
@@ -98,19 +110,23 @@ public class BankInterface implements Listener {
         lore.set(0,Component.text(ChatColor.GRAY + "" + this.taux));
         itemMeta.lore(lore);
         item.setItemMeta(itemMeta);
-        this.inventory.setItem(10,item);
+        this.inventory.setItem(VisualItems.TAUX.getSlot(),item);
 
         update(this.inventory,this.bank);
     }
 
     public static void update(Inventory inv, Bank bank) {
-        ItemStack item = inv.getItem(12);
+        BankRank br = bank.getRank();
+
+        ItemStack item = inv.getItem(VisualItems.SOLDE.getSlot());
         ItemMeta meta = item.getItemMeta();
         List<Component> lore =  meta.lore();
-        lore.set(0,Component.text("§d" + bank.getSolde()));
+        lore.set(0,Component.text("§d" + bank.getSolde() + ChatColor.GRAY + " / " + br.getMaxStorage()));
         meta.lore(lore);
         item.setItemMeta(meta);
-        inv.setItem(12,item);
+        inv.setItem(VisualItems.SOLDE.getSlot(),item);
+
+        inv.setItem(VisualItems.RANK_GREEN.getSlot(), VisualItems.getItemByRank(br).getItem());
     }
 
 }
