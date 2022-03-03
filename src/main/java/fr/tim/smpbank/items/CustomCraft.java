@@ -20,8 +20,6 @@ public class CustomCraft {
         SAM.setIngredient('4',Material.COPPER_INGOT);
         SAM.setIngredient('5',Material.GOLD_INGOT);
         Bukkit.addRecipe(SAM);
-
-
     }
 
 }

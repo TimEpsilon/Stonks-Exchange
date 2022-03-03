@@ -2,7 +2,6 @@ package fr.tim.smpbank.items;
 
 import fr.tim.smpbank.StonksExchange;
 import net.kyori.adventure.text.Component;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -21,7 +20,7 @@ public enum CustomItems {
     PDA_ITEM(Material.PAPER,1,ChatColor.GREEN + "" + ChatColor.BOLD + "S.A.M.",96,ChatColor.GRAY+"Stonks Assistant Manager", ChatColor.GRAY + "" + ChatColor.ITALIC + "'Te ramènes chez toi quand t'es bourré!'")
     ;
 
-    public static NamespacedKey CustomItemKey =  new NamespacedKey(StonksExchange.getPlugin(),"customItem");
+    public static NamespacedKey CustomItemKey =  new NamespacedKey(StonksExchange.getPlugin(),"customitem");
     private ItemStack item;
     private String name;
 
@@ -32,15 +31,15 @@ public enum CustomItems {
         }
 
         this.item = new ItemStack(material,n);
+        this.name = ChatColor.stripColor(name);
 
         ItemMeta meta = this.item.getItemMeta();
         meta.displayName(Component.text(name));
         meta.lore(Lore);
         meta.setCustomModelData(cmd);
         PersistentDataContainer data = meta.getPersistentDataContainer();
-        data.set(new NamespacedKey(StonksExchange.getPlugin(),"customItem"), PersistentDataType.STRING,name);
+        data.set(new NamespacedKey(StonksExchange.getPlugin(),"customitem"), PersistentDataType.STRING,this.name);
         this.item.setItemMeta(meta);
-        this.name = name;
     }
 
     public ItemStack getItem() {

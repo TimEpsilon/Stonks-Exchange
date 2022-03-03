@@ -6,7 +6,7 @@ import java.io.Serializable;
 
 public enum BankRank implements Serializable  {
 
-    GREEN(10,0, ChatColor.GREEN),
+    GREEN(25,0, ChatColor.GREEN),
     BLUE(100,5,ChatColor.AQUA),
     PURPLE(500,25,ChatColor.LIGHT_PURPLE),
     RED(1000,100,ChatColor.RED),

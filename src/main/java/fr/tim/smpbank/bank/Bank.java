@@ -95,11 +95,17 @@ public class Bank implements Serializable {
     }
 
     public void setSolde(float newSolde) {
-        this.solde = Math.round(newSolde*1000.0f)/1000.0f;
+        this.solde =newSolde;
+        roundSolde();
+    }
+
+    private void roundSolde() {
+        this.solde = Math.round(this.solde*1000f)/1000f;
     }
 
     public void add(float n) {
-        this.solde += Math.round(n*1000f)/1000f;
+        this.solde += n;
+        roundSolde();
     }
 
 }

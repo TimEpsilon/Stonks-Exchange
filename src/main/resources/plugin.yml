@@ -1,4 +1,4 @@
-name: smpBank
+name: StonksExchange
 version: ${project.version}
 main: fr.tim.smpbank.StonksExchange
 api-version: 1.18

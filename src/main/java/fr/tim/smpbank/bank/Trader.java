@@ -2,6 +2,7 @@ package fr.tim.smpbank.bank;
 
 import fr.tim.smpbank.StonksExchange;
 import fr.tim.smpbank.items.CustomItems;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -12,6 +13,8 @@ import java.util.HashMap;
 import java.util.UUID;
 
 public class Trader {
+
+    //TODO tester les cas limites
 
     public static void deposit(int n, Player p, UUID uuid) {
         Bank b = Bank.bankList.get(uuid);
@@ -25,6 +28,7 @@ public class Trader {
         for (ItemStack item : p.getInventory().getContents()) {
             if (n < 0) break;
             if (item == null) continue;
+
             if (item.getItemMeta().getPersistentDataContainer().has(CustomItems.CustomItemKey, PersistentDataType.STRING)) {
                 if(item.getItemMeta().getPersistentDataContainer().get(CustomItems.CustomItemKey,PersistentDataType.STRING).contains(CustomItems.MCOIN.getName())) {
                     int amount = item.getAmount();
