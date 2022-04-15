@@ -4,15 +4,14 @@ import fr.tim.smpbank.StonksExchange;
 import fr.tim.smpbank.gui.bank.BankInterface;
 import org.bukkit.*;
 import org.bukkit.block.Block;
-import org.bukkit.block.BlockFace;
-import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.type.Jigsaw;
 import org.bukkit.entity.EntityType;
-import org.bukkit.entity.GlowItemFrame;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Slime;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.SlimeSplitEvent;
 import org.bukkit.event.player.PlayerInteractAtEntityEvent;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.potion.PotionEffect;
@@ -33,8 +32,6 @@ public class Vault implements Listener {
         this.vaultInterface.setInvulnerable(true);
         this.vaultInterface.setPersistent(true);
         this.vaultInterface.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY,1000000000,0,false,false));
-        this.vaultInterface.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,1000000000,0,false,false));
-        this.vaultInterface.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE,1000000000,0,false,false));
         this.vaultInterface.setAI(false);
         this.vaultInterface.setSize(5);
         this.vaultInterface.getPersistentDataContainer().set(vaultKey, PersistentDataType.INTEGER,1);
@@ -86,6 +83,24 @@ public class Vault implements Listener {
                 }
             }
         }
+    }
+
+    @EventHandler
+    public void onSlimeAttack(EntityDamageByEntityEvent e) {
+        if (!(e.getEntity() instanceof Slime)) return;
+        if (!e.getEntity().getPersistentDataContainer().has(vaultKey,PersistentDataType.INTEGER)) return;
+        if (e.getEntity().getPersistentDataContainer().get(vaultKey,PersistentDataType.INTEGER) != 1) return;
+        if (e.getDamager() instanceof Player p) {
+            if (p.getGameMode().equals(GameMode.CREATIVE)) ((Slime) e.getEntity()).damage(1000);
+            else e.setCancelled(true);
+        }
+    }
+
+    @EventHandler
+    public void onSlimeSplit(SlimeSplitEvent e) {
+        if (!e.getEntity().getPersistentDataContainer().has(vaultKey,PersistentDataType.INTEGER)) return;
+        if (e.getEntity().getPersistentDataContainer().get(vaultKey,PersistentDataType.INTEGER) != 1) return;
+        e.setCancelled(true);
     }
 
 }

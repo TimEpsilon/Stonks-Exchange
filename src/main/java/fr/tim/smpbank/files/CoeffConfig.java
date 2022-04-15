@@ -1,6 +1,5 @@
 package fr.tim.smpbank.files;
 
-import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
@@ -9,7 +8,7 @@ import java.io.File;
 public class CoeffConfig {
 
     private static FileConfiguration load() {
-        File file = new File(FileManager.BANK_PATH + "config.yml");
+        File file = new File(FileManager.CONFIG_PATH + "config.yml");
         return YamlConfiguration.loadConfiguration(file);
     }
 

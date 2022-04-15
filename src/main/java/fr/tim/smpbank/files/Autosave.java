@@ -4,6 +4,7 @@ import fr.tim.smpbank.bank.Bank;
 import fr.tim.smpbank.StonksExchange;
 import fr.tim.smpbank.bank.taux.Taux;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 public abstract class Autosave {
@@ -16,7 +17,7 @@ public abstract class Autosave {
         }
 
         Bukkit.getScheduler().runTaskTimerAsynchronously(StonksExchange.getPlugin(), () -> {
-            Bukkit.broadcastMessage("§2Sauvegarde des donnees...");
+            Bukkit.broadcastMessage(ChatColor.DARK_GREEN + "Sauvegarde des donnees...");
 
             for (Bank bank : Bank.bankList.values()) {
                 bank.logBankState();

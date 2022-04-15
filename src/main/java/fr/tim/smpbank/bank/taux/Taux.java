@@ -1,5 +1,6 @@
 package fr.tim.smpbank.bank.taux;
 
+import com.google.gson.Gson;
 import fr.tim.smpbank.StonksExchange;
 import fr.tim.smpbank.bank.BankLog;
 import fr.tim.smpbank.files.FileManager;
@@ -29,7 +30,6 @@ public class Taux implements Serializable {
     public Taux() {
         this.taux = 5;
         this.pente = 0;
-        loadData();
     }
 
     public float getTaux() {
@@ -51,11 +51,14 @@ public class Taux implements Serializable {
 
             logTaux(System.currentTimeMillis());
 
-            ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(file));
-            oos.writeObject(this);
-            oos.close();
+            Gson gson = new Gson();
+            Writer writer = new FileWriter(file);
+            gson.toJson(this,writer);
+            writer.flush();
+            writer.close();
 
         } catch (IOException e) {
+            System.out.println("An error has occurred saving Taux. Current Amount : " + taux);
             e.printStackTrace();
         }
     }
@@ -70,15 +73,16 @@ public class Taux implements Serializable {
                 return;
             }
 
-            ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file));
-            Taux taux = (Taux) ois.readObject();
-            ois.close();
+            Gson gson = new Gson();
+            Bukkit.broadcastMessage("taux");
+            Reader reader = new FileReader(file);
+            Taux taux = gson.fromJson(reader,Taux.class);
 
             this.tauxLog = taux.getTauxLog();
             this.taux = taux.getTaux();
             this.pente = taux.getPente();
             this.penteLog = taux.getPenteLog();
-        } catch (IOException | ClassNotFoundException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
@@ -130,7 +134,7 @@ public class Taux implements Serializable {
     private float tauxProactif() {
         float penteResiduelle = 0;
         for (int i =-1; i>-Math.min(10,this.getPenteLog().size()); i--) {
-            penteResiduelle += this.getPenteLog().get(this.getPenteLog().size() - 1 + i).getSolde() / Math.pow(i,2);
+            penteResiduelle += this.getPenteLog().get(this.getPenteLog().size() - 1 + i).getSolde() / i;
         }
         return penteResiduelle;
     }

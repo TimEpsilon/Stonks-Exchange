@@ -16,7 +16,7 @@ public class AntiEChest implements Listener {
     @EventHandler
     public void onItemDrag(InventoryCloseEvent e) {
         if (e.getInventory().getType().equals(InventoryType.ENDER_CHEST)) {
-            if (e.getInventory().contains(Material.EMERALD) ||e.getInventory().contains(Material.FILLED_MAP) || e.getInventory().contains(Material.PAPER)) {
+            if (e.getInventory().contains(Material.EMERALD) || e.getInventory().contains(Material.FILLED_MAP) || e.getInventory().contains(Material.PAPER)) {
                 for (ItemStack item : e.getInventory().getContents()) {
                     if (item == null) continue;
                     if (item.getItemMeta().getPersistentDataContainer().has(CustomItems.CustomItemKey,PersistentDataType.STRING)) {

@@ -1,5 +1,6 @@
 package fr.tim.smpbank.bank;
 
+import com.google.gson.Gson;
 import fr.tim.smpbank.bank.rank.BankRank;
 import fr.tim.smpbank.files.FileManager;
 import org.bukkit.Bukkit;
@@ -38,32 +39,36 @@ public class Bank implements Serializable {
                 file.createNewFile();
             }
 
-            ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(file));
-            oos.writeObject(this);
-            oos.close();
+            Gson gson = new Gson();
+            Writer writer = new FileWriter(file);
+            gson.toJson(this,writer);
+            writer.flush();
+            writer.close();
 
         } catch (IOException e) {
+            System.out.println("An error has occurred saving " + uuid + "'s bank account. Current Amount : " + solde);
             e.printStackTrace();
         }
     }
 
     public void loadData() {
-        File file = new File(FileManager.BANK_PATH + this.uuid + ".bank");
-
-        if (!file.exists()) {
-            saveData();
-            return;
-        }
-
         try {
-            ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file));
-            Bank bank = (Bank) ois.readObject();
-            ois.close();
+            File file = new File(FileManager.BANK_PATH + this.uuid + ".bank");
+
+            if (!file.exists()) {
+                saveData();
+                return;
+            }
+            Bukkit.broadcastMessage("taux");
+            Gson gson = new Gson();
+            Reader reader = new FileReader(file);
+            Bank bank = gson.fromJson(reader,Bank.class);
 
             this.bankLogList = bank.getBankLogList();
             this.solde = bank.getSolde();
             this.rank = bank.getRank();
-        } catch (IOException | ClassNotFoundException e) {
+        } catch (IOException e) {
+            System.out.println("An error has occurred loading " + uuid + "'s bank account.");
             e.printStackTrace();
         }
     }

@@ -26,10 +26,9 @@ public class StonksExchange extends JavaPlugin {
         new CustomCraft();
         Autosave.loop();
 
-        this.taux = new Taux();
-        this.taux.dailyUpdate();
-
-
+        taux = new Taux();
+        taux.loadData();
+        taux.dailyUpdate();
     }
 
     @Override

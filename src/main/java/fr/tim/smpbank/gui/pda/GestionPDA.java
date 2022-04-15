@@ -22,7 +22,6 @@ public class GestionPDA implements Listener {
     public final static String PDAText = ChatColor.GREEN + "" + ChatColor.BOLD + "[S.A.M.] ";
 
     static {
-
         map.setTrackingPosition(false);
         map.setUnlimitedTracking(false);
         map.setScale(MapView.Scale.FARTHEST);
@@ -37,7 +36,7 @@ public class GestionPDA implements Listener {
         if (item == null) return;
 
         if (item.getItemMeta().getPersistentDataContainer().has(CustomItems.CustomItemKey, PersistentDataType.STRING)) {
-            if (!item.getItemMeta().getPersistentDataContainer().get(CustomItems.CustomItemKey,PersistentDataType.STRING).contains(ChatColor.GREEN + "" + ChatColor.BOLD + "S.A.M.")) return;
+            if (!item.getItemMeta().getPersistentDataContainer().get(CustomItems.CustomItemKey,PersistentDataType.STRING).contains(CustomItems.PDA.getName())) return;
 
             p.sendMessage(Component.text(  ChatColor.AQUA + "Actualisation..."));
 
