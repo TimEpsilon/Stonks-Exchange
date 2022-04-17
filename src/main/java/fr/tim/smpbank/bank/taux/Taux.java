@@ -23,7 +23,7 @@ public class Taux implements Serializable {
     private transient static float moyenne = 5;
     private transient static float ecartRandom = 0.1f;
     private transient static float ecartMax = 2;
-    public transient static final long time = 21300; //5h55min
+    public transient static final long time = 1800; //21300; //5h55min
     private transient static float retour =0.1f;
 
 
@@ -74,7 +74,6 @@ public class Taux implements Serializable {
             }
 
             Gson gson = new Gson();
-            Bukkit.broadcastMessage("taux");
             Reader reader = new FileReader(file);
             Taux taux = gson.fromJson(reader,Taux.class);
 

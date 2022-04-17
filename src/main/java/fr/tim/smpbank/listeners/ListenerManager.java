@@ -1,6 +1,7 @@
 package fr.tim.smpbank.listeners;
 
 import fr.tim.smpbank.StonksExchange;
+import fr.tim.smpbank.bank.vault.PocketVault;
 import fr.tim.smpbank.bank.vault.Vault;
 import fr.tim.smpbank.gui.pda.GestionPDA;
 import fr.tim.smpbank.listeners.bank.InterfaceInteraction;
@@ -21,5 +22,6 @@ public class ListenerManager {
         pm.registerEvents(new GestionPDA(),plugin);
         pm.registerEvents(new AntiEChest(),plugin);
         pm.registerEvents(new Vault(),plugin);
+        pm.registerEvents(new PocketVault(),plugin);
     }
 }

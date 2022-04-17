@@ -59,7 +59,6 @@ public class Bank implements Serializable {
                 saveData();
                 return;
             }
-            Bukkit.broadcastMessage("taux");
             Gson gson = new Gson();
             Reader reader = new FileReader(file);
             Bank bank = gson.fromJson(reader,Bank.class);

@@ -15,22 +15,22 @@ import java.util.List;
 
 public enum CustomItems {
 
-    MCOIN(Material.EMERALD,1, ChatColor.AQUA + "" + ChatColor.BOLD + "M-Coin",42),
-    PDA(Material.FILLED_MAP,1,ChatColor.GREEN + "" + ChatColor.BOLD + "S.A.M.",96,ChatColor.GRAY+"Stonks Assistant Manager", ChatColor.GRAY + "" + ChatColor.ITALIC + "'Te ramènes chez toi quand t'es bourré!'"),
-    PDA_ITEM(Material.PAPER,1,ChatColor.GREEN + "" + ChatColor.BOLD + "S.A.M.",96,ChatColor.GRAY+"Stonks Assistant Manager", ChatColor.GRAY + "" + ChatColor.ITALIC + "'Te ramènes chez toi quand t'es bourré!'")
+    MCOIN(Material.EMERALD, ChatColor.AQUA + "" + ChatColor.BOLD + "M-Coin",42),
+    PDA(Material.FILLED_MAP,ChatColor.GREEN + "" + ChatColor.BOLD + "S.A.M.",96,ChatColor.GRAY+"Stonks Assistant Manager", ChatColor.GRAY + "" + ChatColor.ITALIC + "'Te ramènes chez toi quand t'es bourré!'"),
+    PDA_ITEM(Material.PAPER,ChatColor.GREEN + "" + ChatColor.BOLD + "S.A.M.",96,ChatColor.GRAY+"Stonks Assistant Manager", ChatColor.GRAY + "" + ChatColor.ITALIC + "'Te ramènes chez toi quand t'es bourré!'")
     ;
 
     public static NamespacedKey CustomItemKey =  new NamespacedKey(StonksExchange.getPlugin(),"customitem");
     private ItemStack item;
     private String name;
 
-    CustomItems(Material material, int n, String name, int cmd, String... lore) {
+    CustomItems(Material material, String name, int cmd, String... lore) {
         List<Component> Lore = new ArrayList<>();
         for (String l : lore) {
             Lore.add(Component.text(l));
         }
 
-        this.item = new ItemStack(material,n);
+        this.item = new ItemStack(material,1);
         this.name = ChatColor.stripColor(name);
 
         ItemMeta meta = this.item.getItemMeta();
@@ -43,11 +43,11 @@ public enum CustomItems {
     }
 
     public ItemStack getItem() {
-        return this.item;
+        return item;
     }
 
     public String getName() {
-        return this.name;
+        return name;
     }
 
 }

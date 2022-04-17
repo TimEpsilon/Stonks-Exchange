@@ -40,7 +40,6 @@ public class Gui implements CommandExecutor {
 
             if (args.length == 0) {
                 new BankInterface(player);
-                return true;
 
             } else {
 
@@ -74,8 +73,8 @@ public class Gui implements CommandExecutor {
                         saveToFile(b,player,args[0]);
                     }
                 }
-                return true;
             }
+            return true;
         }
         return false;
     }
