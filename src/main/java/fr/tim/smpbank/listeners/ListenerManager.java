@@ -8,6 +8,7 @@ import fr.tim.smpbank.listeners.bank.InterfaceInteraction;
 import fr.tim.smpbank.listeners.environment.AntiEChest;
 import fr.tim.smpbank.listeners.environment.PlayerJoin;
 import fr.tim.smpbank.listeners.taux.GetTauxParametres;
+import fr.tim.smpbank.misc.PlayerHeadPersistent;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.PluginManager;
 
@@ -23,5 +24,6 @@ public class ListenerManager {
         pm.registerEvents(new AntiEChest(),plugin);
         pm.registerEvents(new Vault(),plugin);
         pm.registerEvents(new PocketVault(),plugin);
+        pm.registerEvents(new PlayerHeadPersistent(),plugin);
     }
 }
