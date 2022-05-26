@@ -1,14 +1,16 @@
-name: StonksExchange
+name: stonkexchange
 version: ${project.version}
-main: fr.tim.smpbank.StonksExchange
+main: fr.tim.stonkexchange.StonkExchange
 api-version: 1.18
 
 commands:
   bank:
     description: Permet de gérer le compte bancaire des joueurs
     usage: /bank <UUID/Name/Taux> [save]
+    permission: admin
   vault:
     description: Fait appararaitre un coffre fort
+    permission: admin
 
 permissions:
   admin:
