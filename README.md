@@ -9,6 +9,7 @@ Ce plugin repose principalement sur la monnaie officielle, le M-Coin, obtenable 
 ## *La Banque*
 
 Chaque joueur dispose d'un compte unique et privé, lié à leur UUID. Ce compte est accessible depuis un Vault Block. 
+
 ![](https://github.com/TimEpsilon/Stonks-Exchange/blob/master/img/vault.png)
 
 L'interface se présente comme ceci :
@@ -78,7 +79,7 @@ soit `n` un instant donné, définit comme un intervalle de `8h`. A l'instant `n
 
 
 
-> Le nombre de morts
+> Le nombre de diamants minés
 
 <img src ="https://github.com/TimEpsilon/Stonks-Exchange/blob/master/img/diamonds_graph.png" width="250"> ![](https://github.com/TimEpsilon/Stonks-Exchange/blob/master/img/diamonds.PNG)
 
@@ -132,6 +133,7 @@ Le retour est la tendance du taux à converger vers sa valeur moyenne. Cette con
 Pour éviter tout conflit quant à qui possède le plus d'argent, l'ancien affichage du solde total de chaque joueur n'est à présent plus possible. Un système de rangs a été introduit à sa place. Un rang est définit par son solde maximal et son prix d'achat et est symbolisé par une couleur. Lorsqu'un joueur atteint le plafond de son compte, il/elle peut acheter le rang suivant, changeant son statut social et la hauteur de son plafond.
 
 Un total de 6 rangs existent :
+
     - Green, max = `25 M-Coins`
     - Blue, max = `100 M-Coins`
     - Purple, max = `500 M-Coins`
