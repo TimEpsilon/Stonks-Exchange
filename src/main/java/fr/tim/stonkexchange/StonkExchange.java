@@ -5,6 +5,7 @@ import fr.tim.stonkexchange.bank.Bank;
 import fr.tim.stonkexchange.bank.taux.Taux;
 import fr.tim.stonkexchange.commands.Gui;
 import fr.tim.stonkexchange.commands.OnTabComplete;
+import fr.tim.stonkexchange.commands.ShowRank;
 import fr.tim.stonkexchange.commands.VaultSpawn;
 import fr.tim.stonkexchange.files.Autosave;
 import fr.tim.stonkexchange.files.FileManager;
@@ -61,6 +62,7 @@ public class StonkExchange extends JavaPlugin {
 
     private void registerCommands() {
         getCommand("bank").setExecutor(new Gui());
+        getCommand("baltop").setExecutor(new ShowRank());
         getCommand("vault").setExecutor(new VaultSpawn());
         getCommand("vault").setTabCompleter(new OnTabComplete());
 

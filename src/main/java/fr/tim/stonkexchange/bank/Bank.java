@@ -12,18 +12,20 @@ public class Bank implements Serializable {
     public transient static HashMap<UUID,Bank> bankList = new HashMap<>();
 
     private final String uuid;
+    private final String name;
     private float solde;
     private BankRank rank;
     private List<BankLog> bankLogList = new ArrayList<>();
 
     public Bank(Player player) {
-        this(player.getUniqueId().toString());
+        this(player.getUniqueId().toString(),player.getName());
     }
 
-    public Bank(String uuid) {
+    public Bank(String uuid,String name) {
         this.solde = 0;
         this.uuid = uuid;
         this.rank = BankRank.GREEN;
+        this.name = name;
         loadData();
         logBankState();
 
@@ -69,6 +71,10 @@ public class Bank implements Serializable {
             System.out.println("An error has occurred loading " + uuid + "'s bank account.");
             e.printStackTrace();
         }
+    }
+
+    public String getName() {
+        return name;
     }
 
     public BankRank getRank() {

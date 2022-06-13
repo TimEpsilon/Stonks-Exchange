@@ -24,7 +24,6 @@ public class Taux implements Serializable {
     private transient static float ecartRandom = 0.1f;
     private transient static float ecartMax = 2;
     public transient static final long time = 28500; //7h55min
-    private transient static float retour =0.1f;
 
 
     public Taux() {
@@ -117,14 +116,16 @@ public class Taux implements Serializable {
                 - GetTauxParametres.getTotalBefore(System.currentTimeMillis()- time*1000);
 
         float somme = CalculTaux.somme(j,m,d,v);
-        this.pente = CalculTaux.pente(somme);
+        pente = CalculTaux.pente(somme);
 
-        this.taux = (float) (this.taux + this.pente + (moyenne - this.taux) * retour + Math.random()*2*ecartRandom - ecartRandom + tauxProactif());
+        taux = (float) (taux + pente + CalculTaux.retour(taux) + Math.random()*2*ecartRandom - ecartRandom + tauxProactif());
 
-        if (this.taux > moyenne + ecartMax) this.taux = 2*moyenne + 2*ecartMax - this.taux;
-        if (this.taux < moyenne - ecartMax) this.taux = 2*moyenne - 2*ecartMax - this.taux;
+        if (taux > moyenne + ecartMax) taux = 2*moyenne + 2*ecartMax - taux;
+        if (taux < moyenne - ecartMax) taux = 2*moyenne - 2*ecartMax - taux;
 
-        this.taux = Math.round(this.taux*1000f)/1000f;
+        taux += CalculTaux.retour(taux);
+
+        taux = Math.round(taux*1000f)/1000f;
 
         GetTauxParametres.resetParameters();
 
@@ -133,7 +134,7 @@ public class Taux implements Serializable {
     private float tauxProactif() {
         float penteResiduelle = 0;
         for (int i =-1; i>-Math.min(10,this.getPenteLog().size()); i--) {
-            penteResiduelle += this.getPenteLog().get(this.getPenteLog().size() - 1 + i).getSolde() / i;
+            penteResiduelle += this.getPenteLog().get(this.getPenteLog().size() - 1 + i).getSolde() / -i;
         }
         return penteResiduelle;
     }

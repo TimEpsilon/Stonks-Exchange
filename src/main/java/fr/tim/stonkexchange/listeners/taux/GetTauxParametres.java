@@ -48,7 +48,7 @@ public class GetTauxParametres implements Listener {
         float total = 0;
         for (OfflinePlayer p : Bukkit.getOfflinePlayers()) {
             if (!Bank.bankList.containsKey(p.getUniqueId())) {
-                new Bank(p.getUniqueId().toString());
+                new Bank(p.getUniqueId().toString(),p.getName());
             }
 
             List<BankLog> logList = Bank.bankList.get(p.getUniqueId()).getBankLogList();
@@ -68,7 +68,7 @@ public class GetTauxParametres implements Listener {
         float total = 0;
         for (OfflinePlayer p : Bukkit.getOfflinePlayers()) {
             if (!Bank.bankList.containsKey(p.getUniqueId())) {
-                new Bank(p.getUniqueId().toString());
+                new Bank(p.getUniqueId().toString(),p.getName());
             }
 
             total += Bank.bankList.get(p.getUniqueId()).getSolde();

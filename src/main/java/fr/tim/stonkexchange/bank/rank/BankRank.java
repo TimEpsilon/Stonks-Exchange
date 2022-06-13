@@ -15,7 +15,7 @@ public enum BankRank implements Serializable  {
     PURPLE(500,25,ChatColor.LIGHT_PURPLE,NamedTextColor.LIGHT_PURPLE,"\u9002"),
     RED(1000,100,ChatColor.RED,NamedTextColor.RED,"\u9003"),
     YELLOW(5000,500,ChatColor.YELLOW,NamedTextColor.YELLOW,"\u9004"),
-    GOLD(1000000,1000,ChatColor.GOLD,NamedTextColor.GOLD,"\u9005");
+    GOLD(20000,1000,ChatColor.GOLD,NamedTextColor.GOLD,"\u9005");
 
     private final int maxStorage;
     private final int price;

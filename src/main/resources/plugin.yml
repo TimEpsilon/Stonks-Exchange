@@ -4,6 +4,8 @@ main: fr.tim.stonkexchange.StonkExchange
 api-version: 1.18
 
 commands:
+  baltop:
+    description: Affiche les rangs de chaques joueurs
   bank:
     description: Permet de gérer le compte bancaire des joueurs
     usage: /bank <UUID/Name/Taux> [save]

@@ -47,14 +47,14 @@ public class Gui implements CommandExecutor {
                 if (args[0].length() == 36) {
                     UUID uuid = UUID.fromString(args[0]);
 
-                    if (!Bank.bankList.containsKey(uuid)) new Bank(uuid.toString());
+                    if (!Bank.bankList.containsKey(uuid)) new Bank(uuid.toString(),Bukkit.getOfflinePlayer(uuid).getName());
                     new BankInterface((Player) sender,uuid);
                     b = Bank.bankList.get(uuid);
                 } else {
-                    if (args[0].equalsIgnoreCase("taux")) {
+                    /*if (args[0].equalsIgnoreCase("taux")) {
                         saveToFile(StonkExchange.getPlugin().getTaux(),player);
                         return true;
-                    }
+                    }*/
 
                     OfflinePlayer op = Bukkit.getOfflinePlayerIfCached(args[0]);
                     if (op == null) {
@@ -63,16 +63,16 @@ public class Gui implements CommandExecutor {
                     }
 
                     UUID uuid = op.getUniqueId();
-                    if (!Bank.bankList.containsKey(uuid)) new Bank(uuid.toString());
+                    if (!Bank.bankList.containsKey(uuid)) new Bank(uuid.toString(), op.getName());
                     new BankInterface((Player) sender,uuid);
                     b = Bank.bankList.get(uuid);
                 }
 
-                if (args.length == 2) {
+                /*if (args.length == 2) {
                     if (args[1].equalsIgnoreCase("save")) {
                         saveToFile(b,player,args[0]);
                     }
-                }
+                }*/
             }
             return true;
         }

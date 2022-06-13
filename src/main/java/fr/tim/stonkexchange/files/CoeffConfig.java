@@ -44,6 +44,9 @@ public class CoeffConfig {
                 coeff[0] = (float)fc.getDouble(path+".a");
                 coeff[1] = (float)fc.getDouble(path+".r");
                 break;
+
+            case "Taux.Retour":
+                coeff[0] = (float)fc.getDouble(path+".r");
         }
 
         return coeff;

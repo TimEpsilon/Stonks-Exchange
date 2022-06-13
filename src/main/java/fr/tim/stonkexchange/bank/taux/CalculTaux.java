@@ -23,7 +23,7 @@ public abstract class CalculTaux {
         float m = coeff[0];
         float a = coeff[1];
 
-        return (float) (1/a * ((1+a)/(1+a*Math.pow(a+2,-x/m))-1));
+        return (float) (1f/a * ((1+a)/(1+a*Math.pow(a+2,-x/m))-1));
     }
 
     private static float morts(double x) {
@@ -62,7 +62,9 @@ public abstract class CalculTaux {
         return (float) (a/(1+exp)-a/2);
     }
 
-    public static int temps(float pente) {
-        return (int) Math.min(4,Math.round(1/Math.sqrt(Math.abs(pente))));
+    public static float retour(float taux) {
+        float r = CoeffConfig.getCoeff("Taux.Retour")[0];
+
+        return (float) (1f / (1+Math.exp(-r*(taux - 5))) - 0.5f);
     }
 }
