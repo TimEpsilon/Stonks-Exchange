@@ -12,6 +12,11 @@ public class CoeffConfig {
         return YamlConfiguration.loadConfiguration(file);
     }
 
+    public static long getTimer() {
+        FileConfiguration fc = load();
+        return fc.getLong("Periode");
+    }
+
     public static float[] getCoeff(String path) {
         FileConfiguration fc = load();
         float[] coeff = new float[4];

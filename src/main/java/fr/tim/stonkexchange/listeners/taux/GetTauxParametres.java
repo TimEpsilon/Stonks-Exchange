@@ -6,23 +6,30 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.player.PlayerAdvancementDoneEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Random;
-import java.util.UUID;
+import java.util.*;
 
 public class GetTauxParametres implements Listener {
 
     public static HashMap<UUID,Integer> DeadList = new HashMap<>();
     public static HashMap<UUID,Boolean> JoinedList = new HashMap<>();
     public static HashMap<UUID,Integer> DiamondList = new HashMap<>();
+    public static HashMap<UUID,Integer> BossCount = new HashMap<>();
+
+    public static final ArrayList<EntityType> BossList = new ArrayList<>(List.of(
+            EntityType.ENDER_DRAGON,
+            EntityType.WITHER,
+            EntityType.WARDEN,
+            EntityType.ELDER_GUARDIAN));
 
     @EventHandler
     public void onDeath(PlayerDeathEvent e) {
@@ -42,6 +49,16 @@ public class GetTauxParametres implements Listener {
     public void onJoin(PlayerJoinEvent e) {
         Player p = e.getPlayer();
         if (!JoinedList.containsKey(p.getUniqueId())) JoinedList.put(p.getUniqueId(),true);
+    }
+
+    @EventHandler
+    public void onBossDeath(EntityDeathEvent e) {
+        if (!BossList.contains(e.getEntity().getType())) return;
+    }
+
+    @EventHandler
+    public void onAchievementGet(PlayerAdvancementDoneEvent e) {
+
     }
 
     public static float getTotalBefore(long time) {

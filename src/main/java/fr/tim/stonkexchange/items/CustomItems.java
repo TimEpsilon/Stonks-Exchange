@@ -17,7 +17,8 @@ public enum CustomItems {
 
     MCOIN(Material.EMERALD, ChatColor.AQUA + "" + ChatColor.BOLD + "M-Coin",42),
     PDA(Material.FILLED_MAP,ChatColor.GREEN + "" + ChatColor.BOLD + "S.A.M.",96,ChatColor.GRAY+"Stonks Assistant Manager", ChatColor.GRAY + "" + ChatColor.ITALIC + "'Te ramènes chez toi quand t'es bourré!'"),
-    PDA_ITEM(Material.PAPER,ChatColor.GREEN + "" + ChatColor.BOLD + "S.A.M.",96,ChatColor.GRAY+"Stonks Assistant Manager", ChatColor.GRAY + "" + ChatColor.ITALIC + "'Te ramènes chez toi quand t'es bourré!'")
+    PDA_ITEM(Material.PAPER,ChatColor.GREEN + "" + ChatColor.BOLD + "S.A.M.",96,ChatColor.GRAY+"Stonks Assistant Manager", ChatColor.GRAY + "" + ChatColor.ITALIC + "'Te ramènes chez toi quand t'es bourré!'"),
+    RECALL_POTION(Material.POTION,ChatColor.LIGHT_PURPLE + "" + ChatColor.BOLD + "Recall Potion", 100, ChatColor.GRAY + "Téléporte à son spawnpoint")
     ;
 
     public static NamespacedKey CustomItemKey =  new NamespacedKey(StonkExchange.getPlugin(),"customitem");

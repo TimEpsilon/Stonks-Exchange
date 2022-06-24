@@ -43,3 +43,6 @@ Taux:
   #Ce retour est donné par f(x) = 1 / (1+exp(-r(x-5))) - 1/2
   Retour:
     r: -0.2
+
+#Le temps en secondes entre chaque actualisation
+Periode: 28500

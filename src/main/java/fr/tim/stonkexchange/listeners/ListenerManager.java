@@ -4,6 +4,7 @@ import fr.tim.stonkexchange.StonkExchange;
 import fr.tim.stonkexchange.bank.vault.PocketVault;
 import fr.tim.stonkexchange.bank.vault.Vault;
 import fr.tim.stonkexchange.gui.pda.GestionPDA;
+import fr.tim.stonkexchange.items.recallpotion.RecallPotion;
 import fr.tim.stonkexchange.listeners.bank.InterfaceInteraction;
 import fr.tim.stonkexchange.listeners.environment.AntiEChest;
 import fr.tim.stonkexchange.listeners.environment.PlayerJoin;
@@ -25,5 +26,6 @@ public class ListenerManager {
         pm.registerEvents(new Vault(),plugin);
         pm.registerEvents(new PocketVault(),plugin);
         pm.registerEvents(new PlayerHeadPersistent(),plugin);
+        pm.registerEvents(new RecallPotion(),plugin);
     }
 }

@@ -3,6 +3,7 @@ package fr.tim.stonkexchange.bank.taux;
 import com.google.gson.Gson;
 import fr.tim.stonkexchange.StonkExchange;
 import fr.tim.stonkexchange.bank.BankLog;
+import fr.tim.stonkexchange.files.CoeffConfig;
 import fr.tim.stonkexchange.files.FileManager;
 import fr.tim.stonkexchange.gui.pda.GestionPDA;
 import fr.tim.stonkexchange.listeners.taux.GetTauxParametres;
@@ -23,7 +24,7 @@ public class Taux implements Serializable {
     private transient static float moyenne = 5;
     private transient static float ecartRandom = 0.1f;
     private transient static float ecartMax = 2;
-    public transient static final long time = 28500; //7h55min
+    public transient static final long time = CoeffConfig.getTimer(); //7h55min
 
 
     public Taux() {
@@ -118,7 +119,7 @@ public class Taux implements Serializable {
         float somme = CalculTaux.somme(j,m,d,v);
         pente = CalculTaux.pente(somme);
 
-        taux = (float) (taux + pente + CalculTaux.retour(taux) + Math.random()*2*ecartRandom - ecartRandom + tauxProactif());
+        taux = (float) (taux + pente + CalculTaux.retour(taux) + Math.random()*2*ecartRandom - ecartRandom + residus());
 
         if (taux > moyenne + ecartMax) taux = 2*moyenne + 2*ecartMax - taux;
         if (taux < moyenne - ecartMax) taux = 2*moyenne - 2*ecartMax - taux;
@@ -131,10 +132,10 @@ public class Taux implements Serializable {
 
     }
 
-    private float tauxProactif() {
+    private float residus() {
         float penteResiduelle = 0;
         for (int i =-1; i>-Math.min(10,this.getPenteLog().size()); i--) {
-            penteResiduelle += this.getPenteLog().get(this.getPenteLog().size() - 1 + i).getSolde() / -i;
+            penteResiduelle += this.getPenteLog().get(this.getPenteLog().size() - 1 + i).getSolde() / -Math.pow(i,1.5);
         }
         return penteResiduelle;
     }
@@ -144,6 +145,7 @@ public class Taux implements Serializable {
             nextTaux();
             Bukkit.broadcast(Component.text(GestionPDA.PDAText + ChatColor.AQUA + "Nouveau Taux : " + ChatColor.GOLD + this.taux));
             saveData();
+
 
         },0,time*20);
     }
