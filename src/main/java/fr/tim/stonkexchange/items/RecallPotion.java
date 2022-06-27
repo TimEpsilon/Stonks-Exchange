@@ -1,4 +1,4 @@
-package fr.tim.stonkexchange.items.recallpotion;
+package fr.tim.stonkexchange.items;
 
 import fr.tim.stonkexchange.StonkExchange;
 import fr.tim.stonkexchange.items.CustomItems;
@@ -17,18 +17,22 @@ public class RecallPotion implements Listener {
 
     private void returnToSpawn(Player p) {
         Location loc;
-        if (p.isSneaking()) loc = p.getWorld().getSpawnLocation();
+        if (p.isSneaking() || p.getBedSpawnLocation() == null) loc = p.getWorld().getSpawnLocation();
         else loc = p.getBedSpawnLocation();
-        
-        p.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION,40,0));
-        p.addPotionEffect(new PotionEffect(PotionEffectType.DARKNESS,40,0));
-        p.spawnParticle(Particle.SCULK_CHARGE,loc,100,0.2,0.7,0.2,1);
+
+        Location current = p.getLocation();
+
+        p.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION,50,2));
+        p.addPotionEffect(new PotionEffect(PotionEffectType.DARKNESS,70,2));
+        p.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,50,6));
+        p.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS,50,10));
+        p.spawnParticle(Particle.SONIC_BOOM,current.clone().add(0,0.5,0),50,0.2,0.6,0.2);
 
         Bukkit.getScheduler().runTaskLater(StonkExchange.getPlugin(), () -> {
-            p.spawnParticle(Particle.SCULK_CHARGE,p.getLocation(),100,0.2,0.7,0.2,1);
+            p.spawnParticle(Particle.SONIC_BOOM,loc.clone().add(0,0.5,0),30,0.2,0.6,0.2);
             p.teleport(loc);
             p.playSound(loc,Sound.ITEM_CHORUS_FRUIT_TELEPORT,1,1);
-        },40);
+        },20);
     }
 
     @EventHandler

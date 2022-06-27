@@ -20,7 +20,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.UUID;
 
-public class Gui implements CommandExecutor {
+public class OpenBank implements CommandExecutor {
 
     /**Commande Gui (en fait c'est la commande bank mais osef)
      * Affiche l'interface de la banque.

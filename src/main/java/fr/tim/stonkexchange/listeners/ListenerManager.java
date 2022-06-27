@@ -4,7 +4,7 @@ import fr.tim.stonkexchange.StonkExchange;
 import fr.tim.stonkexchange.bank.vault.PocketVault;
 import fr.tim.stonkexchange.bank.vault.Vault;
 import fr.tim.stonkexchange.gui.pda.GestionPDA;
-import fr.tim.stonkexchange.items.recallpotion.RecallPotion;
+import fr.tim.stonkexchange.items.RecallPotion;
 import fr.tim.stonkexchange.listeners.bank.InterfaceInteraction;
 import fr.tim.stonkexchange.listeners.environment.AntiEChest;
 import fr.tim.stonkexchange.listeners.environment.PlayerJoin;

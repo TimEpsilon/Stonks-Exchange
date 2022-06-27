@@ -8,7 +8,7 @@ public class FileManager {
 
     public static final String BANK_PATH = StonkExchange.getPlugin().getDataFolder() + File.separator + "bank" + File.separator;
     public static final String LOG_PATH = StonkExchange.getPlugin().getDataFolder() + File.separator + "logs" + File.separator;
-    public static final String INC_PATH = StonkExchange.getPlugin().getDataFolder() + File.separator + "incorporation" + File.separator;
+    public static final String INC_PATH = StonkExchange.getPlugin().getDataFolder() + File.separator + "group" + File.separator;
     public static final String CONFIG_PATH = StonkExchange.getPlugin().getDataFolder() + File.separator + "";
 
     public FileManager() {
@@ -23,6 +23,9 @@ public class FileManager {
         if (!f.exists()) f.mkdir();
 
         f = new File(LOG_PATH);
+        if (!f.exists()) f.mkdir();
+
+        f = new File(INC_PATH);
         if (!f.exists()) f.mkdir();
 
         StonkExchange.getPlugin().saveDefaultConfig();

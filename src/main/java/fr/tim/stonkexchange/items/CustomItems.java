@@ -7,6 +7,7 @@ import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 
@@ -40,6 +41,7 @@ public enum CustomItems {
         meta.setCustomModelData(cmd);
         PersistentDataContainer data = meta.getPersistentDataContainer();
         data.set(new NamespacedKey(StonkExchange.getPlugin(),"customitem"), PersistentDataType.STRING,this.name);
+
         this.item.setItemMeta(meta);
     }
 

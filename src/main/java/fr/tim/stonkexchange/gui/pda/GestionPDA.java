@@ -1,7 +1,9 @@
 package fr.tim.stonkexchange.gui.pda;
 
 import fr.tim.stonkexchange.StonkExchange;
+import fr.tim.stonkexchange.bank.taux.CalculTaux;
 import fr.tim.stonkexchange.bank.taux.Taux;
+import fr.tim.stonkexchange.files.ConfigManager;
 import fr.tim.stonkexchange.items.CustomItems;
 import fr.tim.stonkexchange.listeners.taux.GetTauxParametres;
 import net.kyori.adventure.text.Component;
@@ -10,7 +12,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.MapMeta;
 import org.bukkit.map.MapRenderer;
@@ -40,61 +41,28 @@ public class GestionPDA implements Listener {
 
             p.sendMessage(Component.text(  ChatColor.AQUA + "Actualisation..."));
 
-            switch (item.getType().toString()) {
-                case "FILLED_MAP":
-
-                    if (p.isSneaking()) {
-
-                        if (e.getHand().equals(EquipmentSlot.HAND)) {
-                            p.getInventory().setItemInMainHand(CustomItems.PDA_ITEM.getItem());
-                        } else {
-                            p.getInventory().setItemInOffHand(CustomItems.PDA_ITEM.getItem());
-                        }
-
-                        showStats(p);
-
-                    } else {
-                        showMap(item);
-                    }
-
-                    break;
-
-                case "PAPER":
-
-                    if (p.isSneaking()) {
-
-                        if (e.getHand().equals(EquipmentSlot.HAND)) {
-                            p.getInventory().setItemInMainHand(CustomItems.PDA.getItem());
-                            showMap(p.getInventory().getItemInMainHand());
-                        } else {
-                            p.getInventory().setItemInOffHand(CustomItems.PDA.getItem());
-                            showMap(p.getInventory().getItemInOffHand());
-                        }
-
-                    } else {
-                        showStats(p);
-                    }
-                    break;
-            }
-
-            Bukkit.getScheduler().runTaskLaterAsynchronously(StonkExchange.getPlugin(),()->{
-                p.getScoreboardTags().remove("SamOnCooldown");
-            },100);
-
+            showStats(p);
+            showMap(item);
             }
         }
 
         private void showStats(Player p) {
-            if (p.getScoreboardTags().contains("SamOnCooldown")) {
-                p.sendMessage(Component.text(PDAText + ChatColor.DARK_RED + ChatColor.ITALIC + "Sous cooldown..."));
-                p.playSound(p.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING,SoundCategory.PLAYERS,1,0.1f);
-                return;
-            }
-            p.getScoreboardTags().add("SamOnCooldown");
+
+            float[] coeff = ConfigManager.getCoeff("Taux.Somme");
+            float aJoueurs = coeff[0];
+            float aVariation = coeff[1];
+            float aMort = coeff[2];
+            float aDiamonds = coeff[3];
+            float aBoss = coeff[4];
+            float aAdvancement = coeff[5];
+            float aOres = coeff[6];
 
             float j = GetTauxParametres.JoinedList.size();
             float m = 0;
-            float d = 0;
+            int d = 0;
+            int a = 0;
+            int b = 0;
+            int o = 0;
 
             for (int i : GetTauxParametres.DeadList.values()) {
                 m += i;
@@ -104,26 +72,29 @@ public class GestionPDA implements Listener {
                 d += i;
             }
 
+            for (int i : GetTauxParametres.AdvancementCount.values()) {
+                a += i;
+            }
+
+            for (int i : GetTauxParametres.BossCount.values()) {
+                b += i;
+            }
+
+            for (int i : GetTauxParametres.OreCount.values()) {
+                o += i;
+            }
+
             float v = GetTauxParametres.getTotalNow()
                     - GetTauxParametres.getTotalBefore(System.currentTimeMillis()- 10);//to do
 
-            final float mort = m;
-            final float diamonds = d;
-            final float variation = v;
-
             p.sendMessage(Component.text(PDAText + ChatColor.AQUA + "Informations du jour :"));
-            Bukkit.getScheduler().runTaskLaterAsynchronously(StonkExchange.getPlugin(),()->{
-                p.sendMessage(Component.text(PDAText + ChatColor.LIGHT_PURPLE + "Joueurs Connectés : " + j));
-            },20);
-            Bukkit.getScheduler().runTaskLaterAsynchronously(StonkExchange.getPlugin(),()->{
-                p.sendMessage(Component.text(PDAText + ChatColor.LIGHT_PURPLE + "Nombre de Morts : " + mort));
-            },40);
-            Bukkit.getScheduler().runTaskLaterAsynchronously(StonkExchange.getPlugin(),()->{
-                p.sendMessage(Component.text(PDAText + ChatColor.LIGHT_PURPLE + "Diamants Minés : " + diamonds));
-            },60);
-            Bukkit.getScheduler().runTaskLaterAsynchronously(StonkExchange.getPlugin(),()->{
-                p.sendMessage(Component.text(PDAText + ChatColor.LIGHT_PURPLE + "Variation de la Banque : " + variation));
-            },80);
+            p.sendMessage(Component.text(PDAText + ChatColor.LIGHT_PURPLE + "Joueurs Connectés : " + j + ChatColor.GRAY + " - Influence : " + Math.round(aJoueurs*CalculTaux.joueurs(j)*1000f)/1000f));
+            p.sendMessage(Component.text(PDAText + ChatColor.LIGHT_PURPLE + "Nombre de Morts : " + m + ChatColor.GRAY + " - Influence : " + Math.round(aMort*CalculTaux.morts(m)*1000f)/1000f));
+            p.sendMessage(Component.text(PDAText + ChatColor.LIGHT_PURPLE + "Diamants Minés : " + d + ChatColor.GRAY + " - Influence : " + Math.round(aDiamonds*CalculTaux.diamonds(d)*1000f)/1000f));
+            p.sendMessage(Component.text(PDAText + ChatColor.LIGHT_PURPLE + "Variation de la Banque : " + v + ChatColor.GRAY + " - Influence : " + Math.round(aVariation*CalculTaux.variation(v)*1000f)/1000f));
+            p.sendMessage(Component.text(PDAText + ChatColor.LIGHT_PURPLE + "Boss vaincus : " + b + ChatColor.GRAY + " - Influence : " + Math.round(aBoss*CalculTaux.boss(b)*1000f)/1000f));
+            p.sendMessage(Component.text(PDAText + ChatColor.LIGHT_PURPLE + "Advancements obtenus : " + a + ChatColor.GRAY + " - Influence : " + Math.round(aAdvancement*CalculTaux.advancement(a)*1000f)/1000f));
+            p.sendMessage(Component.text(PDAText + ChatColor.LIGHT_PURPLE + "Minerais Rares Minés : " + o + ChatColor.GRAY + " - Influence : " + Math.round(aOres*CalculTaux.ores(o)*1000f)/1000f));
         }
 
         private void showMap(ItemStack itemMap) {

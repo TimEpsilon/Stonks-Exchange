@@ -12,7 +12,7 @@ public class Bank implements Serializable {
     public transient static HashMap<UUID,Bank> bankList = new HashMap<>();
 
     private final String uuid;
-    private final String name;
+    private String name;
     private float solde;
     private BankRank rank;
     private List<BankLog> bankLogList = new ArrayList<>();
@@ -64,6 +64,7 @@ public class Bank implements Serializable {
             Reader reader = new FileReader(file);
             Bank bank = gson.fromJson(reader,Bank.class);
 
+            this.name = bank.getName();
             this.bankLogList = bank.getBankLogList();
             this.solde = bank.getSolde();
             this.rank = bank.getRank();
@@ -115,6 +116,17 @@ public class Bank implements Serializable {
     public void add(float n) {
         this.solde += n;
         roundSolde();
+    }
+
+    public static void loadBanks() {
+        File folder = new File(FileManager.BANK_PATH);
+
+        for (File file : folder.listFiles()) {
+            if (file.getName().contains("Taux")) continue;
+            String uuid = file.getName().replace(".bank","");
+
+            new Bank(uuid,uuid);
+        }
     }
 
 }

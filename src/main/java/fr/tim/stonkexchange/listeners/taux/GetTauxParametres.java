@@ -24,12 +24,20 @@ public class GetTauxParametres implements Listener {
     public static HashMap<UUID,Boolean> JoinedList = new HashMap<>();
     public static HashMap<UUID,Integer> DiamondList = new HashMap<>();
     public static HashMap<UUID,Integer> BossCount = new HashMap<>();
+    public static HashMap<UUID,Integer> AdvancementCount = new HashMap<>();
+    public static HashMap<UUID,Integer> OreCount = new HashMap<>();
 
     public static final ArrayList<EntityType> BossList = new ArrayList<>(List.of(
             EntityType.ENDER_DRAGON,
             EntityType.WITHER,
             EntityType.WARDEN,
             EntityType.ELDER_GUARDIAN));
+    public static final ArrayList<Material> oreList = new ArrayList<>(List.of(
+            Material.ANCIENT_DEBRIS,
+            Material.EMERALD_ORE,
+            Material.GOLD_ORE,
+            Material.DEEPSLATE_EMERALD_ORE,
+            Material.DEEPSLATE_GOLD_ORE));
 
     @EventHandler
     public void onDeath(PlayerDeathEvent e) {
@@ -54,11 +62,24 @@ public class GetTauxParametres implements Listener {
     @EventHandler
     public void onBossDeath(EntityDeathEvent e) {
         if (!BossList.contains(e.getEntity().getType())) return;
+        if (e.getEntity().getKiller() == null) return;
+
+        Player p = e.getEntity().getKiller();
+
+        BossCount.compute(p.getUniqueId(),(k,v) -> (v == null) ? 1 : v+1);
     }
 
     @EventHandler
     public void onAchievementGet(PlayerAdvancementDoneEvent e) {
+        Player p = e.getPlayer();
+        AdvancementCount.compute(p.getUniqueId(),(k,v) -> (v == null) ? 1 : v+1);
+    }
 
+    @EventHandler void onOreMined(BlockBreakEvent e) {
+        Player p = e.getPlayer();
+        if (oreList.contains(e.getBlock().getType()) && !p.getInventory().getItemInMainHand().getEnchantments().containsKey(Enchantment.SILK_TOUCH)) {
+            OreCount.compute(p.getUniqueId(),(k, v) -> (v == null) ? 1 : v+1);
+        }
     }
 
     public static float getTotalBefore(long time) {
@@ -98,6 +119,9 @@ public class GetTauxParametres implements Listener {
         JoinedList.clear();
         DiamondList.clear();
         DeadList.clear();
+        OreCount.clear();
+        BossCount.clear();
+        AdvancementCount.clear();
     }
 
     public static float[] getFakeParameters() {

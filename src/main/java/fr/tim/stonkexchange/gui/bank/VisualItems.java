@@ -2,6 +2,7 @@ package fr.tim.stonkexchange.gui.bank;
 
 import fr.tim.stonkexchange.bank.rank.BankRank;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
@@ -26,15 +27,22 @@ public enum VisualItems {
     RANK_RED(Material.RED_WOOL,1,ChatColor.RED + "Rang : \u9003 Red",ChatColor.GRAY + " Prochain Rang : Yellow (" + BankRank.YELLOW.getPrice() + ")", 0,21),
     RANK_YELLOW(Material.YELLOW_WOOL,1,ChatColor.YELLOW + "Rang : \u9004 Yellow",ChatColor.GRAY + " Prochain Rang : Gold (" + BankRank.GOLD.getPrice() + ")", 0,21),
     RANK_GOLD(Material.GOLD_BLOCK,1,ChatColor.GOLD + "Rang : \u9005 Gold","", 0,21),
-    SOLDE(Material.PLAYER_HEAD, 1, ChatColor.GOLD + "Solde : ", "§d" + "0.0 / 10.0",0,12);
+    SOLDE(Material.PLAYER_HEAD, 1, ChatColor.GOLD + "Solde : ", "§d" + "0.0 / 10.0",0,12),
+    GROUP(Material.TOTEM_OF_UNDYING,1,ChatColor.BLUE + "Groupe",ChatColor.GRAY + "Informations sur votre groupe",0,0),
+    OWNER(Material.PLAYER_HEAD,1,ChatColor.LIGHT_PURPLE + "Owner : ","",0,1),
+    MEMBERS(Material.BUNDLE,1,ChatColor.YELLOW + "Membres : ", "", 0,19),
+    EMBLEM(Material.PAPER,1,ChatColor.GOLD + "GroupName : ", ChatColor.GRAY + "Modifiez votre groupe avec /group",0,10),
+    BANK(Material.IRON_INGOT,1,ChatColor.GOLD + "Solde du Groupe : ", "0.0",12,12);
 
     private ItemStack item;
     private int slot;
+    private String name;
 
     VisualItems(Material material, int count, String name, String lore, int cmd,int slot) {
         List<Component> Lore = new ArrayList<>();
         Lore.add(Component.text(lore));
 
+        this.name = name;
         this.item = new ItemStack(material,count);
         ItemMeta meta = this.item.getItemMeta();
         meta.setCustomModelData(cmd);
@@ -54,9 +62,13 @@ public enum VisualItems {
         return this.slot;
     }
 
-    public static VisualItems searchItem(String name,int n) {
-        switch (name) {
-            case "DIAMOND":
+    public static VisualItems searchItem(ItemStack item) {
+        Material mat = item.getType();
+        int n = item.getAmount();
+        Component display = item.getItemMeta().displayName();
+        if (display == null) return null;
+        switch (mat) {
+            case DIAMOND:
                 switch (n) {
                     case 1:
                         return DEPOSIT_1;
@@ -65,9 +77,9 @@ public enum VisualItems {
                     case 64:
                         return DEPOSIT_64;
                 }
-            case "DIAMOND_BLOCK":
+            case DIAMOND_BLOCK:
                 return DEPOSIT_ALL;
-            case "EMERALD":
+            case EMERALD:
                 switch (n) {
                     case 1:
                         return WITHDRAW_1;
@@ -76,41 +88,52 @@ public enum VisualItems {
                     case 64:
                         return WITHDRAW_64;
                 }
-            case "NETHER_STAR":
+            case NETHER_STAR:
                 return TAUX;
-            case "PLAYER_HEAD":
-                return SOLDE;
-            case "LIME_WOOL":
+            case PLAYER_HEAD: {
+                if (display.equals(Component.text(SOLDE.getName()))) return SOLDE;
+                if (display.equals(Component.text(OWNER.getName()))) return OWNER;
+                break;
+            }
+
+
+            case LIME_WOOL:
                 return RANK_GREEN;
-            case "LIGHT_BLUE_WOOL":
+            case LIGHT_BLUE_WOOL:
                 return RANK_BLUE;
-            case "MAGENTA_WOOL":
+            case MAGENTA_WOOL:
                 return PURPLE;
-            case "RED_WOOL":
+            case RED_WOOL:
                 return RANK_RED;
-            case "YELLOW_WOOL":
+            case YELLOW_WOOL:
                 return RANK_YELLOW;
-            case "GOLD_BLOCK":
+            case GOLD_BLOCK:
                 return RANK_GOLD;
+            case BUNDLE:
+                return MEMBERS;
+            case IRON_INGOT:
+                return BANK;
+            case TOTEM_OF_UNDYING:
+                return GROUP;
         }
+
+        if (display.equals(Component.text(EMBLEM.getName()))) return EMBLEM;
+
         return null;
     }
 
     public static VisualItems getItemByRank(BankRank br) {
-        switch (br) {
-            case GREEN:
-                return VisualItems.RANK_GREEN;
-            case BLUE:
-                return VisualItems.RANK_BLUE;
-            case PURPLE:
-                return VisualItems.PURPLE;
-            case RED:
-                return VisualItems.RANK_RED;
-            case YELLOW:
-                return VisualItems.RANK_YELLOW;
-            case GOLD:
-                return VisualItems.RANK_GOLD;
-        }
-        return null;
-        }
+        return switch (br) {
+            case GREEN -> VisualItems.RANK_GREEN;
+            case BLUE -> VisualItems.RANK_BLUE;
+            case PURPLE -> VisualItems.PURPLE;
+            case RED -> VisualItems.RANK_RED;
+            case YELLOW -> VisualItems.RANK_YELLOW;
+            case GOLD -> VisualItems.RANK_GOLD;
+        };
+    }
+
+    public String getName() {
+        return name;
+    }
 }

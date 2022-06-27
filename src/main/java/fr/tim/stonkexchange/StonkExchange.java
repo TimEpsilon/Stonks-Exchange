@@ -2,11 +2,9 @@ package fr.tim.stonkexchange;
 
 import fr.tim.stonkexchange.bank.Bank;
 
+import fr.tim.stonkexchange.bank.group.Group;
 import fr.tim.stonkexchange.bank.taux.Taux;
-import fr.tim.stonkexchange.commands.Gui;
-import fr.tim.stonkexchange.commands.OnTabComplete;
-import fr.tim.stonkexchange.commands.ShowRank;
-import fr.tim.stonkexchange.commands.VaultSpawn;
+import fr.tim.stonkexchange.commands.*;
 import fr.tim.stonkexchange.files.Autosave;
 import fr.tim.stonkexchange.files.FileManager;
 import fr.tim.stonkexchange.files.Logs;
@@ -33,6 +31,9 @@ public class StonkExchange extends JavaPlugin {
         new CustomCraft();
         Autosave.loop();
 
+        Bank.loadBanks();
+        Group.loadGroups();
+
         taux = new Taux();
         taux.loadData();
         taux.dailyUpdate();
@@ -44,6 +45,9 @@ public class StonkExchange extends JavaPlugin {
     public void onDisable() {
         for (Bank bank : Bank.bankList.values()) {
             bank.logBankState();
+        }
+        for (Group group : Group.incList.values()) {
+            group.logBankState();
         }
     }
 
@@ -61,10 +65,9 @@ public class StonkExchange extends JavaPlugin {
     }
 
     private void registerCommands() {
-        getCommand("bank").setExecutor(new Gui());
+        getCommand("bank").setExecutor(new OpenBank());
         getCommand("baltop").setExecutor(new ShowRank());
-        getCommand("vault").setExecutor(new VaultSpawn());
-        getCommand("vault").setTabCompleter(new OnTabComplete());
+        getCommand("group").setExecutor(new CreateGroup());
 
     }
 

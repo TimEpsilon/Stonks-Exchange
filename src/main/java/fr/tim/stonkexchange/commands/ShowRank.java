@@ -36,8 +36,10 @@ public class ShowRank implements CommandExecutor {
                         (oldValue, newValue) -> oldValue, LinkedHashMap::new));
 
         sender.sendMessage(ChatColor.GOLD + "\n----------- Ranks -----------\n ");
-        for (String name : result.keySet()) {
-            sender.sendMessage(ChatColor.GOLD + "● " + name);
+        for (int i = result.keySet().size(); i > 0; i--) {
+            Object[] names = result.keySet().toArray();
+
+            sender.sendMessage(ChatColor.GOLD + "● " + names[i-1]);
         }
         sender.sendMessage(ChatColor.GOLD + "\n-----------------------------\n ");
         return true;

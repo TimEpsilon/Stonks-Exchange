@@ -16,6 +16,8 @@ public class PlayerJoin implements Listener {
     public void onJoin(PlayerJoinEvent e) {
         Player player = e.getPlayer();
         if (!player.hasDiscoveredRecipe(new NamespacedKey(StonkExchange.getPlugin(),"SAM"))) player.discoverRecipe(new NamespacedKey(StonkExchange.getPlugin(),"SAM"));
+        if (!player.hasDiscoveredRecipe(new NamespacedKey(StonkExchange.getPlugin(),"recall_potion"))) player.discoverRecipe(new NamespacedKey(StonkExchange.getPlugin(),"recall_potion"));
+
         Bank bank = Bank.bankList.get(player);
 
         if (bank == null) {

@@ -1,7 +1,7 @@
 name: stonkexchange
 version: ${project.version}
 main: fr.tim.stonkexchange.StonkExchange
-api-version: 1.18
+api-version: 1.19
 
 commands:
   baltop:
@@ -10,9 +10,8 @@ commands:
     description: Permet de gérer le compte bancaire des joueurs
     usage: /bank <UUID/Name/Taux> [save]
     permission: admin
-  vault:
-    description: Fait appararaitre un coffre fort
-    permission: admin
+  group:
+    description: Permet la gestion de groupes
 
 permissions:
   admin:

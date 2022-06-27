@@ -1,13 +1,13 @@
-package fr.tim.stonkexchange.bank.corporate;
+package fr.tim.stonkexchange.bank.group;
 
 import com.google.gson.Gson;
+import fr.tim.stonkexchange.bank.Bank;
 import fr.tim.stonkexchange.bank.BankLog;
-import fr.tim.stonkexchange.bank.rank.BankRank;
 import fr.tim.stonkexchange.files.FileManager;
 import fr.tim.stonkexchange.gui.pda.GestionPDA;
-import fr.tim.stonkexchange.items.CustomItems;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.*;
@@ -16,25 +16,26 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
-public class Corporation implements Serializable {
-    public transient static HashMap<String, Corporation> incList = new HashMap<>();
+public class Group implements Serializable {
+    public transient static HashMap<String, Group> incList = new HashMap<>();
 
     private String name;
     private float solde;
     private UUID owner;
-    private List<UUID> members;
+    private HashMap<UUID,String> members = new HashMap<>();
     private List<BankLog> bankLogList = new ArrayList<>();
+    private ItemStack emblem;
 
-    public Corporation(String name, Player owner) {
-        if (incList.containsKey(name)) {
+    public Group(String name, Player owner) {
+        if (incList.containsKey(name) && (owner != null)) {
             owner.sendMessage(GestionPDA.PDAText + ChatColor.RED + " [ERROR] Ce nom est déjà pris.");
             return;
         }
 
         solde = 0;
         this.name = name;
-        this.owner = owner.getUniqueId();
-        members.add(this.owner);
+        this.owner = (owner != null) ? owner.getUniqueId() : null;
+        members.put(this.owner,(owner != null) ? owner.getName() : null);
 
         loadData();
         logBankState();
@@ -57,7 +58,7 @@ public class Corporation implements Serializable {
             writer.close();
 
         } catch (IOException e) {
-            System.out.println("An error has occurred saving " + name + "'s corporation account. Current Amount : " + solde);
+            System.out.println("An error has occurred saving " + name + "'s group account. Current Amount : " + solde);
             e.printStackTrace();
         }
     }
@@ -72,14 +73,17 @@ public class Corporation implements Serializable {
             }
             Gson gson = new Gson();
             Reader reader = new FileReader(file);
-            Corporation inc = gson.fromJson(reader, Corporation.class);
+            Group inc = gson.fromJson(reader, Group.class);
 
             bankLogList = inc.getBankLogList();
             solde = inc.getSolde();
             name = inc.getName();
+            owner = inc.getOwner();
+            members = inc.getMembers();
+            emblem = inc.getEmblem();
 
         } catch (IOException e) {
-            System.out.println("An error has occurred loading " + name + "'s corporation account.");
+            System.out.println("An error has occurred loading " + name + "'s group account.");
             e.printStackTrace();
         }
     }
@@ -88,7 +92,7 @@ public class Corporation implements Serializable {
         return name;
     }
 
-    public List<UUID> getMembers() {
+    public HashMap<UUID,String> getMembers() {
         return members;
     }
 
@@ -101,7 +105,15 @@ public class Corporation implements Serializable {
     }
 
     public void addMember(@NotNull Player p) {
-        members.add(p.getUniqueId());
+        members.put(p.getUniqueId(),p.getName());
+    }
+
+    public void setEmblem(ItemStack item) {
+        emblem = item;
+    }
+
+    public ItemStack getEmblem() {
+        return emblem;
     }
 
     public void removeMember(Player p) {
@@ -138,6 +150,31 @@ public class Corporation implements Serializable {
     public void soldeAdd(float n) {
         solde += n;
         roundSolde();
+    }
+
+    public static Group getByPlayer(Player p) {
+        for (Group g : incList.values()) {
+            if (g.getMembers().containsKey(p.getUniqueId())) return g;
+        }
+        return null;
+    }
+
+    public int getMax() {
+        int max = 50;
+        for (UUID uuid : members.keySet()) {
+            max += Bank.bankList.get(uuid).getRank().getMaxStorage();
+        }
+        return max;
+    }
+
+    public static void loadGroups() {
+        File folder = new File(FileManager.INC_PATH);
+
+        for (File file : folder.listFiles()) {
+            String name = file.getName().replace(".bank","");
+
+            new Group(name,null);
+        }
     }
 
 }

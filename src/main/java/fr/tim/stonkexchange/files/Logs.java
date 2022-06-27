@@ -11,7 +11,7 @@ import java.util.List;
 
 public class Logs {
 
-    private File file;
+    public String file;
     private final List<String> logs;
 
     public Logs() {
@@ -38,6 +38,7 @@ public class Logs {
             for (String log : logs) pw.println(log);
 
             pw.close();
+            fw.close();
         }
         catch (IOException e) {
             e.printStackTrace();
@@ -54,7 +55,7 @@ public class Logs {
             file = new File(FileManager.LOG_PATH + date + "-" + count + ".txt");
             count++;
         }
-        this.file = file;
+        this.file = file.getAbsolutePath();
 
         try {
             file.createNewFile();

@@ -7,8 +7,8 @@ Taux:
   #La fonction variation est de la forme f(x) = { 2/(1+3^-x/M)-1 si x>0 , -2/(1+3^-x/m)+1 si x<0 }
   #m et M vérifient f(m) = -1/2 et f(M) = 1/2
   variation:
-    m: -700
-    M: 3500
+    m: -400
+    M: 1500
 
   #La fonction joueurs est de la forme f(x) = 1/a * ((1+a) / (1+a*(a+2)^-x/m) - 1 )
   #m vérifie f(m) = 1/2, a correspond à l'étalement de la logistique
@@ -19,19 +19,37 @@ Taux:
   #La fonction mort est de la forme f(x) = 2^-x/m - 1
   #m vérifie f(m) = -1/2
   mort:
-    m: 5
+    m: 10
 
-  #La fonction diamonds est de la forme f(x) = 2^-x/m - 1
+  #La fonction diamonds est de la forme f(x) = 2^-(x/m) - 1
   #m vérifie f(m) = -1/2
   diamonds:
-    m: 30
+    m: 40
+
+  #La fonction boss est de la forme f(x) = 1 - 2^-(x/m)
+  #m vérifie f(m) = 1/2
+  boss:
+    m: 5
+
+  #La fonction advancement est de la forme f(x) = 2 / (1 + 3^(-x/m)) - 1
+  #m vérifie f(m) = 1/2
+  advancement:
+    m: 50
+
+  #La fonction advancement est de la forme f(x) = 1 - 2^-(x/m)
+  #m vérifie f(m) = 1/2
+  ores:
+    m: 150
 
   #Après injection dans chaque fonction, chaque résultat est multiplié par un coefficient pour calculer la somme
   Somme:
-    aJoueurs: 0.5
+    aJoueurs: 0.6
     aVariation: 0.4
-    aMort: 0.7
-    aDiamonds: 0.3
+    aMort: 0.6
+    aDiamonds: 0.4
+    aBoss: 0.3
+    aAdvancement: 0.1
+    aOres: 0.4
 
   #Le taux suit toujours une évolution linéaire dont la pente est déterminée par la somme
   #La pente est donnée par f(x) = a / (1+a*exp(-rx)) - a/(a+1)
@@ -46,3 +64,10 @@ Taux:
 
 #Le temps en secondes entre chaque actualisation
 Periode: 28500
+
+#Gestion discord
+Discord:
+  #L'url du webhook
+  webhook:
+  #L'id de l'emoji mcoin
+  emoji:

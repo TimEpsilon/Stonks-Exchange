@@ -5,7 +5,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
 
-public class CoeffConfig {
+public class ConfigManager {
 
     private static FileConfiguration load() {
         File file = new File(FileManager.CONFIG_PATH + "config.yml");
@@ -17,9 +17,14 @@ public class CoeffConfig {
         return fc.getLong("Periode");
     }
 
+    public static String getString(String path) {
+        FileConfiguration fc = load();
+        return fc.getString(path);
+    }
+
     public static float[] getCoeff(String path) {
         FileConfiguration fc = load();
-        float[] coeff = new float[4];
+        float[] coeff = new float[7];
 
         switch (path) {
 
@@ -35,6 +40,9 @@ public class CoeffConfig {
 
             case "Taux.mort":
             case "Taux.diamonds":
+            case "Taux.boss":
+            case "Taux.advancement":
+            case "Taux.ores":
                 coeff[0] = (float)fc.getDouble(path+".m");
                 break;
 
@@ -43,6 +51,9 @@ public class CoeffConfig {
                 coeff[1] = (float)fc.getDouble(path+".aVariation");
                 coeff[2] = (float)fc.getDouble(path+".aMort");
                 coeff[3] = (float)fc.getDouble(path+".aDiamonds");
+                coeff[4] = (float)fc.getDouble(path+".aBoss");
+                coeff[5] = (float)fc.getDouble(path+".aAdvancement");
+                coeff[6] = (float)fc.getDouble(path+".aOres");
                 break;
 
             case "Taux.Pente":
