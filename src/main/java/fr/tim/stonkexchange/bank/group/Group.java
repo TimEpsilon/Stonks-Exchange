@@ -4,8 +4,13 @@ import com.google.gson.Gson;
 import fr.tim.stonkexchange.bank.Bank;
 import fr.tim.stonkexchange.bank.BankLog;
 import fr.tim.stonkexchange.files.FileManager;
+import fr.tim.stonkexchange.gui.bank.VisualItems;
 import fr.tim.stonkexchange.gui.pda.GestionPDA;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.configuration.InvalidConfigurationException;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
@@ -18,13 +23,14 @@ import java.util.UUID;
 
 public class Group implements Serializable {
     public transient static HashMap<String, Group> incList = new HashMap<>();
+    private transient ItemStack emblem;
 
     private String name;
     private float solde;
     private UUID owner;
     private HashMap<UUID,String> members = new HashMap<>();
     private List<BankLog> bankLogList = new ArrayList<>();
-    private ItemStack emblem;
+
 
     public Group(String name, Player owner) {
         if (incList.containsKey(name) && (owner != null)) {
@@ -36,6 +42,8 @@ public class Group implements Serializable {
         this.name = name;
         this.owner = (owner != null) ? owner.getUniqueId() : null;
         members.put(this.owner,(owner != null) ? owner.getName() : null);
+        emblem = VisualItems.EMBLEM.getItem();
+
 
         loadData();
         logBankState();
@@ -46,10 +54,7 @@ public class Group implements Serializable {
     private void saveData() {
         try {
             File file = new File(FileManager.INC_PATH + name + ".bank");
-
-            if (!file.exists()) {
-                file.createNewFile();
-            }
+            file.createNewFile();
 
             Gson gson = new Gson();
             Writer writer = new FileWriter(file);
@@ -57,10 +62,25 @@ public class Group implements Serializable {
             writer.flush();
             writer.close();
 
-        } catch (IOException e) {
+            file = new File(FileManager.INC_PATH + name + "-EMBLEM.yml");
+            file.createNewFile();
+
+            FileConfiguration conf = new YamlConfiguration();
+            conf.load(file);
+
+            conf.set("Item",emblem);
+
+            conf.save(file);
+
+        } catch (IOException | InvalidConfigurationException e) {
             System.out.println("An error has occurred saving " + name + "'s group account. Current Amount : " + solde);
             e.printStackTrace();
         }
+    }
+
+    public void deleteData() {
+        File file = new File(FileManager.INC_PATH + name + ".bank");
+        file.delete();
     }
 
     public void loadData() {
@@ -80,9 +100,15 @@ public class Group implements Serializable {
             name = inc.getName();
             owner = inc.getOwner();
             members = inc.getMembers();
-            emblem = inc.getEmblem();
 
-        } catch (IOException e) {
+            file = new File(FileManager.INC_PATH + name + "-EMBLEM.yml");
+            if (file.exists()) {
+                FileConfiguration conf = new YamlConfiguration();
+                conf.load(file);
+                emblem = conf.getItemStack("Item");
+            }
+
+        } catch (IOException | InvalidConfigurationException e) {
             System.out.println("An error has occurred loading " + name + "'s group account.");
             e.printStackTrace();
         }
@@ -117,11 +143,13 @@ public class Group implements Serializable {
     }
 
     public void removeMember(Player p) {
-        if (p.getUniqueId().equals(owner)) {
-            p.sendMessage(GestionPDA.PDAText + ChatColor.RED + "[ERROR] Impossible de retirer le propriétaire.");
-            return;
-        }
+        if (p.getUniqueId().equals(owner)) return;
         members.remove(p.getUniqueId());
+    }
+
+    public void removeMember(UUID uuid) {
+        if (uuid.equals(owner)) return;
+        members.remove(uuid);
     }
 
     public void logBankState() {
@@ -152,11 +180,12 @@ public class Group implements Serializable {
         roundSolde();
     }
 
-    public static Group getByPlayer(Player p) {
+    public static List<Group> getByPlayer(Player p) {
+        List<Group> groups = new ArrayList<>();
         for (Group g : incList.values()) {
-            if (g.getMembers().containsKey(p.getUniqueId())) return g;
+            if (g.getMembers().containsKey(p.getUniqueId())) groups.add(g);
         }
-        return null;
+        return groups;
     }
 
     public int getMax() {
@@ -171,10 +200,15 @@ public class Group implements Serializable {
         File folder = new File(FileManager.INC_PATH);
 
         for (File file : folder.listFiles()) {
+            if (!file.getName().contains(".bank")) continue;
             String name = file.getName().replace(".bank","");
 
             new Group(name,null);
         }
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
 }

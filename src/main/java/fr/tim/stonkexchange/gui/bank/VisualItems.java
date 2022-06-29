@@ -29,14 +29,15 @@ public enum VisualItems {
     RANK_GOLD(Material.GOLD_BLOCK,1,ChatColor.GOLD + "Rang : \u9005 Gold","", 0,21),
     SOLDE(Material.PLAYER_HEAD, 1, ChatColor.GOLD + "Solde : ", "§d" + "0.0 / 10.0",0,12),
     GROUP(Material.TOTEM_OF_UNDYING,1,ChatColor.BLUE + "Groupe",ChatColor.GRAY + "Informations sur votre groupe",0,0),
+    NEXT(Material.ARROW,1,ChatColor.BLUE + "Next Groupe",ChatColor.GRAY + "Passez à votre groupe suivant",0,0),
     OWNER(Material.PLAYER_HEAD,1,ChatColor.LIGHT_PURPLE + "Owner : ","",0,1),
     MEMBERS(Material.BUNDLE,1,ChatColor.YELLOW + "Membres : ", "", 0,19),
     EMBLEM(Material.PAPER,1,ChatColor.GOLD + "GroupName : ", ChatColor.GRAY + "Modifiez votre groupe avec /group",0,10),
     BANK(Material.IRON_INGOT,1,ChatColor.GOLD + "Solde du Groupe : ", "0.0",12,12);
 
-    private ItemStack item;
-    private int slot;
-    private String name;
+    private final ItemStack item;
+    private final int slot;
+    private final String name;
 
     VisualItems(Material material, int count, String name, String lore, int cmd,int slot) {
         List<Component> Lore = new ArrayList<>();
@@ -46,7 +47,7 @@ public enum VisualItems {
         this.item = new ItemStack(material,count);
         ItemMeta meta = this.item.getItemMeta();
         meta.setCustomModelData(cmd);
-        meta.displayName(Component.text(name));
+        meta.setDisplayName(name);
         meta.lore(Lore);
         this.item.setItemMeta(meta);
 
@@ -68,6 +69,8 @@ public enum VisualItems {
         Component display = item.getItemMeta().displayName();
         if (display == null) return null;
         switch (mat) {
+            case ARROW:
+                return NEXT;
             case DIAMOND:
                 switch (n) {
                     case 1:

@@ -1,15 +1,12 @@
 package fr.tim.stonkexchange.listeners.bank;
 
-import fr.tim.stonkexchange.bank.group.Group;
 import fr.tim.stonkexchange.gui.bank.BankInterface;
 import fr.tim.stonkexchange.gui.bank.GroupInterface;
-import fr.tim.stonkexchange.gui.bank.VisualItems;
 import net.kyori.adventure.text.Component;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 
@@ -32,7 +29,7 @@ public class InterfaceInteraction implements Listener {
         }
 
         if (e.getView().title().equals(Component.text(ChatColor.BLUE + "Groupe"))) {
-            GroupInterface.interaction(item, player, Group.getByPlayer(player), e.getClickedInventory());
+            GroupInterface.groupInterfaceList.get(player.getUniqueId()).interaction(item, player);
         }
     }
 }

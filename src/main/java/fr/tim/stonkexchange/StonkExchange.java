@@ -68,6 +68,7 @@ public class StonkExchange extends JavaPlugin {
         getCommand("bank").setExecutor(new OpenBank());
         getCommand("baltop").setExecutor(new ShowRank());
         getCommand("group").setExecutor(new CreateGroup());
+        getCommand("group").setTabCompleter(new GroupTabComplete());
 
     }
 

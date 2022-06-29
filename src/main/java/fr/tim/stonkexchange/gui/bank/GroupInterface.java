@@ -1,46 +1,48 @@
 package fr.tim.stonkexchange.gui.bank;
 
-import fr.tim.stonkexchange.StonkExchange;
-import fr.tim.stonkexchange.bank.Bank;
 import fr.tim.stonkexchange.bank.Trader;
 import fr.tim.stonkexchange.bank.group.Group;
-import fr.tim.stonkexchange.bank.rank.BankRank;
-import fr.tim.stonkexchange.bank.rank.RankManager;
 import fr.tim.stonkexchange.gui.pda.GestionPDA;
+import it.unimi.dsi.fastutil.Hash;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Listener;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BundleMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 public class GroupInterface {
     private final Inventory inventory;
-    private final Group group;
+    private Group group;
+    private final List<Group> groupList;
+
+    public static HashMap<UUID,GroupInterface> groupInterfaceList = new HashMap<>();
 
     public GroupInterface(Player p) {
-        group = Group.getByPlayer(p);
+        groupList = Group.getByPlayer(p);
         inventory = null;
-        if (group == null) {
+
+        if (groupList.size() == 0) {
             p.sendMessage(GestionPDA.PDAText + ChatColor.RED + "[ERROR] Vous n'apartenez pas à un groupe");
             return;
         }
-        new GroupInterface(p,Group.getByPlayer(p).getName());
+
+        group = groupList.get(0);
+
+        new GroupInterface(p,group.getName());
     }
 
     public GroupInterface(Player viewer, String name) {
+        groupList = Group.getByPlayer(viewer);
         group = Group.incList.get(name);
-
-        this.inventory = Bukkit.createInventory(null, 27, Component.text(ChatColor.BLUE + "Groupe"));
+        inventory = Bukkit.createInventory(null, 27, Component.text(ChatColor.BLUE + "Groupe"));
 
         inventory.setItem(VisualItems.DEPOSIT_1.getSlot(), VisualItems.DEPOSIT_1.getItem());
         inventory.setItem(VisualItems.DEPOSIT_8.getSlot(),VisualItems.DEPOSIT_8.getItem());
@@ -54,13 +56,15 @@ public class GroupInterface {
         inventory.setItem(VisualItems.BANK.getSlot(),VisualItems.BANK.getItem());
         inventory.setItem(VisualItems.EMBLEM.getSlot(),VisualItems.EMBLEM.getItem());
 
+        if (groupList.size() > 1) inventory.setItem(VisualItems.NEXT.getSlot(), VisualItems.NEXT.getItem());
+
         load();
         update(inventory,group);
         viewer.openInventory(inventory);
-
+        groupInterfaceList.put(viewer.getUniqueId(),this);
     }
 
-    public static void interaction(ItemStack item, Player player, Group group, Inventory inv) {
+    public void interaction(ItemStack item, Player player) {
 
         VisualItems itemEnum = VisualItems.searchItem(item);
         if (itemEnum == null) return;
@@ -72,14 +76,12 @@ public class GroupInterface {
             case WITHDRAW_1 -> Trader.withdraw(1, player, group);
             case WITHDRAW_8 -> Trader.withdraw(8, player, group);
             case WITHDRAW_64 -> Trader.withdraw(64, player, group);
-            case EMBLEM -> {
-                return; //TODO;
-            }
+            case NEXT -> new GroupInterface(player,getNextGroup(group,player).getName());
         }
-        update(inv,group);
+        update(inventory,group);
     }
 
-    public static void update(Inventory inv, Group group) {
+    public void update(Inventory inv, Group group) {
 
         // Solde
         ItemStack item = inv.getItem(VisualItems.BANK.getSlot());
@@ -95,8 +97,7 @@ public class GroupInterface {
     private void load() {
 
         //Owner
-        ItemStack item = inventory.getItem(VisualItems.OWNER.getSlot());
-        if (item == null) return;
+        ItemStack item = VisualItems.OWNER.getItem().clone();
         SkullMeta skull = (SkullMeta) item.getItemMeta();
         List<Component> lore =  skull.lore();
         lore.set(0,Component.text(ChatColor.GREEN + group.getMembers().get(group.getOwner())));
@@ -105,38 +106,47 @@ public class GroupInterface {
         item.setItemMeta(skull);
         inventory.setItem(VisualItems.OWNER.getSlot(),item);
 
-
         //Name
-        ItemStack emblem = inventory.getItem(VisualItems.EMBLEM.getSlot());
-        if (emblem == null) return;
+        ItemStack emblem = group.getEmblem().clone();
         ItemMeta meta = emblem.getItemMeta();
+        List<Component> lore2 = new ArrayList<>();
+        lore2.add(Component.text(ChatColor.GRAY + "Modifiez votre groupe avec /group"));
+        meta.lore(lore2);
         meta.displayName(Component.text(ChatColor.GOLD + group.getName()));
         emblem.setItemMeta(meta);
         inventory.setItem(VisualItems.EMBLEM.getSlot(), emblem);
 
-
         //Members
-        ItemStack item1 = inventory.getItem(VisualItems.MEMBERS.getSlot());
-        if (item1 == null) return;
+        ItemStack item1 = VisualItems.MEMBERS.getItem().clone();
         BundleMeta bundle = (BundleMeta) item1.getItemMeta();
-        List<Component> lore1 =  bundle.lore();
+        List<Component> lore1 =  new ArrayList<>();
 
-        int i = 0;
         for (Map.Entry<UUID, String> entry : group.getMembers().entrySet()) {
             UUID uuid = entry.getKey();
             String name = entry.getValue();
-            lore1.set(i,Component.text(ChatColor.YELLOW + name));
+            lore1.add(Component.text(ChatColor.YELLOW + name));
             ItemStack member = new ItemStack(Material.PLAYER_HEAD);
             SkullMeta skullMeta = (SkullMeta) member.getItemMeta();
             skullMeta.setOwningPlayer(Bukkit.getOfflinePlayer(uuid));
             member.setItemMeta(skullMeta);
             bundle.addItem(member);
-
-            i++;
         }
         bundle.lore(lore1);
         item1.setItemMeta(bundle);
         inventory.setItem(VisualItems.MEMBERS.getSlot(),item1);
+    }
+
+    private Group getNextGroup(Group group, Player p) {
+        List<Group> groups = Group.getByPlayer(p);
+        for (int i = 0; i < groups.size() ; i++) {
+            Group g = groups.get(i);
+            if (g.equals(group)) {
+                if (i == groups.size() - 1) {
+                    return groups.get(0);
+                } return groups.get(i+1);
+            }
+        }
+        return null;
     }
 
 }

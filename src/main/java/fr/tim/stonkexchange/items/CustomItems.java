@@ -36,7 +36,7 @@ public enum CustomItems {
         this.name = ChatColor.stripColor(name);
 
         ItemMeta meta = this.item.getItemMeta();
-        meta.displayName(Component.text(name));
+        meta.setDisplayName(name);
         meta.lore(Lore);
         meta.setCustomModelData(cmd);
         PersistentDataContainer data = meta.getPersistentDataContainer();
