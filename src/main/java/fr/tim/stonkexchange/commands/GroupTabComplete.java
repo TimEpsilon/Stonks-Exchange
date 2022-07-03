@@ -18,11 +18,11 @@ public class GroupTabComplete implements TabCompleter {
             "create",
             "delete",
             "modify",
-            "list"));
+            "list",
+            "quit"));
     public final static ArrayList<String> modifyList = new ArrayList<>(List.of(
             "add",
             "remove",
-            "name",
             "emblem",
             "owner"));
 
@@ -42,9 +42,10 @@ public class GroupTabComplete implements TabCompleter {
         if (args.length == 1) return dynamicTab(argumentList,args[0]);
         if (args.length == 2 && args[0].equals("modify")) return dynamicTab(modifyList,args[1]);
 
-        List<String> groups = new ArrayList<>();
-        Group.incList.values().forEach(Group -> groups.add(Group.getName()));
-        if (args.length == 2 && args[0].equals("delete")) return groups;
+        List<Group> groups = Group.getByPlayer((Player) sender);
+        List<String> names = new ArrayList<>();
+        groups.forEach(Group -> names.add(Group.getName()));
+        if (args.length == 2 && args[0].equals("quit")) return dynamicTab(names,args[1]);
         return null;
     }
 }

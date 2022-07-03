@@ -1,4 +1,4 @@
-package fr.tim.stonkexchange.misc;
+package fr.tim.stonkexchange.qol;
 
 import fr.tim.stonkexchange.StonkExchange;
 import net.kyori.adventure.text.Component;

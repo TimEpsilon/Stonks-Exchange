@@ -37,6 +37,13 @@ public class GestionPDA implements Listener {
         if (item == null) return;
 
         if (item.getItemMeta().getPersistentDataContainer().has(CustomItems.CustomItemKey, PersistentDataType.STRING)) {
+            if (item.getType().equals(Material.PAPER) && item.getItemMeta().getPersistentDataContainer().get(CustomItems.CustomItemKey,PersistentDataType.STRING).contains(CustomItems.PDA_ITEM.getName())) {
+                p.getInventory().remove(item);
+                ItemStack pda = CustomItems.PDA.getItem();
+                pda.setAmount(item.getAmount());
+                p.getInventory().addItem(pda);
+                return;
+            }
             if (!item.getItemMeta().getPersistentDataContainer().get(CustomItems.CustomItemKey,PersistentDataType.STRING).contains(CustomItems.PDA.getName())) return;
 
             p.sendMessage(Component.text(  ChatColor.AQUA + "Actualisation..."));

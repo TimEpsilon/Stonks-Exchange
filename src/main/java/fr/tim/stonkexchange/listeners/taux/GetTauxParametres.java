@@ -2,6 +2,7 @@ package fr.tim.stonkexchange.listeners.taux;
 
 import fr.tim.stonkexchange.bank.Bank;
 import fr.tim.stonkexchange.bank.BankLog;
+import fr.tim.stonkexchange.bank.group.Group;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
@@ -72,6 +73,7 @@ public class GetTauxParametres implements Listener {
     @EventHandler
     public void onAchievementGet(PlayerAdvancementDoneEvent e) {
         Player p = e.getPlayer();
+         if (e.getAdvancement().getDisplay() == null || !e.getAdvancement().getDisplay().doesAnnounceToChat()) return;
         AdvancementCount.compute(p.getUniqueId(),(k,v) -> (v == null) ? 1 : v+1);
     }
 
@@ -90,6 +92,17 @@ public class GetTauxParametres implements Listener {
             }
 
             List<BankLog> logList = Bank.bankList.get(p.getUniqueId()).getBankLogList();
+
+            for (int i = logList.size()-1; i > -1; i--) {
+                if (logList.get(i).getTime() <= time) {
+                    total += logList.get(i).getSolde();
+                    break;
+                }
+            }
+        }
+
+        for (Group group : Group.incList.values()) {
+            List<BankLog> logList = group.getBankLogList();
 
             for (int i = logList.size()-1; i > -1; i--) {
                 if (logList.get(i).getTime() <= time) {

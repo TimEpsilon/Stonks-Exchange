@@ -1,7 +1,6 @@
 package fr.tim.stonkexchange.commands;
 
 import fr.tim.stonkexchange.bank.Bank;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -35,9 +34,10 @@ public class ShowRank implements CommandExecutor {
                         Map.Entry::getValue,
                         (oldValue, newValue) -> oldValue, LinkedHashMap::new));
 
+        Object[] names = result.keySet().toArray();
+
         sender.sendMessage(ChatColor.GOLD + "\n----------- Ranks -----------\n ");
         for (int i = result.keySet().size(); i > 0; i--) {
-            Object[] names = result.keySet().toArray();
 
             sender.sendMessage(ChatColor.GOLD + "● " + names[i-1]);
         }

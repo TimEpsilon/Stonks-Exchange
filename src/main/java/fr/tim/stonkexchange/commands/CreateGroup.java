@@ -14,10 +14,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class CreateGroup implements CommandExecutor {
 
@@ -27,6 +25,36 @@ public class CreateGroup implements CommandExecutor {
         if (args.length == 0) return false;
 
         switch (args[0]) {
+            case "quit" -> {
+                if (args.length == 1) return false;
+
+                List<Group> groups = Group.getByPlayer(p);
+                if (groups.size() == 0) {
+                    p.sendMessage(GestionPDA.PDAText + ChatColor.RED + "Vous n'appartenez pas à un groupe");
+                    return true;
+                }
+
+                Group group = Group.incList.get(args[1]);
+                if (group == null) {
+                    p.sendMessage(GestionPDA.PDAText + ChatColor.RED + "Ce groupe n'existe pas");
+                    return true;
+                }
+
+                if (!group.getMembers().containsKey(p.getUniqueId())) {
+                    p.sendMessage(GestionPDA.PDAText + ChatColor.RED + "Vous n'appartenez pas à ce groupe");
+                    return true;
+                }
+
+                if (group.getOwner().equals(p.getUniqueId())) {
+                    p.sendMessage(GestionPDA.PDAText + ChatColor.RED + "Vous ne pouvez pas quitter votre propre groupe");
+                    return true;
+                }
+
+                group.getMembers().remove(p.getUniqueId());
+                p.sendMessage(GestionPDA.PDAText + ChatColor.GREEN + "Vous avez quitté " + group.getName());
+                return true;
+            }
+
             case "create" -> {
                 if (args.length != 2) return false;
                 String name = args[1];
@@ -60,41 +88,65 @@ public class CreateGroup implements CommandExecutor {
 
             case "delete" -> {
                 List<Group> groups = Group.getByPlayer(p);
-                if (args.length != 2) return false;
-                String name = args[1];
 
                 if (groups.size() == 0) {
                     p.sendMessage(GestionPDA.PDAText + ChatColor.RED + "Vous n'appartenez pas à un groupe");
                     return true;
                 }
 
-                for (Group group : groups) {
-                    if (!group.getOwner().equals(p.getUniqueId())) {
-                        p.sendMessage(GestionPDA.PDAText + ChatColor.RED + "Vous n'êtes pas le chef de ce groupe");
-                        return true;
+                Group group = null;
+                for (Group temp : groups) {
+                    if (temp.getOwner().equals(p.getUniqueId())) {
+                        group = temp;
+                        break;
                     }
-
-                    giveRemainingToOwner(group,p);
-                    group.deleteData();
-                    Group.incList.remove(group.getName());
-                    group.setName(null);
-                    group.setSolde(0);
-                    p.sendMessage(GestionPDA.PDAText + ChatColor.GREEN + "Votre groupe " + name + " a bien été supprimé");
+                }
+                if (group == null) {
+                    p.sendMessage(GestionPDA.PDAText + ChatColor.RED + "Vous n'êtes pas chef de groupe");
                     return true;
                 }
 
+                if (args.length < 2 || !args[1].equals("confirm")) {
+                    p.sendMessage(GestionPDA.PDAText + ChatColor.YELLOW + "Vous êtes sur le point de supprimer votre groupe. Pour confirmer : " + ChatColor.RESET + "/group delete confirm");
+                    return true;
+                }
 
+                giveRemainingToOwner(group,p);
+                group.deleteData();
+                Group.incList.remove(group.getName());
+                group.setSolde(0);
+                p.sendMessage(GestionPDA.PDAText + ChatColor.GREEN + "Votre groupe " + group.getName() + " a bien été supprimé");
+                return true;
             }
 
             case "list" -> {
                 p.sendMessage(ChatColor.GOLD + "--------------- Groupes ---------------");
+                HashMap<Group,Float> solde = new HashMap<>();
                 for (Group group : Group.incList.values()) {
-                    p.sendMessage(ChatColor.GOLD + "● " + group.getName());
-                    for (String name : group.getMembers().values()) {
+                    solde.put(group, group.getSolde());
+                }
+
+                Map<Group, Float> result = solde.entrySet()
+                        .stream()
+                        .sorted(Map.Entry.comparingByValue())
+                        .collect(Collectors.toMap(
+                                Map.Entry::getKey,
+                                Map.Entry::getValue,
+                                (oldValue, newValue) -> oldValue, LinkedHashMap::new));
+
+                Object[] groups = result.keySet().toArray();
+
+
+                for (int i = groups.length; i > 0; i--) {
+                    p.sendMessage(ChatColor.GOLD + "● " + ((Group) groups[i-1]).getName());
+                    for (String name : ((Group) groups[i-1]).getMembers().values()) {
                         p.sendMessage(ChatColor.YELLOW + "     - " + name);
                     }
                 }
+                p.sendMessage(ChatColor.GOLD + "---------------------------------------");
+                return true;
             }
+
             case "modify" -> {
                 List<Group> groups  = Group.getByPlayer(p);
                 if (groups.size() == 0) {
@@ -118,7 +170,7 @@ public class CreateGroup implements CommandExecutor {
                 String modify = args[1];
 
                 switch (modify) {
-                    case "name" -> {
+                    /*case "name" -> {
                         if (args.length != 3) {
                             p.sendMessage(GestionPDA.PDAText + ChatColor.RED + "Merci d'entrer un nom valide");
                             return true;
@@ -126,7 +178,7 @@ public class CreateGroup implements CommandExecutor {
                         String name = args[2];
                         p.sendMessage(GestionPDA.PDAText + ChatColor.GREEN + group.getName() + " a bien été renommé en " + name);
                         group.setName(name);
-                    }
+                    }*/
 
                     case "emblem" -> {
                         ItemStack emblem = p.getInventory().getItemInMainHand();
@@ -192,6 +244,19 @@ public class CreateGroup implements CommandExecutor {
                             return true;
                         }
 
+                        boolean isOwner = false;
+                        for (Group temp : Group.getByPlayer(p)) {
+                            if (temp.getOwner().equals(p.getUniqueId())) {
+                                isOwner = true;
+                                break;
+                            }
+                        }
+
+                        if (isOwner) {
+                            p.sendMessage(GestionPDA.PDAText + ChatColor.RED + "Le joueur est déjà chef de groupe");
+                            return true;
+                        }
+
                         p.sendMessage(GestionPDA.PDAText + ChatColor.GREEN + pseudo + " a bien été promu chef de " + group.getName());
                         group.setOwner(player);
                     }
@@ -218,6 +283,7 @@ public class CreateGroup implements CommandExecutor {
                         return true;
                     }
                 }
+                return true;
             }
         }
         return false;

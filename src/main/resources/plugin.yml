@@ -12,6 +12,9 @@ commands:
     permission: admin
   group:
     description: Permet la gestion de groupes
+    usage: /group <create/delete/modify/quit/list>
+#  item:
+#    permission: admin
 
 permissions:
   admin:

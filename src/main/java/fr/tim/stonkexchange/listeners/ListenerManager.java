@@ -9,7 +9,8 @@ import fr.tim.stonkexchange.listeners.bank.InterfaceInteraction;
 import fr.tim.stonkexchange.listeners.environment.AntiEChest;
 import fr.tim.stonkexchange.listeners.environment.PlayerJoin;
 import fr.tim.stonkexchange.listeners.taux.GetTauxParametres;
-import fr.tim.stonkexchange.misc.PlayerHeadPersistent;
+import fr.tim.stonkexchange.qol.AntiMobGrief;
+import fr.tim.stonkexchange.qol.PlayerHeadPersistent;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.PluginManager;
 
@@ -25,7 +26,9 @@ public class ListenerManager {
         pm.registerEvents(new AntiEChest(),plugin);
         pm.registerEvents(new Vault(),plugin);
         pm.registerEvents(new PocketVault(),plugin);
-        pm.registerEvents(new PlayerHeadPersistent(),plugin);
         pm.registerEvents(new RecallPotion(),plugin);
+
+        pm.registerEvents(new PlayerHeadPersistent(),plugin);
+        pm.registerEvents(new AntiMobGrief(),plugin);
     }
 }

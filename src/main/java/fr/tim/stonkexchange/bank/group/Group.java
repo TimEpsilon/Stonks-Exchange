@@ -6,7 +6,6 @@ import fr.tim.stonkexchange.bank.BankLog;
 import fr.tim.stonkexchange.files.FileManager;
 import fr.tim.stonkexchange.gui.bank.VisualItems;
 import fr.tim.stonkexchange.gui.pda.GestionPDA;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -189,11 +188,11 @@ public class Group implements Serializable {
     }
 
     public int getMax() {
-        int max = 50;
+        int max = 0;
         for (UUID uuid : members.keySet()) {
             max += Bank.bankList.get(uuid).getRank().getMaxStorage();
         }
-        return max;
+        return (int) Math.round(max*1.1);
     }
 
     public static void loadGroups() {
