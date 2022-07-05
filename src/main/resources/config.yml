@@ -63,7 +63,7 @@ Taux:
     r: -0.2
 
 #Le temps en secondes entre chaque actualisation
-Periode: 28500
+Periode: 28200
 
 #Gestion discord
 Discord:

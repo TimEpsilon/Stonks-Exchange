@@ -157,11 +157,11 @@ public class Taux implements Serializable {
 
     public void dailyUpdate() {
         Bukkit.getScheduler().runTaskTimerAsynchronously(StonkExchange.getPlugin(),() -> {
+            Bukkit.getScheduler().runTask(StonkExchange.getPlugin(), this::sendInfoToDiscord);
             nextTaux();
             Bukkit.broadcast(Component.text(GestionPDA.PDAText + ChatColor.AQUA + "Nouveau Taux : " + ChatColor.GOLD + this.taux));
             saveData();
 
-            Bukkit.getScheduler().runTask(StonkExchange.getPlugin(), this::sendInfoToDiscord);
         },time*20,time*20);
     }
 

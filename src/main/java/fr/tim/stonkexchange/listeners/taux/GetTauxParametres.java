@@ -12,6 +12,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerAdvancementDoneEvent;
@@ -79,8 +80,15 @@ public class GetTauxParametres implements Listener {
 
     @EventHandler void onOreMined(BlockBreakEvent e) {
         Player p = e.getPlayer();
-        if (oreList.contains(e.getBlock().getType()) && !p.getInventory().getItemInMainHand().getEnchantments().containsKey(Enchantment.SILK_TOUCH)) {
+        if (oreList.contains(e.getBlock().getType())) {
             OreCount.compute(p.getUniqueId(),(k, v) -> (v == null) ? 1 : v+1);
+        }
+    }
+
+    @EventHandler void onOrePlaced(BlockPlaceEvent e) {
+        Player p = e.getPlayer();
+        if (oreList.contains(e.getBlock().getType())) {
+            OreCount.compute(p.getUniqueId(),(k, v) -> (v == null) ? 1 : Math.max(v-1,0));
         }
     }
 

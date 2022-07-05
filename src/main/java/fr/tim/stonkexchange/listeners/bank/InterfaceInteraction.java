@@ -19,7 +19,7 @@ public class InterfaceInteraction implements Listener {
 
         if (item == null) return;
 
-        if (e.getInventory().getHolder() != null) return;
+       if (!e.getView().title().equals(Component.text(ChatColor.GREEN + "Banque")) && !e.getView().title().equals(Component.text(ChatColor.BLUE + "Groupe"))) return;
 
         e.setCancelled(true);
 
