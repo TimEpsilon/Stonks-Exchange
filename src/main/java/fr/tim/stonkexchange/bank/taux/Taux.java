@@ -117,7 +117,7 @@ public class Taux implements Serializable {
         }
 
         v = GetTauxParametres.getTotalNow()
-                - GetTauxParametres.getTotalBefore(System.currentTimeMillis()- time*1000);
+                - GetTauxParametres.getTotalBefore(System.currentTimeMillis()- time*1000 + 10000);
 
         for (int i : GetTauxParametres.BossCount.values()) {
             b += i;
@@ -156,8 +156,8 @@ public class Taux implements Serializable {
     }
 
     public void dailyUpdate() {
-        Bukkit.getScheduler().runTaskTimerAsynchronously(StonkExchange.getPlugin(),() -> {
-            Bukkit.getScheduler().runTask(StonkExchange.getPlugin(), this::sendInfoToDiscord);
+        Bukkit.getScheduler().runTaskTimer(StonkExchange.getPlugin(),() -> {
+            sendInfoToDiscord();
             nextTaux();
             Bukkit.broadcast(Component.text(GestionPDA.PDAText + ChatColor.AQUA + "Nouveau Taux : " + ChatColor.GOLD + this.taux));
             saveData();
@@ -204,7 +204,7 @@ public class Taux implements Serializable {
         }
 
         float v = GetTauxParametres.getTotalNow()
-                - GetTauxParametres.getTotalBefore(System.currentTimeMillis()- 10);
+                - GetTauxParametres.getTotalBefore(System.currentTimeMillis()- time*1000 + 10000);
 
         DiscordLink.sendMessage("**Nouveau Taux** : " + taux + " " + DiscordLink.mcoinEmoji,
                 "Joueurs Connectés : " + j + " - Influence : " + Math.round(aJoueurs*CalculTaux.joueurs(j)*1000f)/1000f,

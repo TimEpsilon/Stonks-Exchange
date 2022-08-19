@@ -1,11 +1,14 @@
 package fr.tim.stonkexchange.bank.group;
 
 import com.google.gson.Gson;
+import fr.tim.stonkexchange.StonkExchange;
 import fr.tim.stonkexchange.bank.Bank;
 import fr.tim.stonkexchange.bank.BankLog;
 import fr.tim.stonkexchange.files.FileManager;
 import fr.tim.stonkexchange.gui.bank.VisualItems;
 import fr.tim.stonkexchange.gui.pda.GestionPDA;
+import net.kyori.adventure.text.Component;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -208,6 +211,20 @@ public class Group implements Serializable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public void interest() {
+        float old = solde;
+
+        solde = solde * (1+ StonkExchange.getPlugin().getTaux().getTaux() / 1000);
+        roundSolde();
+
+        for (UUID uuid : getMembers().keySet()) {
+            Player p = Bukkit.getPlayer(uuid);
+            if (p != null && p.isOnline()) {
+                p.sendMessage(Component.text(GestionPDA.PDAText + ChatColor.YELLOW + "Votre groupe " + getName() + " gagne " + Math.round((solde-old)*1000f)/1000f + "M-Coins d'intérêts"));
+            }
+        }
     }
 
 }

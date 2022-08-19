@@ -20,6 +20,8 @@ public class RecallPotion implements Listener {
         if (p.isSneaking() || p.getBedSpawnLocation() == null) loc = p.getWorld().getSpawnLocation();
         else loc = p.getBedSpawnLocation();
 
+        loc.setWorld(Bukkit.getWorld("world"));
+
         Location current = p.getLocation();
 
         p.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION,50,2));
@@ -45,7 +47,6 @@ public class RecallPotion implements Listener {
         if (!pdc.get(CustomItems.CustomItemKey, PersistentDataType.STRING).contains(CustomItems.RECALL_POTION.getName())) return;
 
         Player p = e.getPlayer();
-        p.getInventory().removeItem(item);
         returnToSpawn(p);
     }
 

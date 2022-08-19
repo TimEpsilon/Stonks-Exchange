@@ -14,6 +14,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -42,6 +43,9 @@ public class BankInterface {
         inventory.setItem(VisualItems.SOLDE.getSlot(),VisualItems.SOLDE.getItem());
         inventory.setItem(VisualItems.RANK_GREEN.getSlot(),VisualItems.RANK_GREEN.getItem());
         inventory.setItem(VisualItems.GROUP.getSlot() ,VisualItems.GROUP.getItem());
+        inventory.setItem(VisualItems.DIAMOND_WITHDRAW_1.getSlot(), VisualItems.DIAMOND_WITHDRAW_1.getItem());
+        inventory.setItem(VisualItems.DIAMOND_WITHDRAW_8.getSlot(), VisualItems.DIAMOND_WITHDRAW_8.getItem());
+        inventory.setItem(VisualItems.DIAMOND_WITHDRAW_64.getSlot(), VisualItems.DIAMOND_WITHDRAW_64.getItem());
 
 
         viewer.openInventory(this.inventory);
@@ -62,6 +66,9 @@ public class BankInterface {
             case WITHDRAW_1 -> Trader.withdraw(1, player, uuid);
             case WITHDRAW_8 -> Trader.withdraw(8, player, uuid);
             case WITHDRAW_64 -> Trader.withdraw(64, player, uuid);
+            case DIAMOND_WITHDRAW_1 -> Trader.withdrawDiamonds(1,player,Bank.bankList.get(player.getUniqueId()));
+            case DIAMOND_WITHDRAW_8 -> Trader.withdrawDiamonds(8,player,Bank.bankList.get(player.getUniqueId()));
+            case DIAMOND_WITHDRAW_64 -> Trader.withdrawDiamonds(64,player,Bank.bankList.get(player.getUniqueId()));
             case RANK_GREEN, RANK_BLUE, RANK_GOLD, RANK_YELLOW, PURPLE, RANK_RED -> RankManager.upggradeAccount(player);
             case GROUP -> new GroupInterface(player);
         }
@@ -94,8 +101,8 @@ public class BankInterface {
         ItemStack item = inv.getItem(VisualItems.SOLDE.getSlot());
         if (item == null) return;
         ItemMeta meta = item.getItemMeta();
-        List<Component> lore =  meta.lore();
-        lore.set(0,Component.text("§d" + bank.getSolde() + ChatColor.GRAY + " / " + br.getMaxStorage()));
+        List<Component> lore =  new ArrayList<>();
+        lore.add(Component.text("§d" + bank.getSolde() + ChatColor.GRAY + " / " + br.getMaxStorage()));
         meta.lore(lore);
         item.setItemMeta(meta);
         inv.setItem(VisualItems.SOLDE.getSlot(),item);

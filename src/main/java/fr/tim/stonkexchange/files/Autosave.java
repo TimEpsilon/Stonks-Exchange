@@ -2,10 +2,13 @@ package fr.tim.stonkexchange.files;
 
 import fr.tim.stonkexchange.StonkExchange;
 import fr.tim.stonkexchange.bank.Bank;
+import fr.tim.stonkexchange.bank.group.Group;
 import fr.tim.stonkexchange.bank.taux.Taux;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
+
+import java.util.UUID;
 
 public abstract class Autosave {
 
@@ -21,6 +24,10 @@ public abstract class Autosave {
 
             for (Bank bank : Bank.bankList.values()) {
                 bank.logBankState();
+            }
+
+            for (Group group : Group.incList.values()) {
+                group.interest();
             }
 
         },0, Taux.time*20);

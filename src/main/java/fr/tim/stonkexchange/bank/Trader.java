@@ -167,6 +167,23 @@ public class Trader {
             p.getWorld().dropItem(p.getLocation(),i);
         }
 
-        StonkExchange.logs.log("(DEPOSIT) " + group.getName() + " - " + p.getName() + " -> " + Math.round((init - group.getSolde())*1000f)/1000f);
+        StonkExchange.logs.log("(WITHDRAW) " + group.getName() + " - " + p.getName() + " -> " + Math.round((init - group.getSolde())*1000f)/1000f);
+    }
+
+    public static void withdrawDiamonds(int n, Player p, Bank bank) {
+        float init = bank.getSolde();
+        int maxDiamonds = (int) Math.floor(init / StonkExchange.getPlugin().getTaux().getTaux());
+
+        int m = Math.min(maxDiamonds,n);
+        ItemStack diamonds = new ItemStack(Material.DIAMOND,m);
+        HashMap<Integer, ItemStack> surplus = p.getInventory().addItem(diamonds);
+        bank.add(-m*StonkExchange.getPlugin().getTaux().getTaux());
+
+        for (ItemStack i : surplus.values()) {
+            if (i == null || i.getAmount() == 0) continue;
+            p.getWorld().dropItem(p.getLocation(),i);
+        }
+
+        StonkExchange.logs.log("(WITHDRAW) " + p.getUniqueId() + " - " + p.getName() + " -> " + Math.round((init - bank.getSolde())*1000f)/1000f);
     }
 }

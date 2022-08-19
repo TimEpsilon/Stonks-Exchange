@@ -19,15 +19,18 @@ public enum VisualItems {
     WITHDRAW_1(Material.EMERALD, 1, ChatColor.RED + "-1", ChatColor.GRAY + "Retirer  1 M-Coin",42,5),
     WITHDRAW_8(Material.EMERALD, 8, ChatColor.RED + "-8", ChatColor.GRAY + "Retirer 8 M-Coin",42,14),
     WITHDRAW_64(Material.EMERALD, 64, ChatColor.RED + "-64", ChatColor.GRAY + "Retirer 64 M-Coin",42,23),
+    DIAMOND_WITHDRAW_1(Material.EMERALD, 1, ChatColor.BLUE + "-1", ChatColor.GRAY + "Retirer 1 Diamant",0,4),
+    DIAMOND_WITHDRAW_8(Material.EMERALD, 8, ChatColor.BLUE + "-8", ChatColor.GRAY + "Retirer 8 Diamants",0,13),
+    DIAMOND_WITHDRAW_64(Material.EMERALD, 64, ChatColor.BLUE + "-64", ChatColor.GRAY + "Retirer 64 Diamants",0,22),
     DEPOSIT_ALL(Material.DIAMOND_BLOCK,1,ChatColor.GREEN + "All", ChatColor.GRAY + "Tout déposer",0,15),
-    TAUX(Material.NETHER_STAR, 1, ChatColor.YELLOW + "Taux du M-coin actuel :",ChatColor.GRAY + " null", 0,10),
-    RANK_GREEN(Material.LIME_WOOL,1,ChatColor.GREEN + "Rang : \u9000 Green",ChatColor.GRAY + " Prochain Rang : Blue (" + BankRank.BLUE.getPrice() + ")", 0,21),
-    RANK_BLUE(Material.LIGHT_BLUE_WOOL,1,ChatColor.AQUA + "Rang : \u9001 Blue",ChatColor.GRAY + " Prochain Rang : Purple (" + BankRank.PURPLE.getPrice() + ")", 0,21),
-    PURPLE(Material.MAGENTA_WOOL,1,ChatColor.LIGHT_PURPLE + "Rang : \u9002 Purple",ChatColor.GRAY + " Prochain Rang : Red (" + BankRank.RED.getPrice() + ")", 0,21),
-    RANK_RED(Material.RED_WOOL,1,ChatColor.RED + "Rang : \u9003 Red",ChatColor.GRAY + " Prochain Rang : Yellow (" + BankRank.YELLOW.getPrice() + ")", 0,21),
-    RANK_YELLOW(Material.YELLOW_WOOL,1,ChatColor.YELLOW + "Rang : \u9004 Yellow",ChatColor.GRAY + " Prochain Rang : Gold (" + BankRank.GOLD.getPrice() + ")", 0,21),
-    RANK_GOLD(Material.GOLD_BLOCK,1,ChatColor.GOLD + "Rang : \u9005 Gold","", 0,21),
-    SOLDE(Material.PLAYER_HEAD, 1, ChatColor.GOLD + "Solde : ", "§d" + "0.0 / 10.0",0,12),
+    TAUX(Material.NETHER_STAR, 1, ChatColor.YELLOW + "Taux du M-coin actuel :",ChatColor.GRAY + " null", 0,9),
+    RANK_GREEN(Material.LIME_WOOL,1,ChatColor.GREEN + "Rang : \u9000 Green",ChatColor.GRAY + " Prochain Rang : Blue (" + BankRank.BLUE.getPrice() + ")", 0,20),
+    RANK_BLUE(Material.LIGHT_BLUE_WOOL,1,ChatColor.AQUA + "Rang : \u9001 Blue",ChatColor.GRAY + " Prochain Rang : Purple (" + BankRank.PURPLE.getPrice() + ")", 0,20),
+    PURPLE(Material.MAGENTA_WOOL,1,ChatColor.LIGHT_PURPLE + "Rang : \u9002 Purple",ChatColor.GRAY + " Prochain Rang : Red (" + BankRank.RED.getPrice() + ")", 0,20),
+    RANK_RED(Material.RED_WOOL,1,ChatColor.RED + "Rang : \u9003 Red",ChatColor.GRAY + " Prochain Rang : Yellow (" + BankRank.YELLOW.getPrice() + ")", 0,20),
+    RANK_YELLOW(Material.YELLOW_WOOL,1,ChatColor.YELLOW + "Rang : \u9004 Yellow",ChatColor.GRAY + " Prochain Rang : Gold (" + BankRank.GOLD.getPrice() + ")", 0,20),
+    RANK_GOLD(Material.GOLD_BLOCK,1,ChatColor.GOLD + "Rang : \u9005 Gold","", 0,20),
+    SOLDE(Material.PLAYER_HEAD, 1, ChatColor.GOLD + "Solde : ", "§d" + "0.0 / 10.0",0,11),
     GROUP(Material.TOTEM_OF_UNDYING,1,ChatColor.BLUE + "Groupe",ChatColor.GRAY + "Informations sur votre groupe",0,0),
     NEXT(Material.ARROW,1,ChatColor.BLUE + "Next Groupe",ChatColor.GRAY + "Passez à votre groupe suivant",0,0),
     OWNER(Material.PLAYER_HEAD,1,ChatColor.LIGHT_PURPLE + "Owner : ","",0,1),
@@ -83,13 +86,24 @@ public enum VisualItems {
             case DIAMOND_BLOCK:
                 return DEPOSIT_ALL;
             case EMERALD:
-                switch (n) {
-                    case 1:
-                        return WITHDRAW_1;
-                    case 8:
-                        return WITHDRAW_8;
-                    case 64:
-                        return WITHDRAW_64;
+                if (item.getItemMeta().getCustomModelData() == 0) {
+                    switch (n) {
+                        case 1:
+                            return DIAMOND_WITHDRAW_1;
+                        case 8:
+                            return DIAMOND_WITHDRAW_8;
+                        case 64:
+                            return DIAMOND_WITHDRAW_64;
+                    }
+                } else {
+                    switch (n) {
+                        case 1:
+                            return WITHDRAW_1;
+                        case 8:
+                            return WITHDRAW_8;
+                        case 64:
+                            return WITHDRAW_64;
+                    }
                 }
             case NETHER_STAR:
                 return TAUX;

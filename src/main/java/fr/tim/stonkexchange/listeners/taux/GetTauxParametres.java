@@ -143,6 +143,8 @@ public class GetTauxParametres implements Listener {
         OreCount.clear();
         BossCount.clear();
         AdvancementCount.clear();
+
+        for (Player p : Bukkit.getOnlinePlayers()) if (!JoinedList.containsKey(p.getUniqueId())) JoinedList.put(p.getUniqueId(),true);
     }
 
     public static float[] getFakeParameters() {

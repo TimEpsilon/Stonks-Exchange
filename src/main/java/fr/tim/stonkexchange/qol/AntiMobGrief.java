@@ -1,5 +1,6 @@
 package fr.tim.stonkexchange.qol;
 
+import org.bukkit.Bukkit;
 import org.bukkit.entity.EntityType;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -16,7 +17,7 @@ public class AntiMobGrief implements Listener {
 
     @EventHandler
     public void onEndermanPickup(EntityChangeBlockEvent e) {
-        if (e.getEntity().getType().equals(EntityType.ENDERMAN)) return;
+        if (!e.getEntity().getType().equals(EntityType.ENDERMAN)) return;
         e.setCancelled(true);
     }
 }
